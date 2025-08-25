@@ -1,0 +1,140 @@
+interface CheckInData {
+  fullName: string;
+  phoneNumber: string;
+  industry: string;
+  attendeeType: string;
+  invitedBy?: string;
+  location: {
+    latitude: number;
+    longitude: number;
+    address: string;
+  } | null;
+  timestamp: string;
+}
+
+const TELEGRAM_BOT_TOKEN = '8477707186:AAH3WxBGVjYzk6CIP6dy3NFuD9lBWUbAiEY';
+const MEMBER_GROUP_ID = '-4985415228'; // Cho thành viên
+const GUEST_GROUP_ID = '-4833968275'; // Cho khách mời, khách thăm, khách đặc biệt
+
+// Hàm xác định group ID dựa trên loại người tham dự
+const getGroupIdByAttendeeType = (attendeeType: string): string => {
+  if (attendeeType === 'Thành viên') {
+    return MEMBER_GROUP_ID;
+  }
+  // Khách mời, Khách thăm, Khách đặc biệt
+  return GUEST_GROUP_ID;
+};
+
+export const sendCheckInToTelegram = async (data: CheckInData): Promise<boolean> => {
+  try {
+    const groupId = getGroupIdByAttendeeType(data.attendeeType);
+    
+    let message = `🎯 **THÔNG BÁO CHECK-IN THÀNH CÔNG**
+
+` +
+       `👤 **Họ tên:** ${data.fullName}
+` +
+       `📱 **Số điện thoại:** ${data.phoneNumber}
+` +
+       `🏢 **Ngành nghề:** ${data.industry}
+` +
+       `👥 **Loại tham dự:** ${data.attendeeType}
+`;
+     
+     if (data.invitedBy && data.invitedBy.trim()) {
+       message += `🤝 **Khách của:** ${data.invitedBy}
+`;
+     }
+    
+    if (data.location) {
+      message += `📍 **Vị trí:** ${data.location.latitude}, ${data.location.longitude}\n`;
+      if (data.location.address) {
+        message += `🗺️ **Địa chỉ:** ${data.location.address}\n`;
+      }
+    } else {
+      message += `📍 **Vị trí:** Không có dữ liệu vị trí\n`;
+    }
+    
+    message += `⏰ **Thời gian:** ${data.timestamp}\n\n` +
+      `✅ Check-in thành công cho buổi họp BNI FELIX Chapter!`;
+
+    const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        chat_id: groupId,
+        text: message,
+        parse_mode: 'Markdown'
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Telegram API error: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result.ok;
+  } catch (error) {
+    console.error('Error sending message to Telegram:', error);
+    return false;
+  }
+};
+
+export const getCurrentLocation = (): Promise<GeolocationPosition> => {
+  return new Promise((resolve, reject) => {
+    if (!navigator.geolocation) {
+      reject(new Error('Trình duyệt không hỗ trợ định vị GPS'));
+      return;
+    }
+
+    // Thử với độ chính xác cao trước
+    navigator.geolocation.getCurrentPosition(
+      (position) => resolve(position),
+      (error) => {
+        // Nếu lỗi, thử lại với cấu hình ít nghiêm ngặt hơn
+        navigator.geolocation.getCurrentPosition(
+          (position) => resolve(position),
+          (fallbackError) => {
+            let errorMessage = 'Không thể lấy vị trí';
+            switch(fallbackError.code) {
+              case fallbackError.PERMISSION_DENIED:
+                errorMessage = 'Người dùng từ chối quyền truy cập vị trí';
+                break;
+              case fallbackError.POSITION_UNAVAILABLE:
+                errorMessage = 'Thông tin vị trí không khả dụng';
+                break;
+              case fallbackError.TIMEOUT:
+                errorMessage = 'Hết thời gian chờ lấy vị trí';
+                break;
+            }
+            reject(new Error(errorMessage));
+          },
+          {
+            enableHighAccuracy: false,
+            timeout: 15000,
+            maximumAge: 300000 // 5 phút
+          }
+        );
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 8000,
+        maximumAge: 60000 // 1 phút
+      }
+    );
+  });
+};
+
+export const getAddressFromCoordinates = async (lat: number, lng: number): Promise<string> => {
+  try {
+    // Using a free geocoding service (you might want to use Google Maps API for better results)
+    const response = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=vi`);
+    const data = await response.json();
+    return data.display_name || `${lat}, ${lng}`;
+  } catch (error) {
+    console.error('Error getting address:', error);
+    return `${lat}, ${lng}`;
+  }
+};
