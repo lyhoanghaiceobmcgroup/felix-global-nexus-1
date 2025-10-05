@@ -2,17 +2,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Users, TrendingUp, Calendar, Award, Target, UserPlus, CheckCircle2, FileText } from "lucide-react";
+import { Users, TrendingUp, Calendar, Award, Target, UserPlus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { Outlet, useLocation } from "react-router-dom";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 // Mockup data - Mục tiêu nhiệm kỳ
 const termGoals = [
@@ -326,11 +322,10 @@ const Dashboard = () => {
 
         {/* Main Content Tabs */}
         <Tabs defaultValue="overview" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="overview">Tổng quan</TabsTrigger>
             <TabsTrigger value="referrals">Referrals</TabsTrigger>
             <TabsTrigger value="meetings">Lịch họp</TabsTrigger>
-            <TabsTrigger value="lt-reports">Báo cáo LT</TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
@@ -477,178 +472,6 @@ const Dashboard = () => {
                     </div>
                   ))}
                 </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* LT Reports Tab */}
-          <TabsContent value="lt-reports" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-bni-red" />
-                  Báo cáo Leadership Team
-                </CardTitle>
-                <CardDescription>
-                  Nhập báo cáo hoạt động theo từng vị trí LT
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="lt-position">Vị trí LT</Label>
-                      <Select>
-                        <SelectTrigger id="lt-position">
-                          <SelectValue placeholder="Chọn vị trí" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="president">President (Chủ tịch)</SelectItem>
-                          <SelectItem value="vice-president">Vice President (Phó Chủ tịch)</SelectItem>
-                          <SelectItem value="secretary">Secretary/Treasurer (Thư ký/Thủ quỹ)</SelectItem>
-                          <SelectItem value="membership">Membership Coordinator (Điều phối viên thành viên)</SelectItem>
-                          <SelectItem value="visitor">Visitor Host (Tiếp khách)</SelectItem>
-                          <SelectItem value="education">Education Coordinator (Điều phối viên đào tạo)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="space-y-2">
-                      <Label htmlFor="report-period">Kỳ báo cáo</Label>
-                      <Input type="date" id="report-period" />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="report-title">Tiêu đề báo cáo</Label>
-                    <Input 
-                      id="report-title" 
-                      placeholder="Ví dụ: Báo cáo hoạt động tháng 10/2025"
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="achievements">Thành tích đạt được</Label>
-                    <Textarea 
-                      id="achievements"
-                      placeholder="Mô tả các thành tích, mục tiêu đã hoàn thành..."
-                      rows={4}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="challenges">Thách thức gặp phải</Label>
-                    <Textarea 
-                      id="challenges"
-                      placeholder="Các khó khăn, vấn đề cần giải quyết..."
-                      rows={4}
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="next-steps">Kế hoạch tiếp theo</Label>
-                    <Textarea 
-                      id="next-steps"
-                      placeholder="Kế hoạch hành động cho kỳ tiếp theo..."
-                      rows={4}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="metric-1">Chỉ số 1</Label>
-                      <Input 
-                        id="metric-1" 
-                        type="number"
-                        placeholder="Ví dụ: Số lượng referrals"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="metric-2">Chỉ số 2</Label>
-                      <Input 
-                        id="metric-2" 
-                        type="number"
-                        placeholder="Ví dụ: Số khách mời"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="metric-3">Chỉ số 3</Label>
-                      <Input 
-                        id="metric-3" 
-                        type="number"
-                        placeholder="Ví dụ: Số 1-to-1"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex justify-end gap-4 pt-4">
-                    <Button type="button" variant="outline">
-                      Hủy
-                    </Button>
-                    <Button type="submit" className="bg-bni-red hover:bg-bni-red/90">
-                      <CheckCircle2 className="h-4 w-4 mr-2" />
-                      Gửi báo cáo
-                    </Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-
-            {/* Danh sách báo cáo đã gửi */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Lịch sử báo cáo</CardTitle>
-                <CardDescription>
-                  Các báo cáo đã được gửi
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Ngày</TableHead>
-                      <TableHead>Vị trí</TableHead>
-                      <TableHead>Tiêu đề</TableHead>
-                      <TableHead>Trạng thái</TableHead>
-                      <TableHead>Hành động</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    <TableRow>
-                      <TableCell>01/10/2025</TableCell>
-                      <TableCell>President</TableCell>
-                      <TableCell>Báo cáo tháng 9/2025</TableCell>
-                      <TableCell>
-                        <Badge>Đã duyệt</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="sm">Xem</Button>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>01/09/2025</TableCell>
-                      <TableCell>Membership Coordinator</TableCell>
-                      <TableCell>Báo cáo tháng 8/2025</TableCell>
-                      <TableCell>
-                        <Badge>Đã duyệt</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="sm">Xem</Button>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow>
-                      <TableCell>01/08/2025</TableCell>
-                      <TableCell>Visitor Host</TableCell>
-                      <TableCell>Báo cáo tháng 7/2025</TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">Chờ duyệt</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Button variant="ghost" size="sm">Xem</Button>
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
               </CardContent>
             </Card>
           </TabsContent>
