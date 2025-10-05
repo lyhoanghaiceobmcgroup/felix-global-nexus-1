@@ -302,7 +302,7 @@ const Index = () => {
                 {currentText.hero.learnChapter}
               </Button>
 
-              <Button size="lg" className="bg-[#8B0000] hover:bg-[#8B0000]/90 text-white text-lg px-8 py-6" onClick={() => window.location.href = '/referral'}>
+              <Button size="lg" onClick={() => window.location.href = '/referral'} className="text-white text-lg px-8 py-6 bg-green-600 hover:bg-green-500">
                 <TrendingUp className="mr-2" size={20} />
                 {currentText.partnership.suggestReferral}
               </Button>
