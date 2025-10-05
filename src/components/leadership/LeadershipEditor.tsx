@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LeadershipMember } from "@/types/chapter";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Save, CheckCircle2 } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface LeadershipEditorProps {
@@ -42,7 +42,11 @@ export function LeadershipEditor({ open, onOpenChange, leadership, onSave }: Lea
     }
   };
 
-  const handleSave = () => {
+  const handleUpdate = () => {
+    onSave(editedLeadership);
+  };
+
+  const handleSaveAndClose = () => {
     onSave(editedLeadership);
     onOpenChange(false);
   };
@@ -99,12 +103,24 @@ export function LeadershipEditor({ open, onOpenChange, leadership, onSave }: Lea
           ))}
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="gap-2 sm:gap-2">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Hủy
           </Button>
-          <Button onClick={handleSave} className="bg-bni-red hover:bg-bni-red/90">
-            Lưu thay đổi
+          <Button 
+            variant="secondary"
+            onClick={handleUpdate} 
+            className="gap-2"
+          >
+            <Save className="h-4 w-4" />
+            Cập nhật thông tin
+          </Button>
+          <Button 
+            onClick={handleSaveAndClose} 
+            className="bg-bni-red hover:bg-bni-red/90 gap-2"
+          >
+            <CheckCircle2 className="h-4 w-4" />
+            Xác nhận & Đóng
           </Button>
         </DialogFooter>
       </DialogContent>
