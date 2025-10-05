@@ -3,11 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Users, TrendingUp, Calendar, Award, ArrowUpRight, ArrowDownRight,
-  Crown, Target, UserCheck, MessageSquare, Trophy, AlertCircle, CheckCircle2, Download,
-  ClipboardCheck, Clock, FileText, TrendingDown
-} from "lucide-react";
+import { Users, TrendingUp, Calendar, Award, ArrowUpRight, ArrowDownRight, Crown, Target, UserCheck, MessageSquare, Trophy, AlertCircle, CheckCircle2, Download, ClipboardCheck, Clock, FileText, TrendingDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -154,8 +150,9 @@ const topMembers = [{
 const Dashboard = () => {
   const location = useLocation();
   const isSubRoute = location.pathname !== "/dashboard";
-  const { chapterData } = useChapterData();
-  
+  const {
+    chapterData
+  } = useChapterData();
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'achieved':
@@ -176,25 +173,17 @@ const Dashboard = () => {
         return null;
     }
   };
-
   return <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gradient-to-br from-background via-bni-gold/5 to-background">
         <DashboardSidebar />
         
         <div className="flex-1 flex flex-col">
           {/* Header */}
-          <header className="bg-bni-red text-bni-white py-6 px-4 md:px-8 shadow-lg border-b-4 border-bni-gold">
-            <div className="max-w-7xl mx-auto">
-              <h1 className="text-3xl font-bold text-bni-white">BNI Dashboard</h1>
-              <p className="text-bni-white/90 mt-1">Quản lý hoạt động Chapter</p>
-            </div>
-          </header>
+          
 
           <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 w-full">
         {/* Show subroute content if navigated to a report page */}
-        {isSubRoute ? (
-          <Outlet />
-        ) : (
+        {isSubRoute ? <Outlet /> :
           // Enhanced Dashboard Overview with Executive Information
           <div className="space-y-8">
             {/* Executive Header */}
@@ -266,22 +255,16 @@ const Dashboard = () => {
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {chapterData.leadership.map((leader, index) => (
-                    leader.isPrimary ? (
-                      <div key={index} className="col-span-full p-4 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
+                  {chapterData.leadership.map((leader, index) => leader.isPrimary ? <div key={index} className="col-span-full p-4 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
                         <div className="flex items-center gap-2">
                           <Crown className="h-5 w-5 text-bni-gold" />
                           <span className="font-semibold">{leader.role}:</span>
                           <span className="font-bold text-bni-red">{leader.name}</span>
                         </div>
-                      </div>
-                    ) : (
-                      <div key={index} className="p-3 border rounded-lg bg-card">
+                      </div> : <div key={index} className="p-3 border rounded-lg bg-card">
                         <div className="font-semibold text-sm">{leader.role}</div>
                         <div className="text-sm">{leader.name}</div>
-                      </div>
-                    )
-                  ))}
+                      </div>)}
                 </div>
               </CardContent>
             </Card>
@@ -340,8 +323,8 @@ const Dashboard = () => {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {stats.map((stat, index) => {
-              const Icon = stat.icon;
-              return <Card key={index} className="hover:shadow-lg transition-shadow">
+                const Icon = stat.icon;
+                return <Card key={index} className="hover:shadow-lg transition-shadow">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
                         {stat.title}
@@ -360,7 +343,7 @@ const Dashboard = () => {
                       </div>
                     </CardContent>
                   </Card>;
-            })}
+              })}
             </div>
 
             {/* Main Content Tabs */}
@@ -1016,8 +999,7 @@ const Dashboard = () => {
                 </Card>
               </TabsContent>
             </Tabs>
-          </div>
-        )}
+          </div>}
           </main>
         </div>
       </div>
