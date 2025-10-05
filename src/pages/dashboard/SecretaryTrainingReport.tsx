@@ -39,6 +39,17 @@ interface FundTransaction {
   relatedTo?: string;
 }
 
+interface TrainingSchedule {
+  id: string;
+  memberName: string;
+  topic: string;
+  date: string;
+  time: string;
+  type: '5min' | '8min';
+  status: 'scheduled' | 'completed' | 'cancelled';
+  notes?: string;
+}
+
 export default function SecretaryTrainingReport() {
   const { chapterData, submitReport } = useChapterData();
   const [weekDate, setWeekDate] = useState(new Date().toISOString().split('T')[0]);
@@ -91,6 +102,30 @@ export default function SecretaryTrainingReport() {
     purpose: '',
     approvedBy: '',
     note: '',
+  });
+
+  // Training Schedule States
+  const [fiveMinTraining, setFiveMinTraining] = useState<TrainingSchedule[]>([
+    { id: '1', memberName: 'Nguyễn Văn A', topic: 'Kỹ năng Networking hiệu quả', date: '2025-02-10', time: '07:30', type: '5min', status: 'scheduled' },
+    { id: '2', memberName: 'Trần Thị B', topic: 'Xây dựng lòng tin trong kinh doanh', date: '2025-02-17', time: '07:30', type: '5min', status: 'scheduled' },
+  ]);
+
+  const [eightMinSpeaker, setEightMinSpeaker] = useState<TrainingSchedule[]>([
+    { id: '1', memberName: 'Phạm Văn C', topic: 'Hành trình phát triển doanh nghiệp', date: '2025-02-10', time: '08:00', type: '8min', status: 'scheduled' },
+    { id: '2', memberName: 'Lê Thị D', topic: 'Chiến lược Marketing số', date: '2025-02-24', time: '08:00', type: '8min', status: 'scheduled' },
+  ]);
+
+  const [isManagingTraining, setIsManagingTraining] = useState(false);
+  const [selectedTrainingType, setSelectedTrainingType] = useState<'5min' | '8min'>('5min');
+  const [editingTraining, setEditingTraining] = useState<TrainingSchedule | null>(null);
+  const [newTraining, setNewTraining] = useState<Partial<TrainingSchedule>>({
+    memberName: '',
+    topic: '',
+    date: new Date().toISOString().split('T')[0],
+    time: '07:30',
+    type: '5min',
+    status: 'scheduled',
+    notes: '',
   });
 
   const calculateIncome = (contributions: FundContribution[]) => {
@@ -227,6 +262,89 @@ export default function SecretaryTrainingReport() {
     setNewExpenditure({ amount: 0, date: new Date().toISOString().split('T')[0], purpose: '', approvedBy: '', note: '' });
     setIsAddingExpenditure(false);
     toast.success('Đã thêm chi tiêu thành công');
+  };
+
+  // Training Schedule Handlers
+  const handleAddOrUpdateTraining = () => {
+    if (!newTraining.memberName || !newTraining.topic || !newTraining.date) {
+      toast.error('Vui lòng nhập đầy đủ thông tin');
+      return;
+    }
+
+    if (editingTraining) {
+      // Update existing training
+      const updated: TrainingSchedule = {
+        ...editingTraining,
+        memberName: newTraining.memberName || '',
+        topic: newTraining.topic || '',
+        date: newTraining.date || '',
+        time: newTraining.time || '07:30',
+        notes: newTraining.notes,
+      };
+
+      if (selectedTrainingType === '5min') {
+        setFiveMinTraining(fiveMinTraining.map(t => t.id === updated.id ? updated : t));
+      } else {
+        setEightMinSpeaker(eightMinSpeaker.map(t => t.id === updated.id ? updated : t));
+      }
+      toast.success('Đã cập nhật lịch đào tạo');
+    } else {
+      // Add new training
+      const training: TrainingSchedule = {
+        id: Date.now().toString(),
+        memberName: newTraining.memberName || '',
+        topic: newTraining.topic || '',
+        date: newTraining.date || '',
+        time: newTraining.time || '07:30',
+        type: selectedTrainingType,
+        status: 'scheduled',
+        notes: newTraining.notes,
+      };
+
+      if (selectedTrainingType === '5min') {
+        setFiveMinTraining([...fiveMinTraining, training]);
+      } else {
+        setEightMinSpeaker([...eightMinSpeaker, training]);
+      }
+      toast.success('Đã thêm lịch đào tạo');
+    }
+
+    setNewTraining({ memberName: '', topic: '', date: new Date().toISOString().split('T')[0], time: '07:30', type: selectedTrainingType, status: 'scheduled', notes: '' });
+    setEditingTraining(null);
+    setIsManagingTraining(false);
+  };
+
+  const handleEditTraining = (training: TrainingSchedule) => {
+    setEditingTraining(training);
+    setNewTraining({
+      memberName: training.memberName,
+      topic: training.topic,
+      date: training.date,
+      time: training.time,
+      type: training.type,
+      status: training.status,
+      notes: training.notes,
+    });
+    setSelectedTrainingType(training.type);
+    setIsManagingTraining(true);
+  };
+
+  const handleDeleteTraining = (id: string, type: '5min' | '8min') => {
+    if (type === '5min') {
+      setFiveMinTraining(fiveMinTraining.filter(t => t.id !== id));
+    } else {
+      setEightMinSpeaker(eightMinSpeaker.filter(t => t.id !== id));
+    }
+    toast.success('Đã xóa lịch đào tạo');
+  };
+
+  const handleUpdateTrainingStatus = (id: string, type: '5min' | '8min', newStatus: 'scheduled' | 'completed' | 'cancelled') => {
+    if (type === '5min') {
+      setFiveMinTraining(fiveMinTraining.map(t => t.id === id ? { ...t, status: newStatus } : t));
+    } else {
+      setEightMinSpeaker(eightMinSpeaker.map(t => t.id === id ? { ...t, status: newStatus } : t));
+    }
+    toast.success('Đã cập nhật trạng thái');
   };
 
   const renderFundCard = (
@@ -866,6 +984,300 @@ export default function SecretaryTrainingReport() {
                 />
               </div>
             </div>
+          </div>
+
+          {/* Lịch Đào tạo 5 phút & Diễn giả 8 phút */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="text-xl font-bold flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-bni-red" />
+                Lịch Đào tạo & Diễn giả
+              </h3>
+              <Dialog open={isManagingTraining} onOpenChange={(open) => {
+                setIsManagingTraining(open);
+                if (!open) {
+                  setEditingTraining(null);
+                  setNewTraining({ memberName: '', topic: '', date: new Date().toISOString().split('T')[0], time: '07:30', type: selectedTrainingType, status: 'scheduled', notes: '' });
+                }
+              }}>
+                <DialogTrigger asChild>
+                  <Button className="bg-bni-red hover:bg-bni-red/90 text-white">
+                    <Plus className="h-4 w-4 mr-2" />
+                    Thêm Lịch
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>{editingTraining ? 'Cập nhật' : 'Thêm'} Lịch Đào tạo</DialogTitle>
+                    <DialogDescription>Quản lý lịch đào tạo 5 phút và diễn giả 8 phút theo chuẩn BNI</DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 mt-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Loại đào tạo</Label>
+                        <div className="flex gap-2 mt-2">
+                          <Button
+                            type="button"
+                            variant={selectedTrainingType === '5min' ? 'default' : 'outline'}
+                            className={selectedTrainingType === '5min' ? 'bg-bni-red text-white' : ''}
+                            onClick={() => {
+                              setSelectedTrainingType('5min');
+                              setNewTraining({...newTraining, type: '5min', time: '07:30'});
+                            }}
+                          >
+                            Đào tạo 5 phút
+                          </Button>
+                          <Button
+                            type="button"
+                            variant={selectedTrainingType === '8min' ? 'default' : 'outline'}
+                            className={selectedTrainingType === '8min' ? 'bg-bni-red text-white' : ''}
+                            onClick={() => {
+                              setSelectedTrainingType('8min');
+                              setNewTraining({...newTraining, type: '8min', time: '08:00'});
+                            }}
+                          >
+                            Diễn giả 8 phút
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Tên thành viên</Label>
+                      <Input 
+                        value={newTraining.memberName} 
+                        onChange={(e) => setNewTraining({...newTraining, memberName: e.target.value})}
+                        placeholder="Nhập tên thành viên"
+                      />
+                    </div>
+                    <div>
+                      <Label>Chủ đề</Label>
+                      <Input 
+                        value={newTraining.topic} 
+                        onChange={(e) => setNewTraining({...newTraining, topic: e.target.value})}
+                        placeholder={selectedTrainingType === '5min' ? 'Ví dụ: Kỹ năng Networking hiệu quả' : 'Ví dụ: Hành trình phát triển doanh nghiệp'}
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Ngày</Label>
+                        <Input 
+                          type="date"
+                          value={newTraining.date} 
+                          onChange={(e) => setNewTraining({...newTraining, date: e.target.value})}
+                        />
+                      </div>
+                      <div>
+                        <Label>Giờ</Label>
+                        <Input 
+                          type="time"
+                          value={newTraining.time} 
+                          onChange={(e) => setNewTraining({...newTraining, time: e.target.value})}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label>Ghi chú</Label>
+                      <Textarea 
+                        value={newTraining.notes || ''} 
+                        onChange={(e) => setNewTraining({...newTraining, notes: e.target.value})}
+                        placeholder="Thông tin bổ sung..."
+                        rows={3}
+                      />
+                    </div>
+                    <div className="flex gap-2 justify-end pt-4">
+                      <Button variant="outline" onClick={() => {
+                        setIsManagingTraining(false);
+                        setEditingTraining(null);
+                        setNewTraining({ memberName: '', topic: '', date: new Date().toISOString().split('T')[0], time: '07:30', type: selectedTrainingType, status: 'scheduled', notes: '' });
+                      }}>
+                        Hủy
+                      </Button>
+                      <Button className="bg-bni-red hover:bg-bni-red/90 text-white" onClick={handleAddOrUpdateTraining}>
+                        {editingTraining ? 'Cập nhật' : 'Thêm'}
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+
+            {/* 5-Minute Training Schedule */}
+            <Card className="border-2 border-blue-500">
+              <CardHeader className="bg-blue-50 dark:bg-blue-950/20">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <GraduationCap className="h-5 w-5 text-blue-600" />
+                  Lịch Đào tạo 5 phút
+                </CardTitle>
+                <CardDescription>
+                  Đào tạo kỹ năng BNI theo chuẩn 5 phút mỗi buổi họp
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Thành viên</TableHead>
+                      <TableHead>Chủ đề</TableHead>
+                      <TableHead>Ngày & Giờ</TableHead>
+                      <TableHead>Trạng thái</TableHead>
+                      <TableHead>Thao tác</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {fiveMinTraining.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                          Chưa có lịch đào tạo 5 phút. Nhấn "Thêm Lịch" để thêm mới.
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      fiveMinTraining.map((training) => (
+                        <TableRow key={training.id}>
+                          <TableCell className="font-medium">{training.memberName}</TableCell>
+                          <TableCell>{training.topic}</TableCell>
+                          <TableCell>
+                            {new Date(training.date).toLocaleDateString('vi-VN')} - {training.time}
+                          </TableCell>
+                          <TableCell>
+                            <Badge 
+                              className={
+                                training.status === 'scheduled' ? 'bg-blue-500' : 
+                                training.status === 'completed' ? 'bg-green-500' : 
+                                'bg-gray-500'
+                              }
+                            >
+                              {training.status === 'scheduled' ? 'Đã lên lịch' : 
+                               training.status === 'completed' ? 'Hoàn thành' : 
+                               'Đã hủy'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className="border-blue-600 text-blue-600 hover:bg-blue-50"
+                                onClick={() => handleEditTraining(training)}
+                                title="Cập nhật bài"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              {training.status === 'scheduled' && (
+                                <Button 
+                                  size="sm" 
+                                  className="bg-green-600 hover:bg-green-700 text-white"
+                                  onClick={() => handleUpdateTrainingStatus(training.id, '5min', 'completed')}
+                                  title="Đánh dấu hoàn thành"
+                                >
+                                  <CheckCircle2 className="h-4 w-4" />
+                                </Button>
+                              )}
+                              <Button 
+                                size="sm" 
+                                variant="destructive"
+                                onClick={() => handleDeleteTraining(training.id, '5min')}
+                                title="Xóa lịch"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            {/* 8-Minute Speaker Schedule */}
+            <Card className="border-2 border-purple-500">
+              <CardHeader className="bg-purple-50 dark:bg-purple-950/20">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Award className="h-5 w-5 text-purple-600" />
+                  Lịch Diễn giả 8 phút
+                </CardTitle>
+                <CardDescription>
+                  Buổi chia sẻ kinh nghiệm kinh doanh 8 phút theo chuẩn BNI
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Thành viên</TableHead>
+                      <TableHead>Chủ đề</TableHead>
+                      <TableHead>Ngày & Giờ</TableHead>
+                      <TableHead>Trạng thái</TableHead>
+                      <TableHead>Thao tác</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {eightMinSpeaker.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
+                          Chưa có lịch diễn giả 8 phút. Nhấn "Thêm Lịch" để thêm mới.
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      eightMinSpeaker.map((training) => (
+                        <TableRow key={training.id}>
+                          <TableCell className="font-medium">{training.memberName}</TableCell>
+                          <TableCell>{training.topic}</TableCell>
+                          <TableCell>
+                            {new Date(training.date).toLocaleDateString('vi-VN')} - {training.time}
+                          </TableCell>
+                          <TableCell>
+                            <Badge 
+                              className={
+                                training.status === 'scheduled' ? 'bg-purple-500' : 
+                                training.status === 'completed' ? 'bg-green-500' : 
+                                'bg-gray-500'
+                              }
+                            >
+                              {training.status === 'scheduled' ? 'Đã lên lịch' : 
+                               training.status === 'completed' ? 'Hoàn thành' : 
+                               'Đã hủy'}
+                            </Badge>
+                          </TableCell>
+                          <TableCell>
+                            <div className="flex gap-2">
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                className="border-purple-600 text-purple-600 hover:bg-purple-50"
+                                onClick={() => handleEditTraining(training)}
+                                title="Cập nhật bài"
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              {training.status === 'scheduled' && (
+                                <Button 
+                                  size="sm" 
+                                  className="bg-green-600 hover:bg-green-700 text-white"
+                                  onClick={() => handleUpdateTrainingStatus(training.id, '8min', 'completed')}
+                                  title="Đánh dấu hoàn thành"
+                                >
+                                  <CheckCircle2 className="h-4 w-4" />
+                                </Button>
+                              )}
+                              <Button 
+                                size="sm" 
+                                variant="destructive"
+                                onClick={() => handleDeleteTraining(training.id, '8min')}
+                                title="Xóa lịch"
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
           </div>
 
         </CardContent>
