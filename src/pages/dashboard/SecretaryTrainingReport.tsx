@@ -50,6 +50,14 @@ interface TrainingSchedule {
   notes?: string;
 }
 
+interface MemberRenewal {
+  id: string;
+  name: string;
+  joinDate: string;
+  renewalDate: string;
+  monthsActive: number;
+}
+
 export default function SecretaryTrainingReport() {
   const { chapterData, submitReport } = useChapterData();
   const [weekDate, setWeekDate] = useState(new Date().toISOString().split('T')[0]);
@@ -127,6 +135,30 @@ export default function SecretaryTrainingReport() {
     status: 'scheduled',
     notes: '',
   });
+
+  // Member Renewal States
+  const [membersRenewal, setMembersRenewal] = useState<MemberRenewal[]>([
+    { id: '1', name: 'Nguyễn Văn A', joinDate: '2024-03-15', renewalDate: '2025-10-15', monthsActive: 7 },
+    { id: '2', name: 'Trần Thị B', joinDate: '2024-02-20', renewalDate: '2025-10-20', monthsActive: 8 },
+    { id: '3', name: 'Lê Văn C', joinDate: '2024-04-10', renewalDate: '2025-11-10', monthsActive: 6 },
+    { id: '4', name: 'Phạm Thị D', joinDate: '2024-03-25', renewalDate: '2025-11-25', monthsActive: 7 },
+    { id: '5', name: 'Hoàng Văn E', joinDate: '2024-02-28', renewalDate: '2025-11-28', monthsActive: 8 },
+    { id: '6', name: 'Vũ Thị F', joinDate: '2024-05-05', renewalDate: '2025-12-05', monthsActive: 5 },
+    { id: '7', name: 'Đặng Văn G', joinDate: '2024-04-18', renewalDate: '2025-12-18', monthsActive: 6 },
+  ]);
+
+  // Calculate members needing care in 7th month
+  const getSeventhMonthMembers = () => {
+    return membersRenewal.filter(member => member.monthsActive === 7);
+  };
+
+  // Calculate members needing renewal by month
+  const getMembersNeedingRenewal = (targetMonth: string) => {
+    return membersRenewal.filter(member => {
+      const renewalMonth = member.renewalDate.substring(0, 7); // YYYY-MM format
+      return renewalMonth === targetMonth;
+    });
+  };
 
   const calculateIncome = (contributions: FundContribution[]) => {
     return contributions.reduce((sum, c) => sum + (c.status === 'paid' ? c.amount : 0), 0);
@@ -709,35 +741,123 @@ export default function SecretaryTrainingReport() {
               <Calendar className="h-5 w-5 text-bni-red" />
               1. Tình hình Gia hạn Thành viên
             </h3>
-            <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg">
-              <p className="font-semibold mb-4">Thành viên cần gia hạn trong 90 ngày tới:</p>
+            <div className="bg-gray-50 dark:bg-gray-900 p-6 rounded-lg space-y-6">
+              
+              {/* Thành viên cần chăm sóc tháng thứ 7 */}
+              <div className="bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 p-6 rounded-lg border-2 border-purple-500">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <Heart className="h-5 w-5 text-purple-600" />
+                    <Label className="font-bold text-lg text-purple-900 dark:text-purple-300">
+                      Thành viên cần chăm sóc tháng thứ 7
+                    </Label>
+                  </div>
+                  <Badge className="bg-purple-600 text-white text-base px-3 py-1">
+                    {getSeventhMonthMembers().length} thành viên
+                  </Badge>
+                </div>
+                <div className="bg-white dark:bg-background p-4 rounded-lg">
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Thành viên đã tham gia được 7 tháng cần chăm sóc đặc biệt:
+                  </p>
+                  {getSeventhMonthMembers().length > 0 ? (
+                    <div className="space-y-2">
+                      {getSeventhMonthMembers().map((member) => (
+                        <div key={member.id} className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg border border-purple-200">
+                          <span className="font-semibold text-purple-900 dark:text-purple-300">
+                            {member.name}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            Ngày gia hạn: {new Date(member.renewalDate).toLocaleDateString('vi-VN')}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-center text-muted-foreground italic">Không có thành viên nào</p>
+                  )}
+                </div>
+              </div>
+
+              <p className="font-semibold">Thành viên cần gia hạn trong 90 ngày tới:</p>
               
               <div className="space-y-4">
-                <div className="bg-white dark:bg-background p-4 rounded-lg border-l-4 border-orange-500">
-                  <div className="flex justify-between items-center mb-2">
-                    <Label className="font-semibold text-base">Tháng 10/2025:</Label>
-                    <Badge className="bg-orange-500">Sắp đến hạn</Badge>
+                {/* October 2025 */}
+                <div className="bg-white dark:bg-background p-5 rounded-lg border-l-4 border-orange-500 shadow-sm">
+                  <div className="flex justify-between items-center mb-3">
+                    <Label className="font-bold text-lg">Tháng 10/2025:</Label>
+                    <Badge className="bg-orange-500 text-base px-3 py-1">
+                      Sắp đến hạn - {getMembersNeedingRenewal('2025-10').length} thành viên
+                    </Badge>
                   </div>
-                  <Input type="number" placeholder="2 thành viên" className="text-lg font-semibold" defaultValue="2" />
-                  <p className="text-sm text-muted-foreground mt-2">thành viên cần gia hạn</p>
+                  {getMembersNeedingRenewal('2025-10').length > 0 ? (
+                    <div className="space-y-2 mt-3">
+                      {getMembersNeedingRenewal('2025-10').map((member) => (
+                        <div key={member.id} className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-orange-200">
+                          <span className="font-semibold text-orange-900 dark:text-orange-300">
+                            {member.name}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            Hạn gia hạn: {new Date(member.renewalDate).toLocaleDateString('vi-VN')}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground italic text-center mt-2">Không có thành viên nào</p>
+                  )}
                 </div>
 
-                <div className="bg-white dark:bg-background p-4 rounded-lg border-l-4 border-yellow-500">
-                  <div className="flex justify-between items-center mb-2">
-                    <Label className="font-semibold text-base">Tháng 11/2025:</Label>
-                    <Badge className="bg-yellow-500">Chuẩn bị</Badge>
+                {/* November 2025 */}
+                <div className="bg-white dark:bg-background p-5 rounded-lg border-l-4 border-yellow-500 shadow-sm">
+                  <div className="flex justify-between items-center mb-3">
+                    <Label className="font-bold text-lg">Tháng 11/2025:</Label>
+                    <Badge className="bg-yellow-500 text-base px-3 py-1">
+                      Chuẩn bị - {getMembersNeedingRenewal('2025-11').length} thành viên
+                    </Badge>
                   </div>
-                  <Input type="number" placeholder="3 thành viên" className="text-lg font-semibold" defaultValue="3" />
-                  <p className="text-sm text-muted-foreground mt-2">thành viên cần gia hạn</p>
+                  {getMembersNeedingRenewal('2025-11').length > 0 ? (
+                    <div className="space-y-2 mt-3">
+                      {getMembersNeedingRenewal('2025-11').map((member) => (
+                        <div key={member.id} className="flex items-center justify-between p-3 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg border border-yellow-200">
+                          <span className="font-semibold text-yellow-900 dark:text-yellow-300">
+                            {member.name}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            Hạn gia hạn: {new Date(member.renewalDate).toLocaleDateString('vi-VN')}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground italic text-center mt-2">Không có thành viên nào</p>
+                  )}
                 </div>
 
-                <div className="bg-white dark:bg-background p-4 rounded-lg border-l-4 border-blue-500">
-                  <div className="flex justify-between items-center mb-2">
-                    <Label className="font-semibold text-base">Tháng 12/2025:</Label>
-                    <Badge className="bg-blue-500">Theo dõi</Badge>
+                {/* December 2025 */}
+                <div className="bg-white dark:bg-background p-5 rounded-lg border-l-4 border-blue-500 shadow-sm">
+                  <div className="flex justify-between items-center mb-3">
+                    <Label className="font-bold text-lg">Tháng 12/2025:</Label>
+                    <Badge className="bg-blue-500 text-base px-3 py-1">
+                      Theo dõi - {getMembersNeedingRenewal('2025-12').length} thành viên
+                    </Badge>
                   </div>
-                  <Input type="number" placeholder="2 thành viên" className="text-lg font-semibold" defaultValue="2" />
-                  <p className="text-sm text-muted-foreground mt-2">thành viên cần gia hạn</p>
+                  {getMembersNeedingRenewal('2025-12').length > 0 ? (
+                    <div className="space-y-2 mt-3">
+                      {getMembersNeedingRenewal('2025-12').map((member) => (
+                        <div key={member.id} className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200">
+                          <span className="font-semibold text-blue-900 dark:text-blue-300">
+                            {member.name}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            Hạn gia hạn: {new Date(member.renewalDate).toLocaleDateString('vi-VN')}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-muted-foreground italic text-center mt-2">Không có thành viên nào</p>
+                  )}
                 </div>
               </div>
             </div>
