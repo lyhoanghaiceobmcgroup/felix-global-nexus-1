@@ -5,12 +5,24 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Sparkles, Copy, Share2, Facebook, CheckCircle2 } from "lucide-react";
+import { Sparkles, Copy, Share2, Facebook, CheckCircle2, Calendar, Clock, Trash2, Edit2 } from "lucide-react";
 import { toast } from "sonner";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 interface ContentGeneratorProps {
   contentType: string;
   defaultPrompt?: string;
+}
+
+interface ScheduledPost {
+  id: string;
+  content: string;
+  platform: string;
+  scheduleDate: string;
+  scheduleTime: string;
+  repeatCount: number;
+  repeatInterval?: string;
 }
 
 const CONTENT_SUGGESTIONS = {
@@ -46,6 +58,15 @@ export default function ContentGenerator({ contentType, defaultPrompt }: Content
   const [customPrompt, setCustomPrompt] = useState<string>("");
   const [generatedContent, setGeneratedContent] = useState<string>("");
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isScheduleDialogOpen, setIsScheduleDialogOpen] = useState(false);
+  const [scheduledPosts, setScheduledPosts] = useState<ScheduledPost[]>([]);
+  const [scheduleForm, setScheduleForm] = useState({
+    date: "",
+    time: "",
+    repeatCount: 1,
+    repeatInterval: "none",
+    platform: "facebook"
+  });
 
   const suggestion = CONTENT_SUGGESTIONS[selectedType as keyof typeof CONTENT_SUGGESTIONS];
 
@@ -89,6 +110,60 @@ export default function ContentGenerator({ contentType, defaultPrompt }: Content
         description: "Tính năng này cần tài khoản Zalo được kết nối"
       });
     }
+  };
+
+  const handleSchedulePost = () => {
+    if (!generatedContent) {
+      toast.error('Vui lòng tạo nội dung trước khi đặt lịch');
+      return;
+    }
+    if (!scheduleForm.date || !scheduleForm.time) {
+      toast.error('Vui lòng chọn ngày và giờ đăng bài');
+      return;
+    }
+
+    const newPost: ScheduledPost = {
+      id: Date.now().toString(),
+      content: generatedContent,
+      platform: scheduleForm.platform,
+      scheduleDate: scheduleForm.date,
+      scheduleTime: scheduleForm.time,
+      repeatCount: scheduleForm.repeatCount,
+      repeatInterval: scheduleForm.repeatInterval !== "none" ? scheduleForm.repeatInterval : undefined
+    };
+
+    setScheduledPosts([...scheduledPosts, newPost]);
+    setIsScheduleDialogOpen(false);
+    toast.success('Đã đặt lịch đăng bài thành công', {
+      description: `Sẽ đăng vào ${scheduleForm.date} lúc ${scheduleForm.time}`
+    });
+    
+    // Reset form
+    setScheduleForm({
+      date: "",
+      time: "",
+      repeatCount: 1,
+      repeatInterval: "none",
+      platform: "facebook"
+    });
+  };
+
+  const handleDeleteScheduledPost = (id: string) => {
+    setScheduledPosts(scheduledPosts.filter(post => post.id !== id));
+    toast.success('Đã xóa lịch đăng bài');
+  };
+
+  const handleEditScheduledPost = (post: ScheduledPost) => {
+    setGeneratedContent(post.content);
+    setScheduleForm({
+      date: post.scheduleDate,
+      time: post.scheduleTime,
+      repeatCount: post.repeatCount,
+      repeatInterval: post.repeatInterval || "none",
+      platform: post.platform
+    });
+    handleDeleteScheduledPost(post.id);
+    setIsScheduleDialogOpen(true);
   };
 
   return (
@@ -166,29 +241,168 @@ export default function ContentGenerator({ contentType, defaultPrompt }: Content
             />
 
             {/* Action Buttons */}
-            <div className="flex flex-wrap gap-2">
-              <Button 
-                onClick={handleCopy} 
-                variant="outline"
-                className="flex-1"
-              >
-                <Copy className="h-4 w-4 mr-2" />
-                Sao chép
-              </Button>
-              <Button 
-                onClick={handleShareToFacebook}
-                className="flex-1 bg-blue-600 hover:bg-blue-700"
-              >
-                <Facebook className="h-4 w-4 mr-2" />
-                Facebook
-              </Button>
-              <Button 
-                onClick={handleShareToZalo}
-                className="flex-1 bg-blue-500 hover:bg-blue-600"
-              >
-                <Share2 className="h-4 w-4 mr-2" />
-                Zalo
-              </Button>
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-wrap gap-2">
+                <Button 
+                  onClick={handleCopy} 
+                  variant="outline"
+                  className="flex-1"
+                >
+                  <Copy className="h-4 w-4 mr-2" />
+                  Sao chép
+                </Button>
+                <Button 
+                  onClick={handleShareToFacebook}
+                  className="flex-1 bg-blue-600 hover:bg-blue-700"
+                >
+                  <Facebook className="h-4 w-4 mr-2" />
+                  Facebook
+                </Button>
+                <Button 
+                  onClick={handleShareToZalo}
+                  className="flex-1 bg-blue-500 hover:bg-blue-600"
+                >
+                  <Share2 className="h-4 w-4 mr-2" />
+                  Zalo
+                </Button>
+              </div>
+              
+              <Dialog open={isScheduleDialogOpen} onOpenChange={setIsScheduleDialogOpen}>
+                <DialogTrigger asChild>
+                  <Button variant="default" className="w-full bg-bni-red hover:bg-bni-red/90">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Đặt lịch đăng bài
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                  <DialogHeader>
+                    <DialogTitle>Đặt lịch đăng bài tự động</DialogTitle>
+                    <DialogDescription>
+                      Cấu hình thời gian và tần suất đăng bài
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 pt-4">
+                    <div className="space-y-2">
+                      <Label>Nền tảng</Label>
+                      <Select value={scheduleForm.platform} onValueChange={(value) => setScheduleForm({...scheduleForm, platform: value})}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="facebook">Facebook</SelectItem>
+                          <SelectItem value="zalo">Zalo</SelectItem>
+                          <SelectItem value="both">Cả hai</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label>Ngày đăng</Label>
+                        <Input 
+                          type="date" 
+                          value={scheduleForm.date}
+                          onChange={(e) => setScheduleForm({...scheduleForm, date: e.target.value})}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Giờ đăng</Label>
+                        <Input 
+                          type="time" 
+                          value={scheduleForm.time}
+                          onChange={(e) => setScheduleForm({...scheduleForm, time: e.target.value})}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Số lần đăng lại</Label>
+                      <Input 
+                        type="number" 
+                        min="1"
+                        value={scheduleForm.repeatCount}
+                        onChange={(e) => setScheduleForm({...scheduleForm, repeatCount: parseInt(e.target.value) || 1})}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Khoảng cách giữa các lần đăng</Label>
+                      <Select value={scheduleForm.repeatInterval} onValueChange={(value) => setScheduleForm({...scheduleForm, repeatInterval: value})}>
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="none">Không lặp lại</SelectItem>
+                          <SelectItem value="daily">Mỗi ngày</SelectItem>
+                          <SelectItem value="weekly">Mỗi tuần</SelectItem>
+                          <SelectItem value="monthly">Mỗi tháng</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <Button onClick={handleSchedulePost} className="w-full bg-bni-red hover:bg-bni-red/90">
+                      <Clock className="h-4 w-4 mr-2" />
+                      Xác nhận đặt lịch
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+        )}
+
+        {/* Scheduled Posts List */}
+        {scheduledPosts.length > 0 && (
+          <div className="mt-6 space-y-3">
+            <Label className="text-sm font-semibold">Lịch đăng bài đã đặt ({scheduledPosts.length})</Label>
+            <div className="space-y-2">
+              {scheduledPosts.map((post) => (
+                <Card key={post.id} className="bg-muted/50">
+                  <CardContent className="p-3">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex-1 space-y-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <Badge variant="outline" className="text-xs">
+                            <Calendar className="h-3 w-3 mr-1" />
+                            {new Date(post.scheduleDate).toLocaleDateString('vi-VN')}
+                          </Badge>
+                          <Badge variant="outline" className="text-xs">
+                            <Clock className="h-3 w-3 mr-1" />
+                            {post.scheduleTime}
+                          </Badge>
+                          <Badge className="text-xs bg-bni-gold text-bni-black">
+                            {post.platform === 'facebook' ? 'Facebook' : post.platform === 'zalo' ? 'Zalo' : 'Facebook & Zalo'}
+                          </Badge>
+                          {post.repeatInterval && (
+                            <Badge variant="secondary" className="text-xs">
+                              Lặp lại {post.repeatCount} lần ({post.repeatInterval === 'daily' ? 'Mỗi ngày' : post.repeatInterval === 'weekly' ? 'Mỗi tuần' : 'Mỗi tháng'})
+                            </Badge>
+                          )}
+                        </div>
+                        <p className="text-xs text-muted-foreground line-clamp-2">{post.content}</p>
+                      </div>
+                      <div className="flex gap-1">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0"
+                          onClick={() => handleEditScheduledPost(post)}
+                        >
+                          <Edit2 className="h-3 w-3" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="h-8 w-8 p-0 text-destructive hover:text-destructive"
+                          onClick={() => handleDeleteScheduledPost(post.id)}
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </div>
         )}
