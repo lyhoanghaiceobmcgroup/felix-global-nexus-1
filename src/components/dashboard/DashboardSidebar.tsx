@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { 
   FileText, 
   Users, 
@@ -8,7 +8,8 @@ import {
   UserPlus,
   LayoutDashboard,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  LogOut
 } from "lucide-react";
 import {
   Sidebar,
@@ -21,6 +22,7 @@ import {
   SidebarMenuItem,
   useSidebar,
   SidebarHeader,
+  SidebarFooter,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 
@@ -60,6 +62,7 @@ const menuItems = [
 export function DashboardSidebar() {
   const { state, toggleSidebar } = useSidebar();
   const collapsed = state === "collapsed";
+  const navigate = useNavigate();
 
   return (
     <Sidebar className={collapsed ? "w-16" : "w-64"} collapsible="icon">
@@ -108,6 +111,17 @@ export function DashboardSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      
+      <SidebarFooter className="border-t p-2">
+        <Button
+          variant="ghost"
+          className="w-full justify-start text-destructive hover:text-destructive hover:bg-destructive/10"
+          onClick={() => navigate("/")}
+        >
+          <LogOut className="h-4 w-4" />
+          {!collapsed && <span>Thoát</span>}
+        </Button>
+      </SidebarFooter>
     </Sidebar>
   );
 }
