@@ -8,8 +8,7 @@ import {
   UserPlus,
   LayoutDashboard,
   ChevronLeft,
-  ChevronRight,
-  Crown
+  ChevronRight
 } from "lucide-react";
 import {
   Sidebar,
@@ -30,11 +29,6 @@ const menuItems = [
     title: "Tổng quan",
     url: "/dashboard",
     icon: LayoutDashboard,
-  },
-  {
-    title: "Tổng quan Điều hành",
-    url: "/dashboard/executive-overview",
-    icon: Crown,
   },
   {
     title: "Báo cáo Chủ tịch",

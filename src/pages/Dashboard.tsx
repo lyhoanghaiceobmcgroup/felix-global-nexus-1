@@ -2,7 +2,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Users, TrendingUp, Calendar, Award, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
+import { 
+  Users, TrendingUp, Calendar, Award, ArrowUpRight, ArrowDownRight,
+  Crown, Target, UserCheck, MessageSquare, Trophy, AlertCircle, CheckCircle2, Download
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -174,167 +178,456 @@ const Dashboard = () => {
         {isSubRoute ? (
           <Outlet />
         ) : (
-          // Show dashboard overview when on /dashboard
-          <>
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => {
-          const Icon = stat.icon;
-          return <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    {stat.title}
-                  </CardTitle>
-                  <Icon className="h-5 w-5 text-muted-foreground" />
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold">{stat.value}</div>
-                  <div className="flex items-center text-xs mt-2">
-                    {stat.trend === "up" && <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />}
-                    {stat.trend === "down" && <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />}
-                    <span className={stat.trend === "up" ? "text-green-500" : stat.trend === "down" ? "text-red-500" : "text-muted-foreground"}>
-                      {stat.change}
-                    </span>
-                    <span className="text-muted-foreground ml-2">{stat.description}</span>
-                  </div>
-                </CardContent>
-              </Card>;
-        })}
-        </div>
+          // Enhanced Dashboard Overview with Executive Information
+          <div className="space-y-8">
+            {/* Executive Header */}
+            <div className="flex justify-between items-start">
+              <div>
+                <h2 className="text-3xl font-bold flex items-center gap-3">
+                  <Crown className="h-8 w-8 text-bni-gold" />
+                  Tổng quan Điều hành BNI Felix Chapter
+                </h2>
+                <p className="text-muted-foreground mt-2">
+                  Nhiệm kỳ XI (01/10/2025 – 31/3/2026) | Cập nhật Real-time: 30/09/2025
+                </p>
+              </div>
+              <Button variant="outline" className="gap-2">
+                <Download className="h-4 w-4" />
+                Xuất báo cáo
+              </Button>
+            </div>
 
-        {/* Main Content Tabs */}
-        <Tabs defaultValue="referrals" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="referrals">Referrals</TabsTrigger>
-            <TabsTrigger value="meetings">Lịch họp</TabsTrigger>
-            <TabsTrigger value="members">Thành viên</TabsTrigger>
-          </TabsList>
-
-          {/* Referrals Tab */}
-          <TabsContent value="referrals" className="space-y-4">
-            <Card className="text-rose-700">
-              <CardHeader className="text-gray-900">
-                <CardTitle>Referrals gần đây</CardTitle>
-                <CardDescription>
-                  Danh sách các referrals được tạo trong tháng này
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Người giới thiệu</TableHead>
-                      <TableHead>Người nhận</TableHead>
-                      <TableHead>Dịch vụ</TableHead>
-                      <TableHead>Giá trị</TableHead>
-                      <TableHead>Trạng thái</TableHead>
-                      <TableHead>Ngày</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {recentReferrals.map(referral => <TableRow key={referral.id}>
-                        <TableCell className="font-medium">{referral.from}</TableCell>
-                        <TableCell>{referral.to}</TableCell>
-                        <TableCell>{referral.service}</TableCell>
-                        <TableCell>{referral.value}</TableCell>
-                        <TableCell>
-                          <Badge variant={referral.status === "completed" ? "default" : "secondary"}>
-                            {referral.status === "completed" ? "Hoàn thành" : "Đang xử lý"}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {new Date(referral.date).toLocaleDateString('vi-VN')}
-                        </TableCell>
-                      </TableRow>)}
-                  </TableBody>
-                </Table>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Meetings Tab */}
-          <TabsContent value="meetings" className="space-y-4">
-            <Card>
+            {/* Strategic Objectives Overview */}
+            <Card className="border-2 border-bni-gold/20 bg-gradient-to-br from-bni-gold/5 to-background">
               <CardHeader>
-                <CardTitle>Lịch họp sắp tới</CardTitle>
-                <CardDescription>
-                  Các cuộc họp và sự kiện trong tuần tới
-                </CardDescription>
+                <CardTitle className="flex items-center gap-2 text-2xl">
+                  <Target className="h-6 w-6 text-bni-gold" />
+                  Mục tiêu Chiến lược Nhiệm kỳ XI
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {upcomingMeetings.map(meeting => <div key={meeting.id} className="flex items-start space-x-4 p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
-                      <div className="flex-shrink-0">
-                        <Calendar className="h-10 w-10 text-bni-red" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-base font-semibold">{meeting.title}</p>
-                        <p className="text-sm text-muted-foreground mt-1">
-                          {new Date(meeting.date).toLocaleDateString('vi-VN')} • {meeting.time}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          📍 {meeting.location}
-                        </p>
-                        <div className="flex items-center mt-2 space-x-2">
-                          <Badge variant="outline">{meeting.attendees} người tham dự</Badge>
-                          <Badge>{meeting.type === "weekly" ? "Họp tuần" : meeting.type === "one-to-one" ? "1-to-1" : "Đào tạo"}</Badge>
-                        </div>
-                      </div>
-                    </div>)}
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="space-y-2">
+                    <div className="text-sm text-muted-foreground">Doanh thu Nhiệm kỳ</div>
+                    <div className="text-2xl font-bold text-bni-gold">33 Tỷ VNĐ</div>
+                    <div className="text-sm font-semibold">Hiện tại: 1.23 Tỷ</div>
+                    <Progress value={3.7} className="h-2" />
+                    <Badge className="bg-green-500/10 text-green-700 border-green-200 text-xs">
+                      🟩 Bắt đầu tốt
+                    </Badge>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-sm text-muted-foreground">Sĩ số Thành viên</div>
+                    <div className="text-2xl font-bold text-bni-red">75+</div>
+                    <div className="text-sm font-semibold">Hiện tại: 42</div>
+                    <Progress value={56} className="h-2" />
+                    <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200 text-xs">
+                      🟨 Đang phát triển
+                    </Badge>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-sm text-muted-foreground">Tỷ lệ Hiện diện</div>
+                    <div className="text-2xl font-bold text-green-600">98%</div>
+                    <div className="text-sm font-semibold">Mục tiêu: 98%</div>
+                    <Progress value={100} className="h-2" />
+                    <Badge className="bg-green-500/10 text-green-700 border-green-200 text-xs">
+                      <CheckCircle2 className="h-3 w-3 mr-1 inline" />
+                      Đạt mục tiêu
+                    </Badge>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="text-sm text-muted-foreground">TV KPI Xanh</div>
+                    <div className="text-2xl font-bold text-green-600">50%</div>
+                    <div className="text-sm font-semibold">Mục tiêu: 50%</div>
+                    <Progress value={100} className="h-2" />
+                    <Badge className="bg-green-500/10 text-green-700 border-green-200 text-xs">
+                      <CheckCircle2 className="h-3 w-3 mr-1 inline" />
+                      Đạt mục tiêu
+                    </Badge>
+                  </div>
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
 
-          {/* Members Tab */}
-          <TabsContent value="members" className="space-y-4">
+            {/* Leadership Structure */}
             <Card>
               <CardHeader>
-                <CardTitle>Top thành viên xuất sắc</CardTitle>
-                <CardDescription>
-                  Bảng xếp hạng dựa trên hoạt động referral và TYFCB
-                </CardDescription>
+                <CardTitle className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-bni-gold" />
+                  Ban Lãnh đạo Nhiệm kỳ XI
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Hạng</TableHead>
-                      <TableHead>Tên</TableHead>
-                      <TableHead>Ngành nghề</TableHead>
-                      <TableHead>Referrals cho</TableHead>
-                      <TableHead>Referrals nhận</TableHead>
-                      <TableHead>TYFCB</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {topMembers.map(member => <TableRow key={member.id}>
-                        <TableCell>
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-bni-gold/20 text-bni-gold font-bold">
-                            {member.rank}
-                          </div>
-                        </TableCell>
-                        <TableCell className="font-medium">{member.name}</TableCell>
-                        <TableCell>{member.category}</TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-200">
-                            {member.referralsGiven}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-200">
-                            {member.referralsReceived}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="font-semibold text-bni-gold">{member.tyfcb}</TableCell>
-                      </TableRow>)}
-                  </TableBody>
-                </Table>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="col-span-full p-4 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
+                    <div className="flex items-center gap-2">
+                      <Crown className="h-5 w-5 text-bni-gold" />
+                      <span className="font-semibold">Chủ tịch:</span>
+                      <span className="font-bold text-bni-red">Mrs. Đoàn Thị Ánh Khuyên</span>
+                    </div>
+                  </div>
+                  <div className="p-3 border rounded-lg bg-card">
+                    <div className="flex items-center gap-2">
+                      <UserCheck className="h-4 w-4 text-bni-red" />
+                      <div>
+                        <div className="font-semibold text-sm">Phó Chủ tịch</div>
+                        <div className="text-sm">Mr. Lý Hoàng Hải</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3 border rounded-lg bg-card">
+                    <div className="flex items-center gap-2">
+                      <MessageSquare className="h-4 w-4 text-bni-red" />
+                      <div>
+                        <div className="font-semibold text-sm">Tổng Thư ký</div>
+                        <div className="text-sm">Ms. Lưu Thị Châu</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3 border rounded-lg bg-card">
+                    <div className="font-semibold text-sm">Ban Thành viên</div>
+                    <div className="text-sm">Mrs. Lê Thị Lan</div>
+                  </div>
+                  <div className="p-3 border rounded-lg bg-card">
+                    <div className="font-semibold text-sm">Ban Khách mời</div>
+                    <div className="text-sm">Ms. Nguyễn Thị Mến</div>
+                  </div>
+                  <div className="p-3 border rounded-lg bg-card">
+                    <div className="font-semibold text-sm">Ban Đào tạo</div>
+                    <div className="text-sm">Mrs. Đào Thị Thanh Trà</div>
+                  </div>
+                  <div className="p-3 border rounded-lg bg-card">
+                    <div className="font-semibold text-sm">Ban Sự kiện</div>
+                    <div className="text-sm">Mr. Lê Ngọc Minh</div>
+                  </div>
+                  <div className="p-3 border rounded-lg bg-card">
+                    <div className="font-semibold text-sm">Ban Truyền thông</div>
+                    <div className="text-sm">Ms. Phùng Trang Linh</div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
-          </>
+
+            {/* Performance Metrics */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-bni-red" />
+                  Hiệu suất Kinh doanh & Kết nối (Tháng 8)
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h4 className="font-semibold mb-2">Giá trị Giao dịch (Thank You Note)</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Mục tiêu: ~5.5 Tỷ</span>
+                      <span className="font-bold">Thực tế: 1.23 Tỷ</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Progress value={22.4} className="h-3 flex-1" />
+                      <Badge variant="outline" className="bg-yellow-500/10 text-yellow-700">22%</Badge>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Cơ hội Kinh doanh (Referrals)</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Mục tiêu: 258 - 408</span>
+                      <span className="font-bold">Thực tế: 103</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Progress value={25.2} className="h-3 flex-1" />
+                      <Badge variant="outline" className="bg-red-500/10 text-red-700">25%</Badge>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-2">Số lượt 1-2-1</h4>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Mục tiêu: 344 - 544</span>
+                      <span className="font-bold">Thực tế: 344</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Progress value={63.2} className="h-3 flex-1" />
+                      <Badge variant="outline" className="bg-green-500/10 text-green-700">Đạt mức tối thiểu</Badge>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {stats.map((stat, index) => {
+              const Icon = stat.icon;
+              return <Card key={index} className="hover:shadow-lg transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
+                        {stat.title}
+                      </CardTitle>
+                      <Icon className="h-5 w-5 text-muted-foreground" />
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-3xl font-bold">{stat.value}</div>
+                      <div className="flex items-center text-xs mt-2">
+                        {stat.trend === "up" && <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />}
+                        {stat.trend === "down" && <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />}
+                        <span className={stat.trend === "up" ? "text-green-500" : stat.trend === "down" ? "text-red-500" : "text-muted-foreground"}>
+                          {stat.change}
+                        </span>
+                        <span className="text-muted-foreground ml-2">{stat.description}</span>
+                      </div>
+                    </CardContent>
+                  </Card>;
+            })}
+            </div>
+
+            {/* Main Content Tabs */}
+            <Tabs defaultValue="members" className="space-y-6">
+              <TabsList className="grid w-full grid-cols-4">
+                <TabsTrigger value="members">Thành viên</TabsTrigger>
+                <TabsTrigger value="referrals">Referrals</TabsTrigger>
+                <TabsTrigger value="meetings">Lịch họp</TabsTrigger>
+                <TabsTrigger value="top-performers">Top xuất sắc</TabsTrigger>
+              </TabsList>
+
+              {/* Members Tab - Member Tracking */}
+              <TabsContent value="members" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Theo dõi & Chăm sóc Thành viên</CardTitle>
+                    <CardDescription>
+                      Cập nhật trạng thái KPI và hoạt động của từng thành viên
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Tên</TableHead>
+                            <TableHead>Vai trò / Ngành</TableHead>
+                            <TableHead>KPI</TableHead>
+                            <TableHead>Hoạt động Nổi bật</TableHead>
+                            <TableHead>Ghi chú</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell className="font-semibold">Mrs. Đoàn Thị Ánh Khuyên</TableCell>
+                            <TableCell>
+                              <div>Chủ tịch</div>
+                              <div className="text-sm text-muted-foreground">Sức khỏe</div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200">🟢 Xanh</Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              19 lượt 1-2-1, 486 điểm CEU
+                            </TableCell>
+                            <TableCell className="text-sm">Lãnh đạo xuất sắc</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-semibold">Mr. Lý Hoàng Hải</TableCell>
+                            <TableCell>
+                              <div>Phó Chủ tịch</div>
+                              <div className="text-sm text-muted-foreground">Dịch vụ DN</div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200">🟢 Xanh</Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">Diễn giả chính tuần này</TableCell>
+                            <TableCell className="text-sm">Hỗ trợ truyền thông</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-semibold">Mrs. Lưu Thị Châu</TableCell>
+                            <TableCell>
+                              <div>Tổng Thư ký</div>
+                              <div className="text-sm text-muted-foreground">F&B</div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200">🟢 Xanh</Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">Trao 12 cơ hội kinh doanh</TableCell>
+                            <TableCell className="text-sm">Vinh danh</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-semibold">Mrs. Hà Thị Hạnh</TableCell>
+                            <TableCell>
+                              <div>Ban Khách mời</div>
+                              <div className="text-sm text-muted-foreground">Bảo hiểm</div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200">🟢 Xanh</Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <Trophy className="h-4 w-4 inline mr-1 text-bni-gold" />
+                              Thank You Note {'>'}312 Triệu
+                            </TableCell>
+                            <TableCell className="text-sm">Case study thành công</TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-semibold">Mr. Nguyễn Sơn Tùng</TableCell>
+                            <TableCell>
+                              <div>PT Chất lượng TV</div>
+                              <div className="text-sm text-muted-foreground">Nội thất</div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200">🟡 Vàng</Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">Diễn giả đào tạo networking</TableCell>
+                            <TableCell className="text-sm">
+                              <AlertCircle className="h-4 w-4 inline mr-1 text-yellow-600" />
+                              Cần cải thiện Referrals
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="font-semibold">Ms. Phùng Trang Linh</TableCell>
+                            <TableCell>
+                              <div>Ban Truyền thông</div>
+                              <div className="text-sm text-muted-foreground">F&B</div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline">N/A</Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">Thành viên mới</TableCell>
+                            <TableCell className="text-sm">Cần Mentor</TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Referrals Tab */}
+              <TabsContent value="referrals" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Referrals gần đây</CardTitle>
+                    <CardDescription>
+                      Danh sách các referrals được tạo trong tháng này
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Người giới thiệu</TableHead>
+                          <TableHead>Người nhận</TableHead>
+                          <TableHead>Dịch vụ</TableHead>
+                          <TableHead>Giá trị</TableHead>
+                          <TableHead>Trạng thái</TableHead>
+                          <TableHead>Ngày</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {recentReferrals.map(referral => <TableRow key={referral.id}>
+                            <TableCell className="font-medium">{referral.from}</TableCell>
+                            <TableCell>{referral.to}</TableCell>
+                            <TableCell>{referral.service}</TableCell>
+                            <TableCell>{referral.value}</TableCell>
+                            <TableCell>
+                              <Badge variant={referral.status === "completed" ? "default" : "secondary"}>
+                                {referral.status === "completed" ? "Hoàn thành" : "Đang xử lý"}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-muted-foreground">
+                              {new Date(referral.date).toLocaleDateString('vi-VN')}
+                            </TableCell>
+                          </TableRow>)}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Meetings Tab */}
+              <TabsContent value="meetings" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Lịch họp sắp tới</CardTitle>
+                    <CardDescription>
+                      Các cuộc họp và sự kiện trong tuần tới
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {upcomingMeetings.map(meeting => <div key={meeting.id} className="flex items-start space-x-4 p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
+                          <div className="flex-shrink-0">
+                            <Calendar className="h-10 w-10 text-bni-red" />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-base font-semibold">{meeting.title}</p>
+                            <p className="text-sm text-muted-foreground mt-1">
+                              {new Date(meeting.date).toLocaleDateString('vi-VN')} • {meeting.time}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              📍 {meeting.location}
+                            </p>
+                            <div className="flex items-center mt-2 space-x-2">
+                              <Badge variant="outline">{meeting.attendees} người tham dự</Badge>
+                              <Badge>{meeting.type === "weekly" ? "Họp tuần" : meeting.type === "one-to-one" ? "1-to-1" : "Đào tạo"}</Badge>
+                            </div>
+                          </div>
+                        </div>)}
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              {/* Top Performers Tab */}
+              <TabsContent value="top-performers" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Top thành viên xuất sắc</CardTitle>
+                    <CardDescription>
+                      Bảng xếp hạng dựa trên hoạt động referral và TYFCB
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Hạng</TableHead>
+                          <TableHead>Tên</TableHead>
+                          <TableHead>Ngành nghề</TableHead>
+                          <TableHead>Referrals cho</TableHead>
+                          <TableHead>Referrals nhận</TableHead>
+                          <TableHead>TYFCB</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {topMembers.map(member => <TableRow key={member.id}>
+                            <TableCell>
+                              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-bni-gold/20 text-bni-gold font-bold">
+                                {member.rank}
+                              </div>
+                            </TableCell>
+                            <TableCell className="font-medium">{member.name}</TableCell>
+                            <TableCell>{member.category}</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-200">
+                                {member.referralsGiven}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-200">
+                                {member.referralsReceived}
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="font-semibold text-bni-gold">{member.tyfcb}</TableCell>
+                          </TableRow>)}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
         )}
           </main>
         </div>
