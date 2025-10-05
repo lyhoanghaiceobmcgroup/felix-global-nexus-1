@@ -5,6 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Users, TrendingUp, Calendar, Award, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 
 // Mockup data
 const stats = [{
@@ -144,23 +146,27 @@ const topMembers = [{
   rank: 5
 }];
 const Dashboard = () => {
-  return <div className="min-h-screen bg-gradient-to-br from-background via-bni-gold/5 to-background">
-      {/* Header */}
-      <header className="bg-bni-red text-white py-6 px-4 md:px-8 shadow-lg">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold">BNI Dashboard</h1>
-            <p className="text-white/80 mt-1">Quản lý hoạt động Chapter</p>
-          </div>
-          <Link to="/">
-            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
-              Về trang chủ
-            </Button>
-          </Link>
-        </div>
-      </header>
+  return <SidebarProvider>
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-background via-bni-gold/5 to-background">
+        <DashboardSidebar />
+        
+        <div className="flex-1 flex flex-col">
+          {/* Header */}
+          <header className="bg-bni-red text-white py-6 px-4 md:px-8 shadow-lg">
+            <div className="max-w-7xl mx-auto flex justify-between items-center">
+              <div>
+                <h1 className="text-3xl font-bold">BNI Dashboard</h1>
+                <p className="text-white/80 mt-1">Quản lý hoạt động Chapter</p>
+              </div>
+              <Link to="/">
+                <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                  Về trang chủ
+                </Button>
+              </Link>
+            </div>
+          </header>
 
-      <main className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+          <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 w-full">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => {
@@ -319,7 +325,9 @@ const Dashboard = () => {
             </Card>
           </TabsContent>
         </Tabs>
-      </main>
-    </div>;
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>;
 };
 export default Dashboard;
