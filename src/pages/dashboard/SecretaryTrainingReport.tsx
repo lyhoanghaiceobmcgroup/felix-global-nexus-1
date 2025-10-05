@@ -229,12 +229,6 @@ export default function SecretaryTrainingReport() {
     toast.success('Đã thêm chi tiêu thành công');
   };
 
-  // Helper function to calculate total contributions (used in development and union funds)
-  const calculateTotal = (contributions: FundContribution[]) => {
-    return contributions.reduce((sum, c) => sum + (c.status === 'paid' ? c.amount : 0), 0);
-  };
-
-  // Render fund card for meeting, development, and union funds with unified format
   const renderFundCard = (
     fundType: 'meeting' | 'development' | 'union',
     title: string,
