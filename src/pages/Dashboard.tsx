@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Users, TrendingUp, Calendar, Award, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 
@@ -146,6 +146,9 @@ const topMembers = [{
   rank: 5
 }];
 const Dashboard = () => {
+  const location = useLocation();
+  const isSubRoute = location.pathname !== "/dashboard";
+
   return <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gradient-to-br from-background via-bni-gold/5 to-background">
         <DashboardSidebar />
@@ -167,6 +170,12 @@ const Dashboard = () => {
           </header>
 
           <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 w-full">
+        {/* Show subroute content if navigated to a report page */}
+        {isSubRoute ? (
+          <Outlet />
+        ) : (
+          // Show dashboard overview when on /dashboard
+          <>
         {/* Stats Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {stats.map((stat, index) => {
@@ -325,6 +334,8 @@ const Dashboard = () => {
             </Card>
           </TabsContent>
         </Tabs>
+          </>
+        )}
           </main>
         </div>
       </div>
