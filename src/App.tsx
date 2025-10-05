@@ -16,6 +16,12 @@ import MeetingRegister from "./pages/MeetingRegister";
 import Referral from "./pages/Referral";
 import CheckIn from "./pages/CheckIn";
 import Dashboard from "./pages/Dashboard";
+import PresidentReport from "./pages/dashboard/PresidentReport";
+import VicePresidentReport from "./pages/dashboard/VicePresidentReport";
+import SecretaryTrainingReport from "./pages/dashboard/SecretaryTrainingReport";
+import EventsReport from "./pages/dashboard/EventsReport";
+import CommunicationsReport from "./pages/dashboard/CommunicationsReport";
+import VisitorsReport from "./pages/dashboard/VisitorsReport";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,7 +44,14 @@ const App = () => (
           <Route path="/meeting-register" element={<MeetingRegister />} />
           <Route path="/referral" element={<Referral />} />
           <Route path="/checkin" element={<CheckIn />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route path="president" element={<PresidentReport />} />
+            <Route path="vice-president" element={<VicePresidentReport />} />
+            <Route path="secretary-training" element={<SecretaryTrainingReport />} />
+            <Route path="events" element={<EventsReport />} />
+            <Route path="communications" element={<CommunicationsReport />} />
+            <Route path="visitors" element={<VisitorsReport />} />
+          </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

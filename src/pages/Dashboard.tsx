@@ -2,10 +2,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Users, TrendingUp, Calendar, Award, Target, CheckCircle2, UserPlus, FileText } from "lucide-react";
+import { Users, TrendingUp, Calendar, Award, Target, UserPlus, CheckCircle2, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import { Outlet, useLocation } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -220,24 +223,36 @@ const topMembers = [
 ];
 
 const Dashboard = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-bni-gold/5 to-background">
-      {/* Header */}
-      <header className="bg-bni-red text-white py-6 px-4 md:px-8 shadow-lg">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold">BNI Dashboard</h1>
-            <p className="text-white/80 mt-1">Quản lý hoạt động Chapter</p>
-          </div>
-          <Link to="/">
-            <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
-              Về trang chủ
-            </Button>
-          </Link>
-        </div>
-      </header>
+  const location = useLocation();
+  const isMainDashboard = location.pathname === "/dashboard";
 
-      <main className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+  return (
+    <SidebarProvider>
+      <div className="min-h-screen bg-gradient-to-br from-background via-bni-gold/5 to-background w-full flex flex-col">
+        {/* Header */}
+        <header className="bg-bni-red text-white py-6 px-4 md:px-8 shadow-lg">
+          <div className="max-w-7xl mx-auto flex justify-between items-center">
+            <div className="flex items-center gap-4">
+              <SidebarTrigger className="text-white hover:bg-white/10" />
+              <div>
+                <h1 className="text-3xl font-bold">BNI Dashboard</h1>
+                <p className="text-white/80 mt-1">Quản lý hoạt động Chapter</p>
+              </div>
+            </div>
+            <Link to="/">
+              <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                Về trang chủ
+              </Button>
+            </Link>
+          </div>
+        </header>
+
+        <div className="flex w-full flex-1">
+          <DashboardSidebar />
+          
+          <main className="flex-1 px-4 md:px-8 py-8 overflow-auto">
+            {isMainDashboard ? (
+              <div>
         {/* Mục tiêu nhiệm kỳ */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
@@ -638,8 +653,14 @@ const Dashboard = () => {
             </Card>
           </TabsContent>
         </Tabs>
-      </main>
-    </div>
+              </div>
+            ) : (
+              <Outlet />
+            )}
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
   );
 };
 
