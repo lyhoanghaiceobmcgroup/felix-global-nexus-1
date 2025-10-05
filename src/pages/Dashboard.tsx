@@ -228,12 +228,9 @@ const Dashboard = () => {
         {/* Header */}
         <header className="bg-bni-red text-white py-6 px-4 md:px-8 shadow-lg">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <SidebarTrigger className="text-white hover:bg-white/10" />
-              <div>
-                <h1 className="text-3xl font-bold">BNI Dashboard</h1>
-                <p className="text-white/80 mt-1">Quản lý hoạt động Chapter</p>
-              </div>
+            <div>
+              <h1 className="text-3xl font-bold">BNI Dashboard</h1>
+              <p className="text-white/80 mt-1">Quản lý hoạt động Chapter</p>
             </div>
             <Link to="/">
               <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">

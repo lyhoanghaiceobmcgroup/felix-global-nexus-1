@@ -6,7 +6,9 @@ import {
   Calendar,
   Megaphone,
   UserPlus,
-  LayoutDashboard
+  LayoutDashboard,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import {
   Sidebar,
@@ -18,7 +20,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
+  SidebarHeader,
 } from "@/components/ui/sidebar";
+import { Button } from "@/components/ui/button";
 
 const menuItems = [
   {
@@ -59,19 +63,37 @@ const menuItems = [
 ];
 
 export function DashboardSidebar() {
-  const { state } = useSidebar();
+  const { state, toggleSidebar } = useSidebar();
   const collapsed = state === "collapsed";
 
   return (
     <Sidebar className={collapsed ? "w-16" : "w-64"} collapsible="icon">
+      <SidebarHeader className="border-b p-4">
+        <div className="flex items-center justify-between">
+          {!collapsed && <span className="font-semibold text-bni-red">Menu Dashboard</span>}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="h-8 w-8"
+          >
+            {collapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <ChevronLeft className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
+      </SidebarHeader>
+      
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Dashboard Menu</SidebarGroupLabel>
+          {!collapsed && <SidebarGroupLabel>Báo cáo</SidebarGroupLabel>}
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
+                  <SidebarMenuButton asChild tooltip={collapsed ? item.title : undefined}>
                     <NavLink
                       to={item.url}
                       end={item.url === "/dashboard"}
@@ -94,3 +116,4 @@ export function DashboardSidebar() {
     </Sidebar>
   );
 }
+
