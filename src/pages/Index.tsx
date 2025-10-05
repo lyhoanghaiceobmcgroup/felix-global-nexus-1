@@ -301,6 +301,11 @@ const Index = () => {
               <Button size="lg" className="bg-[#2E2E2E] hover:bg-[#2E2E2E]/90 text-white text-lg px-8 py-6" onClick={() => window.location.href = '/checkin'}>
                 {currentText.hero.learnChapter}
               </Button>
+
+              <Button size="lg" className="bg-[#8B0000] hover:bg-[#8B0000]/90 text-white text-lg px-8 py-6" onClick={() => window.location.href = '/referral'}>
+                <TrendingUp className="mr-2" size={20} />
+                {currentText.partnership.suggestReferral}
+              </Button>
             </div>
             
             {/* Location Alert */}
@@ -606,10 +611,6 @@ const Index = () => {
             <Button size="lg" variant="outline" className="border-white hover:bg-white text-lg px-8 py-3 text-red-600" onClick={() => window.location.href = '/register'}>
               <Handshake className="mr-2" size={20} />
               {currentText.partnership.registerPartner}
-            </Button>
-            <Button size="lg" className="bg-[#8B0000] hover:bg-[#8B0000]/90 text-lg px-8 py-3" onClick={() => window.location.href = '/referral'}>
-              <TrendingUp className="mr-2" size={20} />
-              {currentText.partnership.suggestReferral}
             </Button>
           </div>
         </div>
