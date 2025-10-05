@@ -18,10 +18,14 @@ interface ContentGeneratorProps {
 interface ScheduledPost {
   id: string;
   content: string;
-  platform: string;
+  platforms: {
+    facebook: boolean;
+    zalo: boolean;
+  };
+  facebookGroups: string[];
+  zaloGroups: string[];
   scheduleDate: string;
-  scheduleTime: string;
-  repeatCount: number;
+  scheduleTimes: string[];
   repeatInterval?: string;
 }
 
@@ -62,10 +66,14 @@ export default function ContentGenerator({ contentType, defaultPrompt }: Content
   const [scheduledPosts, setScheduledPosts] = useState<ScheduledPost[]>([]);
   const [scheduleForm, setScheduleForm] = useState({
     date: "",
-    time: "",
-    repeatCount: 1,
-    repeatInterval: "none",
-    platform: "facebook"
+    times: [""],
+    platforms: {
+      facebook: false,
+      zalo: false
+    },
+    facebookGroups: [""],
+    zaloGroups: [""],
+    repeatInterval: "none"
   });
 
   const suggestion = CONTENT_SUGGESTIONS[selectedType as keyof typeof CONTENT_SUGGESTIONS];
@@ -117,34 +125,48 @@ export default function ContentGenerator({ contentType, defaultPrompt }: Content
       toast.error('Vui lòng tạo nội dung trước khi đặt lịch');
       return;
     }
-    if (!scheduleForm.date || !scheduleForm.time) {
-      toast.error('Vui lòng chọn ngày và giờ đăng bài');
+    if (!scheduleForm.date) {
+      toast.error('Vui lòng chọn ngày đăng bài');
+      return;
+    }
+    if (scheduleForm.times.every(t => !t)) {
+      toast.error('Vui lòng chọn ít nhất một giờ đăng bài');
+      return;
+    }
+    if (!scheduleForm.platforms.facebook && !scheduleForm.platforms.zalo) {
+      toast.error('Vui lòng chọn ít nhất một nền tảng');
       return;
     }
 
+    const validTimes = scheduleForm.times.filter(t => t);
     const newPost: ScheduledPost = {
       id: Date.now().toString(),
       content: generatedContent,
-      platform: scheduleForm.platform,
+      platforms: scheduleForm.platforms,
+      facebookGroups: scheduleForm.platforms.facebook ? scheduleForm.facebookGroups.filter(g => g) : [],
+      zaloGroups: scheduleForm.platforms.zalo ? scheduleForm.zaloGroups.filter(g => g) : [],
       scheduleDate: scheduleForm.date,
-      scheduleTime: scheduleForm.time,
-      repeatCount: scheduleForm.repeatCount,
+      scheduleTimes: validTimes,
       repeatInterval: scheduleForm.repeatInterval !== "none" ? scheduleForm.repeatInterval : undefined
     };
 
     setScheduledPosts([...scheduledPosts, newPost]);
     setIsScheduleDialogOpen(false);
     toast.success('Đã đặt lịch đăng bài thành công', {
-      description: `Sẽ đăng vào ${scheduleForm.date} lúc ${scheduleForm.time}`
+      description: `Sẽ đăng vào ${scheduleForm.date} vào ${validTimes.length} giờ khác nhau`
     });
     
     // Reset form
     setScheduleForm({
       date: "",
-      time: "",
-      repeatCount: 1,
-      repeatInterval: "none",
-      platform: "facebook"
+      times: [""],
+      platforms: {
+        facebook: false,
+        zalo: false
+      },
+      facebookGroups: [""],
+      zaloGroups: [""],
+      repeatInterval: "none"
     });
   };
 
@@ -157,10 +179,11 @@ export default function ContentGenerator({ contentType, defaultPrompt }: Content
     setGeneratedContent(post.content);
     setScheduleForm({
       date: post.scheduleDate,
-      time: post.scheduleTime,
-      repeatCount: post.repeatCount,
-      repeatInterval: post.repeatInterval || "none",
-      platform: post.platform
+      times: post.scheduleTimes,
+      platforms: post.platforms,
+      facebookGroups: post.facebookGroups.length > 0 ? post.facebookGroups : [""],
+      zaloGroups: post.zaloGroups.length > 0 ? post.zaloGroups : [""],
+      repeatInterval: post.repeatInterval || "none"
     });
     handleDeleteScheduledPost(post.id);
     setIsScheduleDialogOpen(true);
@@ -284,45 +307,162 @@ export default function ContentGenerator({ contentType, defaultPrompt }: Content
                   <div className="space-y-4 pt-4">
                     <div className="space-y-2">
                       <Label>Nền tảng</Label>
-                      <Select value={scheduleForm.platform} onValueChange={(value) => setScheduleForm({...scheduleForm, platform: value})}>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="facebook">Facebook</SelectItem>
-                          <SelectItem value="zalo">Zalo</SelectItem>
-                          <SelectItem value="both">Cả hai</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div className="flex gap-4">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={scheduleForm.platforms.facebook}
+                            onChange={(e) => setScheduleForm({
+                              ...scheduleForm,
+                              platforms: { ...scheduleForm.platforms, facebook: e.target.checked }
+                            })}
+                            className="w-4 h-4"
+                          />
+                          <span>Facebook</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={scheduleForm.platforms.zalo}
+                            onChange={(e) => setScheduleForm({
+                              ...scheduleForm,
+                              platforms: { ...scheduleForm.platforms, zalo: e.target.checked }
+                            })}
+                            className="w-4 h-4"
+                          />
+                          <span>Zalo</span>
+                        </label>
+                      </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    {scheduleForm.platforms.facebook && (
                       <div className="space-y-2">
-                        <Label>Ngày đăng</Label>
-                        <Input 
-                          type="date" 
-                          value={scheduleForm.date}
-                          onChange={(e) => setScheduleForm({...scheduleForm, date: e.target.value})}
-                        />
+                        <Label>Link nhóm Facebook</Label>
+                        {scheduleForm.facebookGroups.map((group, index) => (
+                          <div key={index} className="flex gap-2">
+                            <Input
+                              placeholder="https://facebook.com/groups/..."
+                              value={group}
+                              onChange={(e) => {
+                                const newGroups = [...scheduleForm.facebookGroups];
+                                newGroups[index] = e.target.value;
+                                setScheduleForm({ ...scheduleForm, facebookGroups: newGroups });
+                              }}
+                            />
+                            {scheduleForm.facebookGroups.length > 1 && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  const newGroups = scheduleForm.facebookGroups.filter((_, i) => i !== index);
+                                  setScheduleForm({ ...scheduleForm, facebookGroups: newGroups });
+                                }}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setScheduleForm({
+                            ...scheduleForm,
+                            facebookGroups: [...scheduleForm.facebookGroups, ""]
+                          })}
+                        >
+                          + Thêm nhóm Facebook
+                        </Button>
                       </div>
+                    )}
+
+                    {scheduleForm.platforms.zalo && (
                       <div className="space-y-2">
-                        <Label>Giờ đăng</Label>
-                        <Input 
-                          type="time" 
-                          value={scheduleForm.time}
-                          onChange={(e) => setScheduleForm({...scheduleForm, time: e.target.value})}
-                        />
+                        <Label>Link nhóm Zalo</Label>
+                        {scheduleForm.zaloGroups.map((group, index) => (
+                          <div key={index} className="flex gap-2">
+                            <Input
+                              placeholder="Link nhóm Zalo..."
+                              value={group}
+                              onChange={(e) => {
+                                const newGroups = [...scheduleForm.zaloGroups];
+                                newGroups[index] = e.target.value;
+                                setScheduleForm({ ...scheduleForm, zaloGroups: newGroups });
+                              }}
+                            />
+                            {scheduleForm.zaloGroups.length > 1 && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => {
+                                  const newGroups = scheduleForm.zaloGroups.filter((_, i) => i !== index);
+                                  setScheduleForm({ ...scheduleForm, zaloGroups: newGroups });
+                                }}
+                              >
+                                <Trash2 className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+                        ))}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setScheduleForm({
+                            ...scheduleForm,
+                            zaloGroups: [...scheduleForm.zaloGroups, ""]
+                          })}
+                        >
+                          + Thêm nhóm Zalo
+                        </Button>
                       </div>
+                    )}
+
+                    <div className="space-y-2">
+                      <Label>Ngày đăng</Label>
+                      <Input 
+                        type="date" 
+                        value={scheduleForm.date}
+                        onChange={(e) => setScheduleForm({...scheduleForm, date: e.target.value})}
+                      />
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Số lần đăng lại</Label>
-                      <Input 
-                        type="number" 
-                        min="1"
-                        value={scheduleForm.repeatCount}
-                        onChange={(e) => setScheduleForm({...scheduleForm, repeatCount: parseInt(e.target.value) || 1})}
-                      />
+                      <Label>Giờ đăng</Label>
+                      {scheduleForm.times.map((time, index) => (
+                        <div key={index} className="flex gap-2">
+                          <Input 
+                            type="time" 
+                            value={time}
+                            onChange={(e) => {
+                              const newTimes = [...scheduleForm.times];
+                              newTimes[index] = e.target.value;
+                              setScheduleForm({...scheduleForm, times: newTimes});
+                            }}
+                          />
+                          {scheduleForm.times.length > 1 && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                const newTimes = scheduleForm.times.filter((_, i) => i !== index);
+                                setScheduleForm({...scheduleForm, times: newTimes});
+                              }}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          )}
+                        </div>
+                      ))}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setScheduleForm({
+                          ...scheduleForm,
+                          times: [...scheduleForm.times, ""]
+                        })}
+                      >
+                        + Thêm giờ đăng
+                      </Button>
                     </div>
 
                     <div className="space-y-2">
@@ -366,16 +506,25 @@ export default function ContentGenerator({ contentType, defaultPrompt }: Content
                             <Calendar className="h-3 w-3 mr-1" />
                             {new Date(post.scheduleDate).toLocaleDateString('vi-VN')}
                           </Badge>
-                          <Badge variant="outline" className="text-xs">
-                            <Clock className="h-3 w-3 mr-1" />
-                            {post.scheduleTime}
-                          </Badge>
-                          <Badge className="text-xs bg-bni-gold text-bni-black">
-                            {post.platform === 'facebook' ? 'Facebook' : post.platform === 'zalo' ? 'Zalo' : 'Facebook & Zalo'}
-                          </Badge>
+                          {post.scheduleTimes.map((time, idx) => (
+                            <Badge key={idx} variant="outline" className="text-xs">
+                              <Clock className="h-3 w-3 mr-1" />
+                              {time}
+                            </Badge>
+                          ))}
+                          {post.platforms.facebook && (
+                            <Badge className="text-xs bg-blue-600 text-white">
+                              Facebook ({post.facebookGroups.length} nhóm)
+                            </Badge>
+                          )}
+                          {post.platforms.zalo && (
+                            <Badge className="text-xs bg-blue-500 text-white">
+                              Zalo ({post.zaloGroups.length} nhóm)
+                            </Badge>
+                          )}
                           {post.repeatInterval && (
                             <Badge variant="secondary" className="text-xs">
-                              Lặp lại {post.repeatCount} lần ({post.repeatInterval === 'daily' ? 'Mỗi ngày' : post.repeatInterval === 'weekly' ? 'Mỗi tuần' : 'Mỗi tháng'})
+                              Lặp lại ({post.repeatInterval === 'daily' ? 'Mỗi ngày' : post.repeatInterval === 'weekly' ? 'Mỗi tuần' : 'Mỗi tháng'})
                             </Badge>
                           )}
                         </div>
