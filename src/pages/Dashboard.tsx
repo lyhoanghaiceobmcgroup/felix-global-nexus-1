@@ -152,14 +152,14 @@ const Dashboard = () => {
         
         <div className="flex-1 flex flex-col">
           {/* Header */}
-          <header className="bg-bni-red text-white py-6 px-4 md:px-8 shadow-lg">
+          <header className="bg-bni-red text-bni-white py-6 px-4 md:px-8 shadow-lg border-b-4 border-bni-gold">
             <div className="max-w-7xl mx-auto flex justify-between items-center">
               <div>
-                <h1 className="text-3xl font-bold">BNI Dashboard</h1>
-                <p className="text-white/80 mt-1">Quản lý hoạt động Chapter</p>
+                <h1 className="text-3xl font-bold text-bni-white">BNI Dashboard</h1>
+                <p className="text-bni-white/90 mt-1">Quản lý hoạt động Chapter</p>
               </div>
               <Link to="/">
-                <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                <Button variant="outline" className="bg-bni-white text-bni-red border-bni-white hover:bg-bni-white/90 hover:text-bni-dark-red font-semibold">
                   Về trang chủ
                 </Button>
               </Link>
