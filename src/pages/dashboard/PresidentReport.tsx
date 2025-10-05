@@ -5,13 +5,15 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Crown, Target, TrendingUp, Users, Calendar, CheckCircle2, AlertTriangle, Lightbulb } from "lucide-react";
+import { Crown, Target, TrendingUp, Users, Calendar, CheckCircle2, AlertTriangle, Lightbulb, ChevronLeft, ChevronRight, Play, Edit, Download, Link } from "lucide-react";
 import { useState } from "react";
 
 export default function PresidentReport() {
   const [meetingDate, setMeetingDate] = useState(new Date().toISOString().split('T')[0]);
   const [termStart, setTermStart] = useState("2025-10-01");
   const [termEnd, setTermEnd] = useState("2026-03-31");
+  const [currentSlide, setCurrentSlide] = useState(1);
+  const totalSlides = 5;
 
   return (
     <div className="space-y-8">
@@ -363,6 +365,361 @@ export default function PresidentReport() {
               placeholder="Nhập chi tiết hành động..."
               defaultValue="Hãy chủ động đặt lịch 1-2-1 với các thành viên trong Ban Điều hành nhiệm kỳ mới. Hãy chia sẻ cho họ biết mục tiêu của bạn, mong muốn của bạn và bạn sẽ đóng góp gì cho Chapter. Sự thấu hiểu này sẽ là chất keo kết dính chúng ta trong 6 tháng tới."
             />
+          </div>
+
+        </CardContent>
+      </Card>
+
+      {/* V. TRÌNH CHIẾU SLIDE BUỔI HỌP */}
+      <Card className="shadow-lg border-bni-gold border-2">
+        <CardHeader className="bg-gradient-to-r from-bni-gold/10 to-bni-red/10">
+          <CardTitle className="text-2xl flex items-center gap-2">
+            <Play className="h-6 w-6 text-bni-gold" />
+            V. TRÌNH CHIẾU SLIDE BUỔI HỌP
+          </CardTitle>
+          <CardDescription className="text-base">
+            Phần dưới đây là công cụ trình chiếu slide tương tác. Chủ tịch có thể tùy chỉnh nội dung và sử dụng để dẫn dắt buổi họp một cách trực quan.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6 space-y-6">
+          
+          {/* Control Buttons */}
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Button className="bg-bni-gold text-bni-black hover:bg-bni-gold/90">
+              <Play className="h-4 w-4 mr-2" />
+              Bắt đầu Trình chiếu
+            </Button>
+            <Button variant="outline">
+              <Edit className="h-4 w-4 mr-2" />
+              Chỉnh sửa Slide
+            </Button>
+            <Button variant="outline">
+              <Download className="h-4 w-4 mr-2" />
+              Tải về (.pptx)
+            </Button>
+            <Button variant="outline">
+              <Link className="h-4 w-4 mr-2" />
+              Tích hợp Báo cáo
+            </Button>
+          </div>
+
+          <div className="flex justify-end">
+            <Button className="bg-bni-gold text-bni-black hover:bg-bni-gold/90">
+              Xuất sang Trang tính
+            </Button>
+          </div>
+
+          {/* Slide Viewer */}
+          <div className="border-2 border-border rounded-lg p-6 bg-muted/30">
+            
+            {/* Navigation Header */}
+            <div className="flex items-center justify-between mb-6 pb-4 border-b">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setCurrentSlide(Math.max(1, currentSlide - 1))}
+                disabled={currentSlide === 1}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Slide Trước
+              </Button>
+              
+              <div className="font-semibold text-lg">
+                Slide {currentSlide}/{totalSlides}: {
+                  currentSlide === 1 ? "CHÀO MỪNG & TUYÊN BỐ SỨ MỆNH" :
+                  currentSlide === 2 ? "TẦM NHÌN & MỤC TIÊU NHIỆM KỲ XI" :
+                  currentSlide === 3 ? "CÁC THÔNG BÁO QUAN TRỌNG" :
+                  currentSlide === 4 ? "TÍCH HỢP BÁO CÁO BAN KHÁCH MỜI" :
+                  "KÊU GỌI HÀNH ĐỘNG"
+                }
+              </div>
+              
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setCurrentSlide(Math.min(totalSlides, currentSlide + 1))}
+                disabled={currentSlide === totalSlides}
+              >
+                Slide Tiếp
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+
+            {/* Slide Content */}
+            <div className="min-h-[400px] bg-white dark:bg-background p-8 rounded-lg">
+              
+              {/* Slide 1: Welcome */}
+              {currentSlide === 1 && (
+                <div className="space-y-6">
+                  <div className="text-center space-y-4">
+                    <h2 className="text-3xl font-bold text-bni-red">
+                      CHÀO MỪNG ĐẾN VỚI BUỔI HỌP BNI FELIX CHAPTER
+                    </h2>
+                    <p className="text-xl text-bni-gold font-semibold">
+                      SỰ KIỆN KẾT NỐI KINH DOANH NGÀY {meetingDate.split('-').reverse().join('/')}
+                    </p>
+                    <Button variant="ghost" size="sm" className="text-muted-foreground">
+                      <Edit className="h-4 w-4 mr-1" />
+                      Chỉnh sửa nội dung
+                    </Button>
+                  </div>
+
+                  <div className="space-y-4 mt-8">
+                    <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                      <Label className="font-bold text-lg block mb-2">Sứ mệnh của chúng ta:</Label>
+                      <Textarea 
+                        rows={3}
+                        className="bg-white dark:bg-background"
+                        defaultValue="Giúp các thành viên phát triển kinh doanh thông qua một chương trình referral marketing chuyên nghiệp, tích cực và có cấu trúc, tạo điều kiện cho các thành viên phát triển những mối quan hệ ý nghĩa và lâu dài."
+                      />
+                    </div>
+
+                    <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                      <Label className="font-bold text-lg block mb-2">Triết lý cốt lõi:</Label>
+                      <Textarea 
+                        rows={2}
+                        className="bg-white dark:bg-background"
+                        defaultValue="Givers Gain® - Cho là Nhận. Bằng việc cho đi cơ hội kinh doanh, bạn cũng sẽ nhận lại cơ hội kinh doanh cho mình."
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Slide 2: Vision & Goals */}
+              {currentSlide === 2 && (
+                <div className="space-y-6">
+                  <div className="text-center space-y-4">
+                    <h2 className="text-3xl font-bold text-bni-red">
+                      TẦM NHÌN & MỤC TIÊU NHIỆM KỲ XI
+                    </h2>
+                    <Button variant="ghost" size="sm" className="text-muted-foreground">
+                      <Edit className="h-4 w-4 mr-1" />
+                      Chỉnh sửa nội dung & số liệu
+                    </Button>
+                  </div>
+
+                  <div className="space-y-4 mt-8">
+                    <div className="p-4 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
+                      <Label className="font-bold text-lg block mb-2">Tầm nhìn:</Label>
+                      <Textarea 
+                        rows={2}
+                        className="bg-white dark:bg-background"
+                        defaultValue="Trở thành Chapter Platinum với 75+ thành viên, dẫn đầu khu vực về giá trị giao dịch và mức độ gắn kết."
+                      />
+                    </div>
+
+                    <div className="p-4 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
+                      <Label className="font-bold text-lg block mb-2">Mục tiêu chính:</Label>
+                      <div className="space-y-3 mt-3">
+                        <div className="flex items-center gap-3">
+                          <span className="font-semibold min-w-[100px]">Thành viên:</span>
+                          <Input defaultValue="Đạt 75+ thành viên" className="bg-white dark:bg-background" />
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="font-semibold min-w-[100px]">Doanh thu:</span>
+                          <Input defaultValue="Đạt 33 Tỷ VNĐ trong 6 tháng" className="bg-white dark:bg-background" />
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="font-semibold min-w-[100px]">Gắn kết:</span>
+                          <Input defaultValue="Duy trì tỷ lệ hiện diện 98%" className="bg-white dark:bg-background" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Slide 3: Announcements */}
+              {currentSlide === 3 && (
+                <div className="space-y-6">
+                  <div className="text-center space-y-4">
+                    <h2 className="text-3xl font-bold text-bni-red">
+                      THÔNG BÁO & SỰ KIỆN SẮP TỚI
+                    </h2>
+                    <Button variant="ghost" size="sm" className="text-muted-foreground">
+                      <Edit className="h-4 w-4 mr-1" />
+                      Chỉnh sửa nội dung
+                    </Button>
+                  </div>
+
+                  <div className="space-y-4 mt-8">
+                    <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                      <Label className="font-semibold block mb-2">📅 Lễ Chuyển giao BĐH Nhiệm kỳ XI:</Label>
+                      <Textarea 
+                        rows={2}
+                        className="bg-white dark:bg-background"
+                        defaultValue="Sẽ diễn ra vào tuần tới, ngày 07/10/2025. Đề nghị tất cả thành viên tham dự đầy đủ và đúng giờ."
+                      />
+                    </div>
+
+                    <div className="p-4 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg">
+                      <Label className="font-semibold block mb-2">🎯 Kêu gọi ngành nghề:</Label>
+                      <Textarea 
+                        rows={2}
+                        className="bg-white dark:bg-background"
+                        defaultValue="Chapter đang tập trung tìm kiếm các ngành nghề trong Power Team Xây dựng như: Thi công ME, Thang máy, Lọc nước, PCCC."
+                      />
+                    </div>
+
+                    <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                      <Label className="font-semibold block mb-2">🏆 Vinh danh Thành viên:</Label>
+                      <div className="space-y-2">
+                        <div className="p-3 bg-white dark:bg-background rounded">
+                          <Textarea 
+                            rows={1}
+                            defaultValue="Chúc mừng Mrs. Hà Thị Hạnh, thành viên trao giá trị thương vụ lớn nhất tháng 8 (>312 triệu VNĐ)."
+                          />
+                        </div>
+                        <div className="p-3 bg-white dark:bg-background rounded">
+                          <Textarea 
+                            rows={1}
+                            defaultValue="Chúc mừng Mrs. Lưu Thị Châu, thành viên trao nhiều cơ hội kinh doanh nhất tháng 8 (12 cơ hội)."
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Slide 4: Visitor Report */}
+              {currentSlide === 4 && (
+                <div className="space-y-6">
+                  <div className="text-center space-y-4">
+                    <h2 className="text-3xl font-bold text-bni-red">
+                      CHÀO ĐÓN KHÁCH MỜI & BÁO CÁO
+                    </h2>
+                    <Button variant="ghost" size="sm" className="text-muted-foreground">
+                      <Link className="h-4 w-4 mr-1" />
+                      Tích hợp trang Báo cáo Ban Khách mời
+                    </Button>
+                  </div>
+
+                  <div className="space-y-4 mt-8">
+                    <div className="text-center p-4 bg-gradient-to-r from-bni-gold/10 to-bni-red/10 rounded-lg">
+                      <p className="text-xl font-semibold">
+                        Chào mừng <span className="text-bni-red font-bold">4 vị khách quý</span> đã đến tham dự buổi họp của chúng ta ngày hôm nay!
+                      </p>
+                    </div>
+
+                    <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                      <Label className="font-bold text-lg block mb-3">Quy trình chăm sóc khách mời:</Label>
+                      <div className="space-y-2">
+                        <div className="flex items-start gap-2">
+                          <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                          <span><strong>Trước buổi họp:</strong> 100% khách mời đã được liên hệ và gửi thông tin.</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                          <span><strong>Trong buổi họp:</strong> Mỗi khách mời đều có thành viên hỗ trợ.</span>
+                        </div>
+                        <div className="flex items-start gap-2">
+                          <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                          <span><strong>Sau buổi họp:</strong> Đã có 1 khách mời tiềm năng nộp hồ sơ.</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                      <Label className="font-bold text-lg block mb-2">💬 Phản hồi nổi bật:</Label>
+                      <Textarea 
+                        rows={2}
+                        className="bg-white dark:bg-background italic"
+                        defaultValue="Khách mời rất ấn tượng với năng lượng và sự chuyên nghiệp của Chapter."
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Slide 5: Call to Action */}
+              {currentSlide === 5 && (
+                <div className="space-y-6">
+                  <div className="text-center space-y-4">
+                    <h2 className="text-3xl font-bold text-bni-red">
+                      KÊU GỌI HÀNH ĐỘNG TRỌNG TÂM
+                    </h2>
+                    <Button variant="ghost" size="sm" className="text-muted-foreground">
+                      <Edit className="h-4 w-4 mr-1" />
+                      Chỉnh sửa nội dung
+                    </Button>
+                  </div>
+
+                  <div className="space-y-4 mt-8">
+                    <div className="p-6 bg-gradient-to-br from-bni-red/10 to-bni-gold/10 rounded-lg border-2 border-bni-red">
+                      <div className="flex items-start gap-3 mb-3">
+                        <Badge className="bg-bni-red text-lg px-3 py-1 shrink-0">1</Badge>
+                        <Label className="font-bold text-lg">Mỗi thành viên mời 1 khách mời:</Label>
+                      </div>
+                      <Textarea 
+                        rows={2}
+                        className="bg-white dark:bg-background"
+                        defaultValue="Cho buổi Lễ Chuyển giao BĐH tuần tới. Hãy tập trung vào các ngành nghề chúng ta đang tìm kiếm."
+                      />
+                    </div>
+
+                    <div className="p-6 bg-gradient-to-br from-bni-gold/10 to-bni-red/10 rounded-lg border-2 border-bni-gold">
+                      <div className="flex items-start gap-3 mb-3">
+                        <Badge className="bg-bni-gold text-bni-black text-lg px-3 py-1 shrink-0">2</Badge>
+                        <Label className="font-bold text-lg">Chủ động 1-2-1 với BĐH mới:</Label>
+                      </div>
+                      <Textarea 
+                        rows={2}
+                        className="bg-white dark:bg-background"
+                        defaultValue="Để chia sẻ mục tiêu và mong muốn của bạn, tạo sự kết nối ngay từ đầu nhiệm kỳ."
+                      />
+                    </div>
+
+                    <div className="mt-8 text-center p-6 bg-gradient-to-r from-bni-red to-bni-gold rounded-lg">
+                      <p className="text-2xl font-bold text-white">
+                        HÃY CÙNG NHAU HÀNH ĐỘNG VÌ MỘT NHIỆM KỲ XI BÙNG NỔ!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+            </div>
+
+            {/* Navigation Footer */}
+            <div className="flex items-center justify-between mt-6 pt-4 border-t">
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setCurrentSlide(Math.max(1, currentSlide - 1))}
+                disabled={currentSlide === 1}
+              >
+                <ChevronLeft className="h-4 w-4 mr-1" />
+                Slide Trước
+              </Button>
+              
+              <div className="flex gap-2">
+                {Array.from({ length: totalSlides }, (_, i) => i + 1).map((num) => (
+                  <button
+                    key={num}
+                    onClick={() => setCurrentSlide(num)}
+                    className={`w-3 h-3 rounded-full transition-colors ${
+                      currentSlide === num 
+                        ? 'bg-bni-red' 
+                        : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
+                    }`}
+                    aria-label={`Go to slide ${num}`}
+                  />
+                ))}
+              </div>
+              
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setCurrentSlide(Math.min(totalSlides, currentSlide + 1))}
+                disabled={currentSlide === totalSlides}
+              >
+                Slide Tiếp
+                <ChevronRight className="h-4 w-4 ml-1" />
+              </Button>
+            </div>
+
           </div>
 
         </CardContent>
