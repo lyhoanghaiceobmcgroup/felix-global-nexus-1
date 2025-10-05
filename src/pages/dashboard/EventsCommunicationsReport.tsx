@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Megaphone, CheckCircle2, TrendingUp, Send, Plus, ChevronDown, ChevronUp } from "lucide-react";
+import { Megaphone, CheckCircle2, TrendingUp, Send, Plus, ChevronDown, ChevronUp, X } from "lucide-react";
 import { useState } from "react";
 import { useChapterData } from "@/contexts/ChapterDataContext";
 import { toast } from "sonner";
@@ -45,6 +45,13 @@ export default function EventsCommunicationsReport() {
   const [isEventDetailsOpen, setIsEventDetailsOpen] = useState(false);
   const [fanpageReach, setFanpageReach] = useState("15");
   const [fanpageEngagement, setFanpageEngagement] = useState("20");
+  const [communicationActivities, setCommunicationActivities] = useState([
+    { id: '1', type: 'member-of-week' },
+    { id: '2', type: 'newsletter' },
+    { id: '3', type: 'event-announcement' },
+    { id: '4', type: 'fanpage-growth' },
+  ]);
+  const [isCommActivitiesOpen, setIsCommActivitiesOpen] = useState(false);
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -193,22 +200,63 @@ export default function EventsCommunicationsReport() {
       {/* III. HOẠT ĐỘNG TRUYỀN THÔNG THƯỜNG XUYÊN */}
       <Card className="shadow-lg border-bni-gold border-2">
         <CardHeader className="bg-gradient-to-r from-bni-red/10 to-bni-gold/10">
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <Megaphone className="h-6 w-6 text-bni-red" />
-            III. HOẠT ĐỘNG TRUYỀN THÔNG THƯỜNG XUYÊN
-          </CardTitle>
-          <CardDescription className="text-base">
-            Tạo nội dung với AI hoặc tự điền, chia sẻ trực tiếp lên mạng xã hội
-          </CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-2xl flex items-center gap-2">
+                <Megaphone className="h-6 w-6 text-bni-red" />
+                III. HOẠT ĐỘNG TRUYỀN THÔNG THƯỜNG XUYÊN
+              </CardTitle>
+              <CardDescription className="text-base">
+                Tạo nội dung với AI hoặc tự điền, chia sẻ trực tiếp lên mạng xã hội
+              </CardDescription>
+            </div>
+            <Button 
+              onClick={() => {
+                const newActivity = {
+                  id: Date.now().toString(),
+                  type: 'member-of-week'
+                };
+                setCommunicationActivities([...communicationActivities, newActivity]);
+              }}
+              className="bg-bni-red hover:bg-bni-red/90"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Thêm Hoạt động
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="pt-6 space-y-6">
           {/* Content Generators */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-            <ContentGenerator contentType="member-of-week" />
-            <ContentGenerator contentType="newsletter" />
-            <ContentGenerator contentType="event-announcement" />
-            <ContentGenerator contentType="fanpage-growth" />
-          </div>
+          <Collapsible open={isCommActivitiesOpen} onOpenChange={setIsCommActivitiesOpen}>
+            <CollapsibleTrigger asChild>
+              <Button variant="outline" className="w-full justify-between">
+                <span>Hoạt động Truyền thông ({communicationActivities.length})</span>
+                {isCommActivitiesOpen ? <ChevronUp /> : <ChevronDown />}
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="space-y-4 mt-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                {communicationActivities.map((activity) => (
+                  <div key={activity.id} className="relative">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="absolute top-2 right-2 z-10 h-8 w-8 p-0 text-destructive hover:text-destructive hover:bg-destructive/10"
+                      onClick={() => {
+                        setCommunicationActivities(
+                          communicationActivities.filter(a => a.id !== activity.id)
+                        );
+                        toast.success('Đã xóa hoạt động truyền thông');
+                      }}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                    <ContentGenerator contentType={activity.type} />
+                  </div>
+                ))}
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
 
           {/* Hiệu quả Fanpage */}
           <Card className="bg-green-50 dark:bg-green-950/20 border-l-4 border-green-500">
