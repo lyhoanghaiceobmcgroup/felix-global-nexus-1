@@ -5,7 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { 
   Users, TrendingUp, Calendar, Award, ArrowUpRight, ArrowDownRight,
-  Crown, Target, UserCheck, MessageSquare, Trophy, AlertCircle, CheckCircle2, Download
+  Crown, Target, UserCheck, MessageSquare, Trophy, AlertCircle, CheckCircle2, Download,
+  ClipboardCheck, Clock, FileText, TrendingDown
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, Outlet, useLocation } from "react-router-dom";
@@ -498,6 +499,417 @@ const Dashboard = () => {
                           </TableRow>
                         </TableBody>
                       </Table>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Task Tracking & Weekly Reports Section */}
+                <Card className="border-2 border-bni-red/20">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <ClipboardCheck className="h-5 w-5 text-bni-red" />
+                      Theo dõi Nhiệm vụ & Báo cáo Hàng tuần Ban LT
+                    </CardTitle>
+                    <CardDescription>
+                      Tiến độ công việc và báo cáo tuần của từng thành viên Ban Lãnh đạo
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead className="w-[180px]">Thành viên LT</TableHead>
+                            <TableHead className="w-[140px]">Vai trò</TableHead>
+                            <TableHead className="w-[280px]">Nhiệm vụ tuần này</TableHead>
+                            <TableHead className="w-[120px]">Tiến độ</TableHead>
+                            <TableHead className="w-[120px]">Deadline</TableHead>
+                            <TableHead className="w-[120px]">Báo cáo</TableHead>
+                            <TableHead className="w-[100px]">Trạng thái</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {/* Chủ tịch */}
+                          <TableRow>
+                            <TableCell className="font-semibold">Mrs. Đoàn Thị Ánh Khuyên</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-bni-gold/10 text-bni-gold border-bni-gold/30">
+                                Chủ tịch
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <ul className="space-y-1">
+                                <li>• Tổ chức họp LT tuần</li>
+                                <li>• Review KPI Chapter</li>
+                                <li>• 1-2-1 với 5 thành viên</li>
+                              </ul>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Progress value={85} className="h-2" />
+                                <span className="text-xs text-muted-foreground">85%</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <div className="flex items-center gap-1 text-green-600">
+                                <Clock className="h-3 w-3" />
+                                06/10
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200">
+                                <CheckCircle2 className="h-3 w-3 mr-1" />
+                                Đã nộp
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200">
+                                Hoàn thành
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+
+                          {/* Phó Chủ tịch */}
+                          <TableRow>
+                            <TableCell className="font-semibold">Mr. Lý Hoàng Hải</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-bni-red/10 text-bni-red border-bni-red/30">
+                                Phó CT
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <ul className="space-y-1">
+                                <li>• Chuẩn bị bài diễn giả</li>
+                                <li>• Hỗ trợ 3 thành viên mới</li>
+                                <li>• Review chiến lược tăng trưởng</li>
+                              </ul>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Progress value={100} className="h-2" />
+                                <span className="text-xs text-muted-foreground">100%</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <div className="flex items-center gap-1 text-green-600">
+                                <Clock className="h-3 w-3" />
+                                05/10
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200">
+                                <CheckCircle2 className="h-3 w-3 mr-1" />
+                                Đã nộp
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200">
+                                Hoàn thành
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+
+                          {/* Tổng Thư ký */}
+                          <TableRow>
+                            <TableCell className="font-semibold">Mrs. Lưu Thị Châu</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-200">
+                                Tổng TK
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <ul className="space-y-1">
+                                <li>• Cập nhật biên bản họp</li>
+                                <li>• Gửi thông báo sự kiện</li>
+                                <li>• Theo dõi tỷ lệ tham dự</li>
+                              </ul>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Progress value={70} className="h-2" />
+                                <span className="text-xs text-muted-foreground">70%</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <div className="flex items-center gap-1 text-yellow-600">
+                                <Clock className="h-3 w-3" />
+                                07/10
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200">
+                                <AlertCircle className="h-3 w-3 mr-1" />
+                                Chưa nộp
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200">
+                                Đang làm
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+
+                          {/* Trưởng Ban Thành viên */}
+                          <TableRow>
+                            <TableCell className="font-semibold">Mrs. Lê Thị Lan</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-purple-500/10 text-purple-700 border-purple-200">
+                                TB Thành viên
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <ul className="space-y-1">
+                                <li>• Đánh giá KPI thành viên</li>
+                                <li>• Lập kế hoạch tuyển mới</li>
+                                <li>• Chăm sóc TV vàng/đỏ</li>
+                              </ul>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Progress value={60} className="h-2" />
+                                <span className="text-xs text-muted-foreground">60%</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <div className="flex items-center gap-1 text-orange-600">
+                                <Clock className="h-3 w-3" />
+                                08/10
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200">
+                                <AlertCircle className="h-3 w-3 mr-1" />
+                                Chưa nộp
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200">
+                                Đang làm
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+
+                          {/* PT Chất lượng Thành viên */}
+                          <TableRow>
+                            <TableCell className="font-semibold">Mr. Nguyễn Sơn Tùng</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-purple-500/10 text-purple-700 border-purple-200">
+                                PT CL TV
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <ul className="space-y-1">
+                                <li>• Phân tích báo cáo KPI</li>
+                                <li>• Đào tạo kỹ năng Referral</li>
+                                <li>• Hỗ trợ TV KPI vàng</li>
+                              </ul>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Progress value={45} className="h-2" />
+                                <span className="text-xs text-muted-foreground">45%</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <div className="flex items-center gap-1 text-red-600">
+                                <Clock className="h-3 w-3" />
+                                04/10
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-red-500/10 text-red-700 border-red-200">
+                                <TrendingDown className="h-3 w-3 mr-1" />
+                                Quá hạn
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-red-500/10 text-red-700 border-red-200">
+                                Trễ deadline
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+
+                          {/* Trưởng Ban Khách mời */}
+                          <TableRow>
+                            <TableCell className="font-semibold">Ms. Nguyễn Thị Mến</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-teal-500/10 text-teal-700 border-teal-200">
+                                TB Khách mời
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <ul className="space-y-1">
+                                <li>• Mời 10 khách mới</li>
+                                <li>• Follow up khách tuần trước</li>
+                                <li>• Chuẩn bị tài liệu giới thiệu</li>
+                              </ul>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Progress value={90} className="h-2" />
+                                <span className="text-xs text-muted-foreground">90%</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <div className="flex items-center gap-1 text-green-600">
+                                <Clock className="h-3 w-3" />
+                                06/10
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200">
+                                <CheckCircle2 className="h-3 w-3 mr-1" />
+                                Đã nộp
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200">
+                                Hoàn thành
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+
+                          {/* Trưởng Ban Đào tạo */}
+                          <TableRow>
+                            <TableCell className="font-semibold">Mrs. Đào Thị Thanh Trà</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-indigo-500/10 text-indigo-700 border-indigo-200">
+                                TB Đào tạo
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <ul className="space-y-1">
+                                <li>• Tổ chức workshop BNI</li>
+                                <li>• Đào tạo TV mới</li>
+                                <li>• Cập nhật tài liệu training</li>
+                              </ul>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Progress value={75} className="h-2" />
+                                <span className="text-xs text-muted-foreground">75%</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <div className="flex items-center gap-1 text-green-600">
+                                <Clock className="h-3 w-3" />
+                                07/10
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200">
+                                <AlertCircle className="h-3 w-3 mr-1" />
+                                Chưa nộp
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200">
+                                Đang làm
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+
+                          {/* Trưởng Ban Sự kiện */}
+                          <TableRow>
+                            <TableCell className="font-semibold">Mr. Lê Ngọc Minh</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-pink-500/10 text-pink-700 border-pink-200">
+                                TB Sự kiện
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <ul className="space-y-1">
+                                <li>• Lên kế hoạch sự kiện Q4</li>
+                                <li>• Tìm địa điểm Year-end</li>
+                                <li>• Phối hợp với nhà tài trợ</li>
+                              </ul>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Progress value={55} className="h-2" />
+                                <span className="text-xs text-muted-foreground">55%</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <div className="flex items-center gap-1 text-orange-600">
+                                <Clock className="h-3 w-3" />
+                                09/10
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200">
+                                <AlertCircle className="h-3 w-3 mr-1" />
+                                Chưa nộp
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200">
+                                Đang làm
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+
+                          {/* Trưởng Ban Truyền thông */}
+                          <TableRow>
+                            <TableCell className="font-semibold">Ms. Phùng Trang Linh</TableCell>
+                            <TableCell>
+                              <Badge variant="outline" className="bg-orange-500/10 text-orange-700 border-orange-200">
+                                TB Truyền thông
+                              </Badge>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <ul className="space-y-1">
+                                <li>• Đăng 5 bài social media</li>
+                                <li>• Chụp ảnh sự kiện tuần</li>
+                                <li>• Cập nhật website Chapter</li>
+                              </ul>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <Progress value={80} className="h-2" />
+                                <span className="text-xs text-muted-foreground">80%</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              <div className="flex items-center gap-1 text-green-600">
+                                <Clock className="h-3 w-3" />
+                                06/10
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200">
+                                <CheckCircle2 className="h-3 w-3 mr-1" />
+                                Đã nộp
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200">
+                                Đang làm
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
+
+                    {/* Summary Statistics */}
+                    <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4 p-4 bg-muted/30 rounded-lg">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-green-600">4</div>
+                        <div className="text-xs text-muted-foreground mt-1">Đã hoàn thành</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-yellow-600">4</div>
+                        <div className="text-xs text-muted-foreground mt-1">Đang tiến hành</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-red-600">1</div>
+                        <div className="text-xs text-muted-foreground mt-1">Quá hạn</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-bni-gold">72%</div>
+                        <div className="text-xs text-muted-foreground mt-1">Tỷ lệ hoàn thành</div>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
