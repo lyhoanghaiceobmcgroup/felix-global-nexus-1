@@ -5,14 +5,113 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { FileText, DollarSign, Calendar, GraduationCap, CheckCircle2, AlertCircle, Award, Send } from "lucide-react";
+import { FileText, DollarSign, Calendar, GraduationCap, CheckCircle2, AlertCircle, Award, Send, PiggyBank, TrendingUp, Heart, Plus, Edit, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useChapterData } from "@/contexts/ChapterDataContext";
 import { toast } from "sonner";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
+interface FundContribution {
+  memberId: string;
+  memberName: string;
+  amount: number;
+  date: string;
+  quarter?: string;
+  status: 'paid' | 'pending' | 'overdue';
+  note?: string;
+}
 
 export default function SecretaryTrainingReport() {
   const { chapterData, submitReport } = useChapterData();
   const [weekDate, setWeekDate] = useState(new Date().toISOString().split('T')[0]);
+  
+  // Fund Management States
+  const [meetingFundContributions, setMeetingFundContributions] = useState<FundContribution[]>([
+    { memberId: '1', memberName: 'Nguyễn Văn A', amount: 500000, date: '2025-01-15', quarter: 'Q1/2025', status: 'paid' },
+    { memberId: '2', memberName: 'Trần Thị B', amount: 500000, date: '2025-01-20', quarter: 'Q1/2025', status: 'paid' },
+    { memberId: '3', memberName: 'Lê Văn C', amount: 0, date: '', quarter: 'Q1/2025', status: 'pending' },
+  ]);
+
+  const [developmentFundContributions, setDevelopmentFundContributions] = useState<FundContribution[]>([
+    { memberId: '1', memberName: 'Nguyễn Văn A', amount: 1000000, date: '2025-01-10', status: 'paid', note: 'Nhận cơ hội kinh doanh' },
+    { memberId: '4', memberName: 'Phạm Văn D', amount: 2000000, date: '2025-01-25', status: 'paid', note: 'Tài trợ Gala' },
+  ]);
+
+  const [unionFundContributions, setUnionFundContributions] = useState<FundContribution[]>([
+    { memberId: '5', memberName: 'Hoàng Thị E', amount: 50000, date: '2025-01-12', status: 'paid', note: 'Vi phạm quy định' },
+    { memberId: '6', memberName: 'Vũ Văn F', amount: 100000, date: '2025-01-18', status: 'paid', note: 'Đến muộn' },
+  ]);
+
+  const [isAddingContribution, setIsAddingContribution] = useState(false);
+  const [selectedFundType, setSelectedFundType] = useState<'meeting' | 'development' | 'union'>('meeting');
+  const [newContribution, setNewContribution] = useState<Partial<FundContribution>>({
+    memberName: '',
+    amount: 0,
+    date: new Date().toISOString().split('T')[0],
+    status: 'paid',
+    note: '',
+  });
+
+  const calculateTotal = (contributions: FundContribution[]) => {
+    return contributions.reduce((sum, c) => sum + (c.status === 'paid' ? c.amount : 0), 0);
+  };
+
+  const handleAddContribution = () => {
+    if (!newContribution.memberName || !newContribution.amount) {
+      toast.error('Vui lòng nhập đầy đủ thông tin');
+      return;
+    }
+
+    const contribution: FundContribution = {
+      memberId: Date.now().toString(),
+      memberName: newContribution.memberName || '',
+      amount: newContribution.amount || 0,
+      date: newContribution.date || new Date().toISOString().split('T')[0],
+      status: newContribution.status as 'paid' | 'pending' | 'overdue' || 'paid',
+      note: newContribution.note,
+      ...(selectedFundType === 'meeting' && { quarter: newContribution.quarter }),
+    };
+
+    if (selectedFundType === 'meeting') {
+      setMeetingFundContributions([...meetingFundContributions, contribution]);
+    } else if (selectedFundType === 'development') {
+      setDevelopmentFundContributions([...developmentFundContributions, contribution]);
+    } else {
+      setUnionFundContributions([...unionFundContributions, contribution]);
+    }
+
+    setNewContribution({ memberName: '', amount: 0, date: new Date().toISOString().split('T')[0], status: 'paid', note: '' });
+    setIsAddingContribution(false);
+    toast.success('Đã thêm đóng góp thành công');
+  };
+
+  const handleDeleteContribution = (fundType: 'meeting' | 'development' | 'union', memberId: string) => {
+    if (fundType === 'meeting') {
+      setMeetingFundContributions(meetingFundContributions.filter(c => c.memberId !== memberId));
+    } else if (fundType === 'development') {
+      setDevelopmentFundContributions(developmentFundContributions.filter(c => c.memberId !== memberId));
+    } else {
+      setUnionFundContributions(unionFundContributions.filter(c => c.memberId !== memberId));
+    }
+    toast.success('Đã xóa đóng góp');
+  };
+
+  const handleUpdateStatus = (fundType: 'meeting' | 'development' | 'union', memberId: string, newStatus: 'paid' | 'pending' | 'overdue') => {
+    if (fundType === 'meeting') {
+      setMeetingFundContributions(meetingFundContributions.map(c => 
+        c.memberId === memberId ? { ...c, status: newStatus, date: newStatus === 'paid' ? new Date().toISOString().split('T')[0] : c.date } : c
+      ));
+    } else if (fundType === 'development') {
+      setDevelopmentFundContributions(developmentFundContributions.map(c => 
+        c.memberId === memberId ? { ...c, status: newStatus, date: newStatus === 'paid' ? new Date().toISOString().split('T')[0] : c.date } : c
+      ));
+    } else {
+      setUnionFundContributions(unionFundContributions.map(c => 
+        c.memberId === memberId ? { ...c, status: newStatus, date: newStatus === 'paid' ? new Date().toISOString().split('T')[0] : c.date } : c
+      ));
+    }
+    toast.success('Đã cập nhật trạng thái');
+  };
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -32,12 +131,12 @@ export default function SecretaryTrainingReport() {
         </div>
       </div>
 
-      {/* II. TỔNG QUAN HÀNH CHÍNH & TÀI CHÍNH */}
+      {/* I. TỔNG QUAN HÀNH CHÍNH & TÀI CHÍNH */}
       <Card className="shadow-lg border-bni-gold border-2">
         <CardHeader className="bg-gradient-to-r from-bni-gold/10 to-bni-red/10">
           <CardTitle className="text-2xl flex items-center gap-2">
             <FileText className="h-6 w-6 text-bni-red" />
-            II. TỔNG QUAN HÀNH CHÍNH & TÀI CHÍNH
+            I. TỔNG QUAN HÀNH CHÍNH & TÀI CHÍNH
           </CardTitle>
           <CardDescription className="text-base">Báo cáo Tổng Thư ký</CardDescription>
         </CardHeader>
@@ -167,15 +266,425 @@ export default function SecretaryTrainingReport() {
             </div>
           </div>
 
+          {/* 3. Quỹ Chapter */}
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold flex items-center gap-2">
+              <PiggyBank className="h-5 w-5 text-bni-red" />
+              3. Quỹ Chapter
+            </h3>
+            
+            {/* Quỹ Phòng họp */}
+            <Card className="border-2 border-green-500">
+              <CardHeader className="bg-green-50 dark:bg-green-950/20">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-green-600" />
+                  Quỹ Phòng họp
+                </CardTitle>
+                <CardDescription>
+                  Quỹ đóng theo quý cho chi phí hoạt động phòng họp BNI
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <div className="mb-4 flex justify-between items-center">
+                  <div className="text-2xl font-bold text-green-600">
+                    Tổng: {calculateTotal(meetingFundContributions).toLocaleString('vi-VN')} VNĐ
+                  </div>
+                  <Dialog open={isAddingContribution && selectedFundType === 'meeting'} onOpenChange={(open) => {
+                    setIsAddingContribution(open);
+                    setSelectedFundType('meeting');
+                  }}>
+                    <DialogTrigger asChild>
+                      <Button className="bg-green-600 hover:bg-green-700 text-white">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Thêm Đóng góp
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Thêm Đóng góp Quỹ Phòng họp</DialogTitle>
+                        <DialogDescription>Nhập thông tin đóng góp của thành viên</DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 mt-4">
+                        <div>
+                          <Label>Tên thành viên</Label>
+                          <Input 
+                            value={newContribution.memberName} 
+                            onChange={(e) => setNewContribution({...newContribution, memberName: e.target.value})}
+                            placeholder="Nhập tên thành viên"
+                          />
+                        </div>
+                        <div>
+                          <Label>Quý</Label>
+                          <Input 
+                            value={newContribution.quarter || ''} 
+                            onChange={(e) => setNewContribution({...newContribution, quarter: e.target.value})}
+                            placeholder="Q1/2025"
+                          />
+                        </div>
+                        <div>
+                          <Label>Số tiền (VNĐ)</Label>
+                          <Input 
+                            type="number"
+                            value={newContribution.amount} 
+                            onChange={(e) => setNewContribution({...newContribution, amount: Number(e.target.value)})}
+                            placeholder="500000"
+                          />
+                        </div>
+                        <div>
+                          <Label>Ngày đóng</Label>
+                          <Input 
+                            type="date"
+                            value={newContribution.date} 
+                            onChange={(e) => setNewContribution({...newContribution, date: e.target.value})}
+                          />
+                        </div>
+                        <div className="flex gap-2 justify-end">
+                          <Button variant="outline" onClick={() => setIsAddingContribution(false)}>Hủy</Button>
+                          <Button className="bg-green-600 hover:bg-green-700 text-white" onClick={handleAddContribution}>
+                            Thêm
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Thành viên</TableHead>
+                      <TableHead>Quý</TableHead>
+                      <TableHead>Số tiền</TableHead>
+                      <TableHead>Ngày đóng</TableHead>
+                      <TableHead>Trạng thái</TableHead>
+                      <TableHead>Thao tác</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {meetingFundContributions.map((contribution) => (
+                      <TableRow key={contribution.memberId}>
+                        <TableCell className="font-medium">{contribution.memberName}</TableCell>
+                        <TableCell>{contribution.quarter}</TableCell>
+                        <TableCell>{contribution.amount.toLocaleString('vi-VN')} VNĐ</TableCell>
+                        <TableCell>{contribution.date || '-'}</TableCell>
+                        <TableCell>
+                          <Badge 
+                            className={
+                              contribution.status === 'paid' ? 'bg-green-500' : 
+                              contribution.status === 'pending' ? 'bg-yellow-500' : 
+                              'bg-red-500'
+                            }
+                          >
+                            {contribution.status === 'paid' ? 'Đã đóng' : 
+                             contribution.status === 'pending' ? 'Chờ đóng' : 
+                             'Quá hạn'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex gap-2">
+                            {contribution.status !== 'paid' && (
+                              <Button 
+                                size="sm" 
+                                className="bg-green-600 hover:bg-green-700 text-white"
+                                onClick={() => handleUpdateStatus('meeting', contribution.memberId, 'paid')}
+                              >
+                                <CheckCircle2 className="h-4 w-4" />
+                              </Button>
+                            )}
+                            <Button 
+                              size="sm" 
+                              variant="destructive"
+                              onClick={() => handleDeleteContribution('meeting', contribution.memberId)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            {/* Quỹ Phát triển */}
+            <Card className="border-2 border-blue-500">
+              <CardHeader className="bg-blue-50 dark:bg-blue-950/20">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <TrendingUp className="h-5 w-5 text-blue-600" />
+                  Quỹ Phát triển
+                </CardTitle>
+                <CardDescription>
+                  Quỹ tự nguyện từ cơ hội kinh doanh và tài trợ, dùng cho BOD, Gala
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <div className="mb-4 flex justify-between items-center">
+                  <div className="text-2xl font-bold text-blue-600">
+                    Tổng: {calculateTotal(developmentFundContributions).toLocaleString('vi-VN')} VNĐ
+                  </div>
+                  <Dialog open={isAddingContribution && selectedFundType === 'development'} onOpenChange={(open) => {
+                    setIsAddingContribution(open);
+                    setSelectedFundType('development');
+                  }}>
+                    <DialogTrigger asChild>
+                      <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Thêm Đóng góp
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Thêm Đóng góp Quỹ Phát triển</DialogTitle>
+                        <DialogDescription>Nhập thông tin đóng góp của thành viên</DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 mt-4">
+                        <div>
+                          <Label>Tên thành viên</Label>
+                          <Input 
+                            value={newContribution.memberName} 
+                            onChange={(e) => setNewContribution({...newContribution, memberName: e.target.value})}
+                            placeholder="Nhập tên thành viên"
+                          />
+                        </div>
+                        <div>
+                          <Label>Số tiền (VNĐ)</Label>
+                          <Input 
+                            type="number"
+                            value={newContribution.amount} 
+                            onChange={(e) => setNewContribution({...newContribution, amount: Number(e.target.value)})}
+                            placeholder="1000000"
+                          />
+                        </div>
+                        <div>
+                          <Label>Ngày đóng</Label>
+                          <Input 
+                            type="date"
+                            value={newContribution.date} 
+                            onChange={(e) => setNewContribution({...newContribution, date: e.target.value})}
+                          />
+                        </div>
+                        <div>
+                          <Label>Ghi chú</Label>
+                          <Input 
+                            value={newContribution.note || ''} 
+                            onChange={(e) => setNewContribution({...newContribution, note: e.target.value})}
+                            placeholder="Nhận cơ hội kinh doanh, tài trợ..."
+                          />
+                        </div>
+                        <div className="flex gap-2 justify-end">
+                          <Button variant="outline" onClick={() => setIsAddingContribution(false)}>Hủy</Button>
+                          <Button className="bg-blue-600 hover:bg-blue-700 text-white" onClick={handleAddContribution}>
+                            Thêm
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Thành viên</TableHead>
+                      <TableHead>Số tiền</TableHead>
+                      <TableHead>Ngày đóng</TableHead>
+                      <TableHead>Ghi chú</TableHead>
+                      <TableHead>Trạng thái</TableHead>
+                      <TableHead>Thao tác</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {developmentFundContributions.map((contribution) => (
+                      <TableRow key={contribution.memberId}>
+                        <TableCell className="font-medium">{contribution.memberName}</TableCell>
+                        <TableCell>{contribution.amount.toLocaleString('vi-VN')} VNĐ</TableCell>
+                        <TableCell>{contribution.date || '-'}</TableCell>
+                        <TableCell className="max-w-xs truncate">{contribution.note || '-'}</TableCell>
+                        <TableCell>
+                          <Badge 
+                            className={
+                              contribution.status === 'paid' ? 'bg-green-500' : 
+                              contribution.status === 'pending' ? 'bg-yellow-500' : 
+                              'bg-red-500'
+                            }
+                          >
+                            {contribution.status === 'paid' ? 'Đã đóng' : 
+                             contribution.status === 'pending' ? 'Chờ đóng' : 
+                             'Quá hạn'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex gap-2">
+                            {contribution.status !== 'paid' && (
+                              <Button 
+                                size="sm" 
+                                className="bg-green-600 hover:bg-green-700 text-white"
+                                onClick={() => handleUpdateStatus('development', contribution.memberId, 'paid')}
+                              >
+                                <CheckCircle2 className="h-4 w-4" />
+                              </Button>
+                            )}
+                            <Button 
+                              size="sm" 
+                              variant="destructive"
+                              onClick={() => handleDeleteContribution('development', contribution.memberId)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+
+            {/* Quỹ Công đoàn */}
+            <Card className="border-2 border-red-500">
+              <CardHeader className="bg-red-50 dark:bg-red-950/20">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Heart className="h-5 w-5 text-red-600" />
+                  Quỹ Công đoàn
+                </CardTitle>
+                <CardDescription>
+                  Quỹ từ phí xử phạt vi phạm, dùng cho chăm sóc thành viên và gia đình
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-6">
+                <div className="mb-4 flex justify-between items-center">
+                  <div className="text-2xl font-bold text-red-600">
+                    Tổng: {calculateTotal(unionFundContributions).toLocaleString('vi-VN')} VNĐ
+                  </div>
+                  <Dialog open={isAddingContribution && selectedFundType === 'union'} onOpenChange={(open) => {
+                    setIsAddingContribution(open);
+                    setSelectedFundType('union');
+                  }}>
+                    <DialogTrigger asChild>
+                      <Button className="bg-red-600 hover:bg-red-700 text-white">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Thêm Đóng góp
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Thêm Đóng góp Quỹ Công đoàn</DialogTitle>
+                        <DialogDescription>Nhập thông tin phí xử phạt</DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 mt-4">
+                        <div>
+                          <Label>Tên thành viên</Label>
+                          <Input 
+                            value={newContribution.memberName} 
+                            onChange={(e) => setNewContribution({...newContribution, memberName: e.target.value})}
+                            placeholder="Nhập tên thành viên"
+                          />
+                        </div>
+                        <div>
+                          <Label>Số tiền phạt (VNĐ)</Label>
+                          <Input 
+                            type="number"
+                            value={newContribution.amount} 
+                            onChange={(e) => setNewContribution({...newContribution, amount: Number(e.target.value)})}
+                            placeholder="50000"
+                          />
+                        </div>
+                        <div>
+                          <Label>Ngày đóng</Label>
+                          <Input 
+                            type="date"
+                            value={newContribution.date} 
+                            onChange={(e) => setNewContribution({...newContribution, date: e.target.value})}
+                          />
+                        </div>
+                        <div>
+                          <Label>Lý do vi phạm</Label>
+                          <Input 
+                            value={newContribution.note || ''} 
+                            onChange={(e) => setNewContribution({...newContribution, note: e.target.value})}
+                            placeholder="Đến muộn, vắng mặt..."
+                          />
+                        </div>
+                        <div className="flex gap-2 justify-end">
+                          <Button variant="outline" onClick={() => setIsAddingContribution(false)}>Hủy</Button>
+                          <Button className="bg-red-600 hover:bg-red-700 text-white" onClick={handleAddContribution}>
+                            Thêm
+                          </Button>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+                
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Thành viên</TableHead>
+                      <TableHead>Số tiền phạt</TableHead>
+                      <TableHead>Ngày đóng</TableHead>
+                      <TableHead>Lý do</TableHead>
+                      <TableHead>Trạng thái</TableHead>
+                      <TableHead>Thao tác</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {unionFundContributions.map((contribution) => (
+                      <TableRow key={contribution.memberId}>
+                        <TableCell className="font-medium">{contribution.memberName}</TableCell>
+                        <TableCell>{contribution.amount.toLocaleString('vi-VN')} VNĐ</TableCell>
+                        <TableCell>{contribution.date || '-'}</TableCell>
+                        <TableCell className="max-w-xs truncate">{contribution.note || '-'}</TableCell>
+                        <TableCell>
+                          <Badge 
+                            className={
+                              contribution.status === 'paid' ? 'bg-green-500' : 
+                              contribution.status === 'pending' ? 'bg-yellow-500' : 
+                              'bg-red-500'
+                            }
+                          >
+                            {contribution.status === 'paid' ? 'Đã đóng' : 
+                             contribution.status === 'pending' ? 'Chờ đóng' : 
+                             'Quá hạn'}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex gap-2">
+                            {contribution.status !== 'paid' && (
+                              <Button 
+                                size="sm" 
+                                className="bg-green-600 hover:bg-green-700 text-white"
+                                onClick={() => handleUpdateStatus('union', contribution.memberId, 'paid')}
+                              >
+                                <CheckCircle2 className="h-4 w-4" />
+                              </Button>
+                            )}
+                            <Button 
+                              size="sm" 
+                              variant="destructive"
+                              onClick={() => handleDeleteContribution('union', contribution.memberId)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </div>
+
         </CardContent>
       </Card>
 
-      {/* III. TỔNG QUAN PHÁT TRIỂN NĂNG LỰC */}
+      {/* II. TỔNG QUAN PHÁT TRIỂN NĂNG LỰC */}
       <Card className="shadow-lg border-bni-red border-2">
         <CardHeader className="bg-gradient-to-r from-bni-red/10 to-bni-gold/10">
           <CardTitle className="text-2xl flex items-center gap-2">
             <GraduationCap className="h-6 w-6 text-bni-red" />
-            III. TỔNG QUAN PHÁT TRIỂN NĂNG LỰC
+            II. TỔNG QUAN PHÁT TRIỂN NĂNG LỰC
           </CardTitle>
           <CardDescription className="text-base">Báo cáo Ban Đào tạo</CardDescription>
         </CardHeader>
