@@ -19,6 +19,7 @@ export interface LeadershipMember {
   role: string;
   name: string;
   isPrimary?: boolean;
+  support?: string; // Người hỗ trợ phụ trách
 }
 
 export interface PerformanceMetrics {

@@ -9,12 +9,14 @@ import { Crown, Target, TrendingUp, Users, Calendar, CheckCircle2, AlertTriangle
 import { useState, useEffect } from "react";
 import { useChapterData } from "@/contexts/ChapterDataContext";
 import { toast } from "sonner";
+import { LeadershipEditor } from "@/components/leadership/LeadershipEditor";
 
 export default function PresidentReport() {
-  const { chapterData, updateStrategicObjectives, updatePerformanceMetrics, submitReport } = useChapterData();
+  const { chapterData, updateStrategicObjectives, updatePerformanceMetrics, submitReport, updateLeadership } = useChapterData();
   const [meetingDate, setMeetingDate] = useState(new Date().toISOString().split('T')[0]);
   const [currentSlide, setCurrentSlide] = useState(1);
   const totalSlides = 5;
+  const [isLeadershipEditorOpen, setIsLeadershipEditorOpen] = useState(false);
 
   // Local state for form inputs
   const [objectives, setObjectives] = useState({
@@ -497,10 +499,21 @@ export default function PresidentReport() {
                 Thông tin được đồng bộ từ Tổng quan Dashboard
               </CardDescription>
             </div>
-            <Badge variant="outline" className="text-sm">
-              <CheckCircle2 className="h-3 w-3 mr-1" />
-              Đã đồng bộ
-            </Badge>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsLeadershipEditorOpen(true)}
+                className="gap-2"
+              >
+                <Edit className="h-4 w-4" />
+                Sửa thông tin
+              </Button>
+              <Badge variant="outline" className="text-sm">
+                <CheckCircle2 className="h-3 w-3 mr-1" />
+                Đã đồng bộ
+              </Badge>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="pt-6">
@@ -508,16 +521,26 @@ export default function PresidentReport() {
             {chapterData.leadership.map((leader, index) => (
               leader.isPrimary ? (
                 <div key={index} className="col-span-full p-4 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 mb-2">
                     <Crown className="h-5 w-5 text-bni-gold" />
                     <span className="font-semibold">{leader.role}:</span>
                     <span className="font-bold text-bni-red">{leader.name}</span>
                   </div>
+                  {leader.support && (
+                    <div className="ml-7 text-sm text-muted-foreground">
+                      Hỗ trợ: <span className="font-medium">{leader.support}</span>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div key={index} className="p-3 border rounded-lg bg-card hover:bg-muted/50 transition-colors">
                   <div className="font-semibold text-sm text-bni-red">{leader.role}</div>
                   <div className="text-sm mt-1">{leader.name}</div>
+                  {leader.support && (
+                    <div className="text-xs text-muted-foreground mt-1">
+                      Hỗ trợ: {leader.support}
+                    </div>
+                  )}
                 </div>
               )
             ))}
@@ -531,6 +554,16 @@ export default function PresidentReport() {
           </div>
         </CardContent>
       </Card>
+
+      <LeadershipEditor
+        open={isLeadershipEditorOpen}
+        onOpenChange={setIsLeadershipEditorOpen}
+        leadership={chapterData.leadership}
+        onSave={(updatedLeadership) => {
+          updateLeadership(updatedLeadership);
+          toast.success("Đã cập nhật thông tin lãnh đạo!");
+        }}
+      />
 
       {/* III. GÓC NHÌN & ĐỊNH HƯỚNG CỦA CHỦ TỊCH */}
       <Card className="shadow-lg border-bni-red border-2">
