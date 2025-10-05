@@ -121,25 +121,25 @@ export default function PresidentReport() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="border-b pb-6">
-        <div className="flex justify-between items-start mb-4">
-          <h1 className="text-4xl font-bold text-bni-red flex items-center gap-3">
-            <Crown className="h-10 w-10 text-bni-gold" />
-            BÁO CÁO CỦA CHỦ TỊCH
+      <div className="border-b pb-4 sm:pb-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4 mb-4">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-bni-red flex items-center gap-2 sm:gap-3">
+            <Crown className="h-8 w-8 sm:h-10 sm:w-10 text-bni-gold flex-shrink-0" />
+            <span>BÁO CÁO CỦA CHỦ TỊCH</span>
           </h1>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Badge variant="outline" className="text-xs">
               Cập nhật: {chapterData.lastUpdated}
             </Badge>
-            <Badge className="bg-green-500 text-xs">
+            <Badge className="bg-green-500 text-xs whitespace-nowrap">
               <CheckCircle2 className="h-3 w-3 mr-1" />
               Đồng bộ với Tổng quan
             </Badge>
           </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex items-center gap-2">
             <Label className="font-semibold shrink-0">Buổi họp ngày:</Label>
             <Input 
@@ -225,6 +225,8 @@ export default function PresidentReport() {
           </div>
         </CardHeader>
         <CardContent className="pt-6">
+          <div className="overflow-x-auto -mx-6 sm:mx-0">
+            <div className="min-w-[600px] px-6 sm:px-0">
           <Table>
             <TableHeader>
               <TableRow>
@@ -341,6 +343,8 @@ export default function PresidentReport() {
               </TableRow>
             </TableBody>
           </Table>
+            </div>
+          </div>
 
           <div className="mt-6 flex justify-end">
             <Button className="bg-bni-gold text-bni-black hover:bg-bni-gold/90">

@@ -15,19 +15,19 @@ export default function VicePresidentReport() {
   const [weekDate, setWeekDate] = useState(new Date().toISOString().split('T')[0]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Header */}
-      <div className="border-b pb-6">
-        <h1 className="text-4xl font-bold text-bni-red mb-2">
+      <div className="border-b pb-4 sm:pb-6">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-bni-red mb-2">
           Dashboard Báo Cáo Hiệu Suất Hoạt Động BNI Chapter
         </h1>
-        <div className="flex items-center gap-4 mt-4">
-          <Label className="font-semibold">Cập nhật cho Tuần:</Label>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-4">
+          <Label className="font-semibold text-sm sm:text-base">Cập nhật cho Tuần:</Label>
           <Input 
             type="date" 
             value={weekDate}
             onChange={(e) => setWeekDate(e.target.value)}
-            className="w-auto"
+            className="w-full sm:w-auto"
           />
         </div>
       </div>
@@ -42,6 +42,8 @@ export default function VicePresidentReport() {
           <CardDescription className="text-base">Báo cáo Phó Chủ tịch</CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
+          <div className="overflow-x-auto -mx-6 sm:mx-0">
+            <div className="min-w-[600px] px-6 sm:px-0">
           <Table>
             <TableHeader>
               <TableRow>
@@ -82,6 +84,8 @@ export default function VicePresidentReport() {
               </TableRow>
             </TableBody>
           </Table>
+            </div>
+          </div>
           
           <div className="mt-6 p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg border-l-4 border-blue-500">
             <p className="font-semibold text-blue-900 dark:text-blue-300 mb-2">
@@ -299,16 +303,16 @@ export default function VicePresidentReport() {
       </Card>
 
       {/* Action Buttons */}
-      <div className="flex justify-end gap-4">
-        <Button variant="outline" size="lg">
+      <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-4">
+        <Button variant="outline" size="lg" className="w-full sm:w-auto order-3 sm:order-1">
           Hủy
         </Button>
-        <Button className="bg-blue-600 hover:bg-blue-700 text-white" size="lg">
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white w-full sm:w-auto order-2 sm:order-2" size="lg">
           <CheckCircle2 className="h-5 w-5 mr-2" />
           Lưu Báo cáo
         </Button>
         <Button 
-          className="bg-bni-red hover:bg-bni-red/90 text-white" 
+          className="bg-bni-red hover:bg-bni-red/90 text-white w-full sm:w-auto order-1 sm:order-3" 
           size="lg"
           onClick={() => {
             submitReport('vicePresident', chapterData.leadership.find(l => l.role === 'Phó Chủ tịch')?.name || 'Phó Chủ tịch');

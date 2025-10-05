@@ -181,25 +181,26 @@ const Dashboard = () => {
           {/* Header */}
           
 
-          <main className="max-w-7xl mx-auto px-4 md:px-8 py-8 w-full">
+          <main className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 max-w-[1600px] mx-auto">
         {/* Show subroute content if navigated to a report page */}
         {isSubRoute ? <Outlet /> :
           // Enhanced Dashboard Overview with Executive Information
           <div className="space-y-8">
             {/* Executive Header */}
-            <div className="flex justify-between items-start">
-              <div>
-                <h2 className="text-3xl font-bold flex items-center gap-3">
-                  <Crown className="h-8 w-8 text-bni-gold" />
-                  Tổng quan Điều hành BNI Felix Chapter
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+              <div className="flex-1">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2 sm:gap-3">
+                  <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-bni-gold flex-shrink-0" />
+                  <span>Tổng quan Điều hành BNI Felix Chapter</span>
                 </h2>
-                <p className="text-muted-foreground mt-2">
+                <p className="text-sm sm:text-base text-muted-foreground mt-2">
                   {chapterData.termName} ({chapterData.termStart} – {chapterData.termEnd}) | Cập nhật: {chapterData.lastUpdated}
                 </p>
               </div>
-              <Button variant="outline" className="gap-2">
+              <Button variant="outline" className="gap-2 w-full sm:w-auto">
                 <Download className="h-4 w-4" />
-                Xuất báo cáo
+                <span className="hidden sm:inline">Xuất báo cáo</span>
+                <span className="sm:hidden">Xuất</span>
               </Button>
             </div>
 
@@ -212,7 +213,7 @@ const Dashboard = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="space-y-2">
                     <div className="text-sm text-muted-foreground">Doanh thu Nhiệm kỳ</div>
                     <div className="text-2xl font-bold text-bni-gold">{chapterData.strategicObjectives.revenue.target}</div>
@@ -254,7 +255,7 @@ const Dashboard = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {chapterData.leadership.map((leader, index) => leader.isPrimary ? <div key={index} className="col-span-full p-4 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
                         <div className="flex items-center gap-2">
                           <Crown className="h-5 w-5 text-bni-gold" />
@@ -348,11 +349,11 @@ const Dashboard = () => {
 
             {/* Main Content Tabs */}
             <Tabs defaultValue="members" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="members">Thành viên</TabsTrigger>
-                <TabsTrigger value="referrals">Referrals</TabsTrigger>
-                <TabsTrigger value="meetings">Lịch họp</TabsTrigger>
-                <TabsTrigger value="top-performers">Top xuất sắc</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
+                <TabsTrigger value="members" className="text-xs sm:text-sm">Thành viên</TabsTrigger>
+                <TabsTrigger value="referrals" className="text-xs sm:text-sm">Referrals</TabsTrigger>
+                <TabsTrigger value="meetings" className="text-xs sm:text-sm">Lịch họp</TabsTrigger>
+                <TabsTrigger value="top-performers" className="text-xs sm:text-sm">Top xuất sắc</TabsTrigger>
               </TabsList>
 
               {/* Members Tab - Member Tracking */}
@@ -365,8 +366,9 @@ const Dashboard = () => {
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="overflow-x-auto">
-                      <Table>
+                    <div className="overflow-x-auto -mx-6 sm:mx-0">
+                      <div className="min-w-[640px] px-6 sm:px-0">
+                        <Table>
                         <TableHeader>
                           <TableRow>
                             <TableHead>Tên</TableHead>
@@ -459,6 +461,7 @@ const Dashboard = () => {
                           </TableRow>
                         </TableBody>
                       </Table>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
