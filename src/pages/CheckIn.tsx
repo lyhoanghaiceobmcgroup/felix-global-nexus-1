@@ -5,8 +5,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, UserCheck, Building2, Phone, User, MapPin, Clock, Loader2 } from "lucide-react";
+import { ArrowLeft, UserCheck, Building2, Phone, User, MapPin, Clock, Loader2, Mail } from "lucide-react";
 import { sendCheckInToTelegram, getCurrentLocation, getAddressFromCoordinates } from "@/services/telegramService";
+import { z } from "zod";
 
 const CheckIn = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +15,8 @@ const CheckIn = () => {
     phoneNumber: '',
     industry: '',
     attendeeType: '',
-    invitedBy: ''
+    invitedBy: '',
+    email: ''
   });
   const [location, setLocation] = useState<{latitude: number, longitude: number, address: string} | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState(false);
@@ -41,10 +43,12 @@ const CheckIn = () => {
   };
 
   // Check if form is complete (location is optional)
+  const isGuestType = formData.attendeeType && formData.attendeeType !== 'Thành viên';
   const isFormComplete = formData.fullName.trim() !== '' && 
                         formData.phoneNumber.trim() !== '' && 
                         formData.industry.trim() !== '' && 
-                        formData.attendeeType !== '';
+                        formData.attendeeType !== '' &&
+                        (!isGuestType || (isGuestType && formData.email.trim() !== ''));
 
   const getLocation = async () => {
     setIsLoadingLocation(true);
@@ -90,6 +94,32 @@ const CheckIn = () => {
       return;
     }
 
+    // Validate email for guest types
+    const isGuestType = formData.attendeeType !== 'Thành viên';
+    if (isGuestType) {
+      if (!formData.email.trim()) {
+        toast({
+          title: "Thông báo",
+          description: "Vui lòng nhập địa chỉ email",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Validate email format
+      const emailSchema = z.string().email();
+      try {
+        emailSchema.parse(formData.email.trim());
+      } catch {
+        toast({
+          title: "Email không hợp lệ",
+          description: "Vui lòng nhập địa chỉ email đúng định dạng",
+          variant: "destructive"
+        });
+        return;
+      }
+    }
+
     // Location is optional, continue without it if not available
 
     setIsSubmitting(true);
@@ -120,7 +150,8 @@ const CheckIn = () => {
             phoneNumber: "",
             industry: "",
             attendeeType: "",
-            invitedBy: ""
+            invitedBy: "",
+            email: ""
           });
           setShowSuccess(false);
         }, 3000);
@@ -324,6 +355,25 @@ const CheckIn = () => {
                   </SelectContent>
                 </Select>
               </div>
+
+              {/* Trường email - chỉ hiển thị khi chọn khách */}
+              {formData.attendeeType && formData.attendeeType !== 'Thành viên' && (
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="flex items-center text-gray-700">
+                    <Mail className="w-4 h-4 mr-2 text-[#D71920]" />
+                    Địa chỉ Email *
+                  </Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Nhập địa chỉ email"
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className="border-2 border-gray-200 focus:border-[#D71920] focus:ring-[#D71920]"
+                    required
+                  />
+                </div>
+              )}
 
               {/* Trường người mời - chỉ hiển thị khi chọn khách */}
               {formData.attendeeType && formData.attendeeType !== 'Thành viên' && (
