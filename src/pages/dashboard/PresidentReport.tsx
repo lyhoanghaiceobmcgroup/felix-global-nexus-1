@@ -5,15 +5,93 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Crown, Target, TrendingUp, Users, Calendar, CheckCircle2, AlertTriangle, Lightbulb, ChevronLeft, ChevronRight, Play, Edit, Download, Link } from "lucide-react";
-import { useState } from "react";
+import { Crown, Target, TrendingUp, Users, Calendar, CheckCircle2, AlertTriangle, Lightbulb, ChevronLeft, ChevronRight, Play, Edit, Download, Link, Save } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useChapterData } from "@/contexts/ChapterDataContext";
+import { toast } from "sonner";
 
 export default function PresidentReport() {
+  const { chapterData, updateStrategicObjectives, updatePerformanceMetrics } = useChapterData();
   const [meetingDate, setMeetingDate] = useState(new Date().toISOString().split('T')[0]);
-  const [termStart, setTermStart] = useState("2025-10-01");
-  const [termEnd, setTermEnd] = useState("2026-03-31");
   const [currentSlide, setCurrentSlide] = useState(1);
   const totalSlides = 5;
+
+  // Local state for form inputs
+  const [objectives, setObjectives] = useState({
+    memberTarget: chapterData.strategicObjectives.memberCount.target,
+    memberCurrent: chapterData.strategicObjectives.memberCount.current,
+    revenueTarget: chapterData.strategicObjectives.revenue.target,
+    attendanceTarget: chapterData.strategicObjectives.attendance.target,
+    attendanceCurrent: chapterData.strategicObjectives.attendance.current,
+    kpiGreenTarget: chapterData.strategicObjectives.kpiGreenMembers.target,
+    kpiGreenCurrent: chapterData.strategicObjectives.kpiGreenMembers.current,
+    oneToOneTarget: chapterData.strategicObjectives.oneToOneMeetings?.target || "344 – 544",
+    oneToOneCurrent: chapterData.strategicObjectives.oneToOneMeetings?.current || 344,
+  });
+
+  const [metrics, setMetrics] = useState({
+    referralsThisWeek: chapterData.performanceMetrics.referralsThisWeek,
+    revenueLastMonth: chapterData.performanceMetrics.revenueLastMonth,
+    visitorsLastWeek: chapterData.performanceMetrics.visitorsLastWeek,
+    newMemberApplications: chapterData.performanceMetrics.newMemberApplications,
+    membersNeedingRenewal: chapterData.performanceMetrics.membersNeedingRenewal,
+    trainingPointsLastMonth: chapterData.performanceMetrics.trainingPointsLastMonth,
+    upcomingEvent: chapterData.performanceMetrics.upcomingEvent,
+  });
+
+  const handleSaveReport = () => {
+    // Calculate progress for each objective
+    const memberProgress = typeof objectives.memberCurrent === 'number' 
+      ? Math.round((objectives.memberCurrent / 75) * 100) 
+      : 56;
+    
+    const attendanceProgress = typeof objectives.attendanceCurrent === 'string' && objectives.attendanceCurrent.includes('%')
+      ? 100
+      : 100;
+
+    const kpiGreenProgress = typeof objectives.kpiGreenCurrent === 'string' && objectives.kpiGreenCurrent.includes('%')
+      ? 100
+      : 100;
+
+    // Update strategic objectives
+    updateStrategicObjectives({
+      memberCount: {
+        target: objectives.memberTarget.toString(),
+        current: objectives.memberCurrent,
+        progress: memberProgress,
+        status: memberProgress >= 100 ? 'achieved' : memberProgress >= 50 ? 'in-progress' : 'needs-attention'
+      },
+      revenue: {
+        target: objectives.revenueTarget.toString(),
+        current: chapterData.strategicObjectives.revenue.current,
+        progress: chapterData.strategicObjectives.revenue.progress,
+        status: chapterData.strategicObjectives.revenue.status
+      },
+      attendance: {
+        target: objectives.attendanceTarget.toString(),
+        current: objectives.attendanceCurrent.toString(),
+        progress: attendanceProgress,
+        status: attendanceProgress >= 98 ? 'achieved' : 'needs-attention'
+      },
+      kpiGreenMembers: {
+        target: objectives.kpiGreenTarget.toString(),
+        current: objectives.kpiGreenCurrent.toString(),
+        progress: kpiGreenProgress,
+        status: kpiGreenProgress >= 100 ? 'achieved' : 'needs-attention'
+      },
+      oneToOneMeetings: {
+        target: objectives.oneToOneTarget.toString(),
+        current: objectives.oneToOneCurrent,
+        progress: typeof objectives.oneToOneCurrent === 'number' ? Math.round((objectives.oneToOneCurrent / 344) * 100) : 100,
+        status: 'achieved'
+      }
+    });
+
+    // Update performance metrics
+    updatePerformanceMetrics(metrics);
+
+    toast.success("Đã lưu báo cáo và cập nhật Tổng quan!");
+  };
 
   return (
     <div className="space-y-8">
@@ -34,20 +112,16 @@ export default function PresidentReport() {
             />
           </div>
           <div className="flex items-center gap-2">
-            <Label className="font-semibold shrink-0">Nhiệm kỳ XI:</Label>
+            <Label className="font-semibold shrink-0">Nhiệm kỳ:</Label>
             <Input 
-              type="date" 
-              value={termStart}
-              onChange={(e) => setTermStart(e.target.value)}
-              className="w-32"
+              type="text" 
+              value={chapterData.termName}
+              disabled
+              className="w-32 bg-muted"
             />
-            <span>–</span>
-            <Input 
-              type="date" 
-              value={termEnd}
-              onChange={(e) => setTermEnd(e.target.value)}
-              className="w-32"
-            />
+            <span className="text-muted-foreground">
+              ({chapterData.termStart} – {chapterData.termEnd})
+            </span>
           </div>
         </div>
       </div>
@@ -88,16 +162,32 @@ export default function PresidentReport() {
               <TableRow>
                 <TableCell className="font-semibold">Số lượng Thành viên</TableCell>
                 <TableCell className="text-center">
-                  <Input placeholder="75+" className="w-32 mx-auto font-bold" defaultValue="75+" />
+                  <Input 
+                    placeholder="75+" 
+                    className="w-32 mx-auto font-bold" 
+                    value={objectives.memberTarget}
+                    onChange={(e) => setObjectives({...objectives, memberTarget: e.target.value})}
+                  />
                 </TableCell>
                 <TableCell className="text-center">
-                  <Input type="number" placeholder="42" className="w-32 mx-auto font-bold" defaultValue="42" />
+                  <Input 
+                    type="number" 
+                    placeholder="42" 
+                    className="w-32 mx-auto font-bold" 
+                    value={objectives.memberCurrent}
+                    onChange={(e) => setObjectives({...objectives, memberCurrent: parseInt(e.target.value) || 0})}
+                  />
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="font-semibold">Doanh thu Cả nhiệm kỳ</TableCell>
                 <TableCell className="text-center">
-                  <Input placeholder="33 Tỷ VNĐ" className="w-40 mx-auto font-bold" defaultValue="33 Tỷ VNĐ" />
+                  <Input 
+                    placeholder="33 Tỷ VNĐ" 
+                    className="w-40 mx-auto font-bold" 
+                    value={objectives.revenueTarget}
+                    onChange={(e) => setObjectives({...objectives, revenueTarget: e.target.value})}
+                  />
                 </TableCell>
                 <TableCell className="text-center text-muted-foreground">
                   (Bắt đầu tính từ 01/10)
@@ -107,14 +197,22 @@ export default function PresidentReport() {
                 <TableCell className="font-semibold">Tỷ lệ Hiện diện</TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <Input type="number" placeholder="98" className="w-20 mx-auto font-bold" defaultValue="98" />
-                    <span className="font-bold">%</span>
+                    <Input 
+                      placeholder="98%" 
+                      className="w-24 mx-auto font-bold" 
+                      value={objectives.attendanceTarget}
+                      onChange={(e) => setObjectives({...objectives, attendanceTarget: e.target.value})}
+                    />
                   </div>
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <Input type="number" placeholder="98" className="w-20 mx-auto font-bold" defaultValue="98" />
-                    <span className="font-bold">%</span>
+                    <Input 
+                      placeholder="98%" 
+                      className="w-24 mx-auto font-bold" 
+                      value={objectives.attendanceCurrent}
+                      onChange={(e) => setObjectives({...objectives, attendanceCurrent: e.target.value})}
+                    />
                     <Badge className="bg-green-500">Đạt</Badge>
                   </div>
                 </TableCell>
@@ -123,14 +221,22 @@ export default function PresidentReport() {
                 <TableCell className="font-semibold">Tỷ lệ Thành viên KPI Xanh</TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <Input type="number" placeholder="50" className="w-20 mx-auto font-bold" defaultValue="50" />
-                    <span className="font-bold">%</span>
+                    <Input 
+                      placeholder="50%" 
+                      className="w-24 mx-auto font-bold" 
+                      value={objectives.kpiGreenTarget}
+                      onChange={(e) => setObjectives({...objectives, kpiGreenTarget: e.target.value})}
+                    />
                   </div>
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <Input type="number" placeholder="50" className="w-20 mx-auto font-bold" defaultValue="50" />
-                    <span className="font-bold">%</span>
+                    <Input 
+                      placeholder="50%" 
+                      className="w-24 mx-auto font-bold" 
+                      value={objectives.kpiGreenCurrent}
+                      onChange={(e) => setObjectives({...objectives, kpiGreenCurrent: e.target.value})}
+                    />
                     <Badge className="bg-green-500">Đạt</Badge>
                   </div>
                 </TableCell>
@@ -138,11 +244,22 @@ export default function PresidentReport() {
               <TableRow>
                 <TableCell className="font-semibold">Số lượt 1-2-1 / tháng</TableCell>
                 <TableCell className="text-center">
-                  <Input placeholder="344 – 544" className="w-40 mx-auto font-bold" defaultValue="344 – 544" />
+                  <Input 
+                    placeholder="344 – 544" 
+                    className="w-40 mx-auto font-bold" 
+                    value={objectives.oneToOneTarget}
+                    onChange={(e) => setObjectives({...objectives, oneToOneTarget: e.target.value})}
+                  />
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <Input type="number" placeholder="344" className="w-24 mx-auto font-bold" defaultValue="344" />
+                    <Input 
+                      type="number" 
+                      placeholder="344" 
+                      className="w-24 mx-auto font-bold" 
+                      value={objectives.oneToOneCurrent}
+                      onChange={(e) => setObjectives({...objectives, oneToOneCurrent: parseInt(e.target.value) || 0})}
+                    />
                     <Badge className="bg-green-500">Đạt tối thiểu</Badge>
                   </div>
                 </TableCell>
@@ -188,28 +305,51 @@ export default function PresidentReport() {
                 <Label className="font-semibold text-sm text-muted-foreground block mb-2">
                   Cơ hội Kinh doanh (Tuần qua):
                 </Label>
-                <Input type="number" placeholder="53" className="text-3xl font-bold" defaultValue="53" />
+                <Input 
+                  type="number" 
+                  placeholder="53" 
+                  className="text-3xl font-bold" 
+                  value={metrics.referralsThisWeek}
+                  onChange={(e) => setMetrics({...metrics, referralsThisWeek: parseInt(e.target.value) || 0})}
+                />
               </div>
 
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/20 p-6 rounded-lg border-2 border-blue-500">
                 <Label className="font-semibold text-sm text-muted-foreground block mb-2">
                   Giá trị Giao dịch (Tháng trước):
                 </Label>
-                <Input placeholder="> 1,23 Tỷ VNĐ" className="text-3xl font-bold" defaultValue="> 1,23 Tỷ VNĐ" />
+                <Input 
+                  placeholder="> 1,23 Tỷ VNĐ" 
+                  className="text-3xl font-bold" 
+                  value={metrics.revenueLastMonth}
+                  onChange={(e) => setMetrics({...metrics, revenueLastMonth: e.target.value})}
+                />
               </div>
 
               <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/20 dark:to-purple-900/20 p-6 rounded-lg border-2 border-purple-500">
                 <Label className="font-semibold text-sm text-muted-foreground block mb-2">
                   Số lượng Khách mời (Tuần trước):
                 </Label>
-                <Input type="number" placeholder="4" className="text-3xl font-bold" defaultValue="4" />
+                <Input 
+                  type="number" 
+                  placeholder="4" 
+                  className="text-3xl font-bold" 
+                  value={metrics.visitorsLastWeek}
+                  onChange={(e) => setMetrics({...metrics, visitorsLastWeek: parseInt(e.target.value) || 0})}
+                />
               </div>
 
               <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/20 dark:to-orange-900/20 p-6 rounded-lg border-2 border-orange-500">
                 <Label className="font-semibold text-sm text-muted-foreground block mb-2">
                   Số hồ sơ TV mới đã nộp:
                 </Label>
-                <Input type="number" placeholder="1" className="text-3xl font-bold" defaultValue="1" />
+                <Input 
+                  type="number" 
+                  placeholder="1" 
+                  className="text-3xl font-bold" 
+                  value={metrics.newMemberApplications}
+                  onChange={(e) => setMetrics({...metrics, newMemberApplications: parseInt(e.target.value) || 0})}
+                />
               </div>
             </div>
           </div>
@@ -222,7 +362,13 @@ export default function PresidentReport() {
                 <Label className="font-semibold text-sm text-muted-foreground block mb-2">
                   Thành viên cần gia hạn (90 ngày tới):
                 </Label>
-                <Input type="number" placeholder="7" className="text-3xl font-bold" defaultValue="7" />
+                <Input 
+                  type="number" 
+                  placeholder="7" 
+                  className="text-3xl font-bold" 
+                  value={metrics.membersNeedingRenewal}
+                  onChange={(e) => setMetrics({...metrics, membersNeedingRenewal: parseInt(e.target.value) || 0})}
+                />
               </div>
 
               <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/20 dark:to-green-900/20 p-6 rounded-lg border-2 border-green-500">
@@ -230,7 +376,13 @@ export default function PresidentReport() {
                   Tổng điểm Đào tạo (Tháng trước):
                 </Label>
                 <div className="flex items-center gap-2">
-                  <Input type="number" placeholder="486" className="text-3xl font-bold" defaultValue="486" />
+                  <Input 
+                    type="number" 
+                    placeholder="486" 
+                    className="text-3xl font-bold" 
+                    value={metrics.trainingPointsLastMonth}
+                    onChange={(e) => setMetrics({...metrics, trainingPointsLastMonth: parseInt(e.target.value) || 0})}
+                  />
                   <Badge className="bg-green-500">Vượt MTC</Badge>
                 </div>
               </div>
@@ -242,7 +394,8 @@ export default function PresidentReport() {
                 <Input 
                   placeholder="Lễ Chuyển giao BĐH (07/10/2025)" 
                   className="text-lg font-bold"
-                  defaultValue="Lễ Chuyển giao BĐH (07/10/2025)"
+                  value={metrics.upcomingEvent}
+                  onChange={(e) => setMetrics({...metrics, upcomingEvent: e.target.value})}
                 />
               </div>
             </div>
@@ -743,11 +896,16 @@ export default function PresidentReport() {
           Hủy
         </Button>
         <Button className="bg-bni-gold text-bni-black hover:bg-bni-gold/90" size="lg">
+          <Download className="h-5 w-5 mr-2" />
           Xuất sang Trang tính
         </Button>
-        <Button className="bg-bni-red hover:bg-bni-red/90 text-white" size="lg">
-          <CheckCircle2 className="h-5 w-5 mr-2" />
-          Lưu Báo cáo
+        <Button 
+          className="bg-bni-red hover:bg-bni-red/90 text-white" 
+          size="lg"
+          onClick={handleSaveReport}
+        >
+          <Save className="h-5 w-5 mr-2" />
+          Lưu & Cập nhật Tổng quan
         </Button>
       </div>
     </div>

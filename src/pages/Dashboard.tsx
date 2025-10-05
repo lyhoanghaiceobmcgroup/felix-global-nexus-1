@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import { useChapterData } from "@/contexts/ChapterDataContext";
 
 // Mockup data
 const stats = [{
@@ -153,6 +154,28 @@ const topMembers = [{
 const Dashboard = () => {
   const location = useLocation();
   const isSubRoute = location.pathname !== "/dashboard";
+  const { chapterData } = useChapterData();
+  
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'achieved':
+        return <Badge className="bg-green-500/10 text-green-700 border-green-200 text-xs">
+          <CheckCircle2 className="h-3 w-3 mr-1 inline" />
+          Đạt mục tiêu
+        </Badge>;
+      case 'in-progress':
+        return <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200 text-xs">
+          🟨 Đang phát triển
+        </Badge>;
+      case 'needs-attention':
+        return <Badge className="bg-red-500/10 text-red-700 border-red-200 text-xs">
+          <AlertCircle className="h-3 w-3 mr-1 inline" />
+          Cần chú ý
+        </Badge>;
+      default:
+        return null;
+    }
+  };
 
   return <SidebarProvider>
       <div className="min-h-screen flex w-full bg-gradient-to-br from-background via-bni-gold/5 to-background">
@@ -189,7 +212,7 @@ const Dashboard = () => {
                   Tổng quan Điều hành BNI Felix Chapter
                 </h2>
                 <p className="text-muted-foreground mt-2">
-                  Nhiệm kỳ XI (01/10/2025 – 31/3/2026) | Cập nhật Real-time: 30/09/2025
+                  {chapterData.termName} ({chapterData.termStart} – {chapterData.termEnd}) | Cập nhật: {chapterData.lastUpdated}
                 </p>
               </div>
               <Button variant="outline" className="gap-2">
@@ -203,48 +226,38 @@ const Dashboard = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-2xl">
                   <Target className="h-6 w-6 text-bni-gold" />
-                  Mục tiêu Chiến lược Nhiệm kỳ XI
+                  Mục tiêu Chiến lược {chapterData.termName}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="space-y-2">
                     <div className="text-sm text-muted-foreground">Doanh thu Nhiệm kỳ</div>
-                    <div className="text-2xl font-bold text-bni-gold">33 Tỷ VNĐ</div>
-                    <div className="text-sm font-semibold">Hiện tại: 1.23 Tỷ</div>
-                    <Progress value={3.7} className="h-2" />
-                    <Badge className="bg-green-500/10 text-green-700 border-green-200 text-xs">
-                      🟩 Bắt đầu tốt
-                    </Badge>
+                    <div className="text-2xl font-bold text-bni-gold">{chapterData.strategicObjectives.revenue.target}</div>
+                    <div className="text-sm font-semibold">Hiện tại: {chapterData.strategicObjectives.revenue.current}</div>
+                    <Progress value={chapterData.strategicObjectives.revenue.progress} className="h-2" />
+                    {getStatusBadge(chapterData.strategicObjectives.revenue.status)}
                   </div>
                   <div className="space-y-2">
                     <div className="text-sm text-muted-foreground">Sĩ số Thành viên</div>
-                    <div className="text-2xl font-bold text-bni-red">75+</div>
-                    <div className="text-sm font-semibold">Hiện tại: 42</div>
-                    <Progress value={56} className="h-2" />
-                    <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200 text-xs">
-                      🟨 Đang phát triển
-                    </Badge>
+                    <div className="text-2xl font-bold text-bni-red">{chapterData.strategicObjectives.memberCount.target}</div>
+                    <div className="text-sm font-semibold">Hiện tại: {chapterData.strategicObjectives.memberCount.current}</div>
+                    <Progress value={chapterData.strategicObjectives.memberCount.progress} className="h-2" />
+                    {getStatusBadge(chapterData.strategicObjectives.memberCount.status)}
                   </div>
                   <div className="space-y-2">
                     <div className="text-sm text-muted-foreground">Tỷ lệ Hiện diện</div>
-                    <div className="text-2xl font-bold text-green-600">98%</div>
-                    <div className="text-sm font-semibold">Mục tiêu: 98%</div>
-                    <Progress value={100} className="h-2" />
-                    <Badge className="bg-green-500/10 text-green-700 border-green-200 text-xs">
-                      <CheckCircle2 className="h-3 w-3 mr-1 inline" />
-                      Đạt mục tiêu
-                    </Badge>
+                    <div className="text-2xl font-bold text-green-600">{chapterData.strategicObjectives.attendance.current}</div>
+                    <div className="text-sm font-semibold">Mục tiêu: {chapterData.strategicObjectives.attendance.target}</div>
+                    <Progress value={chapterData.strategicObjectives.attendance.progress} className="h-2" />
+                    {getStatusBadge(chapterData.strategicObjectives.attendance.status)}
                   </div>
                   <div className="space-y-2">
                     <div className="text-sm text-muted-foreground">TV KPI Xanh</div>
-                    <div className="text-2xl font-bold text-green-600">50%</div>
-                    <div className="text-sm font-semibold">Mục tiêu: 50%</div>
-                    <Progress value={100} className="h-2" />
-                    <Badge className="bg-green-500/10 text-green-700 border-green-200 text-xs">
-                      <CheckCircle2 className="h-3 w-3 mr-1 inline" />
-                      Đạt mục tiêu
-                    </Badge>
+                    <div className="text-2xl font-bold text-green-600">{chapterData.strategicObjectives.kpiGreenMembers.current}</div>
+                    <div className="text-sm font-semibold">Mục tiêu: {chapterData.strategicObjectives.kpiGreenMembers.target}</div>
+                    <Progress value={chapterData.strategicObjectives.kpiGreenMembers.progress} className="h-2" />
+                    {getStatusBadge(chapterData.strategicObjectives.kpiGreenMembers.status)}
                   </div>
                 </div>
               </CardContent>
@@ -255,56 +268,27 @@ const Dashboard = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-bni-gold" />
-                  Ban Lãnh đạo Nhiệm kỳ XI
+                  Ban Lãnh đạo {chapterData.termName}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  <div className="col-span-full p-4 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
-                    <div className="flex items-center gap-2">
-                      <Crown className="h-5 w-5 text-bni-gold" />
-                      <span className="font-semibold">Chủ tịch:</span>
-                      <span className="font-bold text-bni-red">Mrs. Đoàn Thị Ánh Khuyên</span>
-                    </div>
-                  </div>
-                  <div className="p-3 border rounded-lg bg-card">
-                    <div className="flex items-center gap-2">
-                      <UserCheck className="h-4 w-4 text-bni-red" />
-                      <div>
-                        <div className="font-semibold text-sm">Phó Chủ tịch</div>
-                        <div className="text-sm">Mr. Lý Hoàng Hải</div>
+                  {chapterData.leadership.map((leader, index) => (
+                    leader.isPrimary ? (
+                      <div key={index} className="col-span-full p-4 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
+                        <div className="flex items-center gap-2">
+                          <Crown className="h-5 w-5 text-bni-gold" />
+                          <span className="font-semibold">{leader.role}:</span>
+                          <span className="font-bold text-bni-red">{leader.name}</span>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="p-3 border rounded-lg bg-card">
-                    <div className="flex items-center gap-2">
-                      <MessageSquare className="h-4 w-4 text-bni-red" />
-                      <div>
-                        <div className="font-semibold text-sm">Tổng Thư ký</div>
-                        <div className="text-sm">Ms. Lưu Thị Châu</div>
+                    ) : (
+                      <div key={index} className="p-3 border rounded-lg bg-card">
+                        <div className="font-semibold text-sm">{leader.role}</div>
+                        <div className="text-sm">{leader.name}</div>
                       </div>
-                    </div>
-                  </div>
-                  <div className="p-3 border rounded-lg bg-card">
-                    <div className="font-semibold text-sm">Ban Thành viên</div>
-                    <div className="text-sm">Mrs. Lê Thị Lan</div>
-                  </div>
-                  <div className="p-3 border rounded-lg bg-card">
-                    <div className="font-semibold text-sm">Ban Khách mời</div>
-                    <div className="text-sm">Ms. Nguyễn Thị Mến</div>
-                  </div>
-                  <div className="p-3 border rounded-lg bg-card">
-                    <div className="font-semibold text-sm">Ban Đào tạo</div>
-                    <div className="text-sm">Mrs. Đào Thị Thanh Trà</div>
-                  </div>
-                  <div className="p-3 border rounded-lg bg-card">
-                    <div className="font-semibold text-sm">Ban Sự kiện</div>
-                    <div className="text-sm">Mr. Lê Ngọc Minh</div>
-                  </div>
-                  <div className="p-3 border rounded-lg bg-card">
-                    <div className="font-semibold text-sm">Ban Truyền thông</div>
-                    <div className="text-sm">Ms. Phùng Trang Linh</div>
-                  </div>
+                    )
+                  ))}
                 </div>
               </CardContent>
             </Card>
