@@ -119,7 +119,8 @@ const CheckIn = () => {
             fullName: "",
             phoneNumber: "",
             industry: "",
-            attendeeType: ""
+            attendeeType: "",
+            invitedBy: ""
           });
           setShowSuccess(false);
         }, 3000);

@@ -15,6 +15,7 @@ import Register from "./pages/Register";
 import MeetingRegister from "./pages/MeetingRegister";
 import Referral from "./pages/Referral";
 import CheckIn from "./pages/CheckIn";
+import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => (
           <Route path="/meeting-register" element={<MeetingRegister />} />
           <Route path="/referral" element={<Referral />} />
           <Route path="/checkin" element={<CheckIn />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
