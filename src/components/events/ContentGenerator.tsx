@@ -269,7 +269,7 @@ export default function ContentGenerator({ contentType, defaultPrompt }: Content
               
               <Dialog open={isScheduleDialogOpen} onOpenChange={setIsScheduleDialogOpen}>
                 <DialogTrigger asChild>
-                  <Button variant="default" className="w-full bg-bni-red hover:bg-bni-red/90">
+                  <Button variant="default" className="w-full bg-bni-red hover:bg-bni-red/90 text-white">
                     <Calendar className="h-4 w-4 mr-2" />
                     Đặt lịch đăng bài
                   </Button>
@@ -340,7 +340,7 @@ export default function ContentGenerator({ contentType, defaultPrompt }: Content
                       </Select>
                     </div>
 
-                    <Button onClick={handleSchedulePost} className="w-full bg-bni-red hover:bg-bni-red/90">
+                    <Button onClick={handleSchedulePost} className="w-full bg-bni-red hover:bg-bni-red/90 text-white">
                       <Clock className="h-4 w-4 mr-2" />
                       Xác nhận đặt lịch
                     </Button>

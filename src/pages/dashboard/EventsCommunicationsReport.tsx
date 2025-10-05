@@ -218,7 +218,7 @@ export default function EventsCommunicationsReport() {
                 };
                 setCommunicationActivities([...communicationActivities, newActivity]);
               }}
-              className="bg-bni-red hover:bg-bni-red/90"
+              className="bg-bni-red hover:bg-bni-red/90 text-white"
             >
               <Plus className="h-4 w-4 mr-2" />
               Thêm Hoạt động

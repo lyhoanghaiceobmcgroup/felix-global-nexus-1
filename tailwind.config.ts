@@ -86,7 +86,16 @@ export default {
 					700: '#a16207',
 					800: '#854d0e',
 					900: '#713f12',
-				}
+					DEFAULT: 'hsl(var(--bni-gold))',
+				},
+				'bni-red': {
+					DEFAULT: 'hsl(var(--bni-red))',
+					dark: 'hsl(var(--bni-dark-red))',
+				},
+				'bni-dark-blue': 'hsl(var(--bni-dark-blue))',
+				'bni-navy': 'hsl(var(--bni-navy))',
+				'bni-white': 'hsl(var(--bni-white))',
+				'bni-black': 'hsl(var(--bni-black))',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
