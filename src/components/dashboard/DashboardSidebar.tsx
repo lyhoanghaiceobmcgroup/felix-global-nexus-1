@@ -46,14 +46,9 @@ const menuItems = [
     icon: FileText,
   },
   {
-    title: "Báo cáo Sự kiện",
-    url: "/dashboard/events",
+    title: "Báo cáo Sự kiện & Truyền thông",
+    url: "/dashboard/events-communications",
     icon: Calendar,
-  },
-  {
-    title: "Báo cáo Truyền thông",
-    url: "/dashboard/communications",
-    icon: Megaphone,
   },
   {
     title: "Báo cáo Khách mời",

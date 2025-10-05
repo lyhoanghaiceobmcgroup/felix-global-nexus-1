@@ -19,8 +19,7 @@ import Dashboard from "./pages/Dashboard";
 import PresidentReport from "./pages/dashboard/PresidentReport";
 import VicePresidentReport from "./pages/dashboard/VicePresidentReport";
 import SecretaryTrainingReport from "./pages/dashboard/SecretaryTrainingReport";
-import EventsReport from "./pages/dashboard/EventsReport";
-import CommunicationsReport from "./pages/dashboard/CommunicationsReport";
+import EventsCommunicationsReport from "./pages/dashboard/EventsCommunicationsReport";
 import VisitorsReport from "./pages/dashboard/VisitorsReport";
 import NotFound from "./pages/NotFound";
 
@@ -48,8 +47,7 @@ const App = () => (
             <Route path="president" element={<PresidentReport />} />
             <Route path="vice-president" element={<VicePresidentReport />} />
             <Route path="secretary-training" element={<SecretaryTrainingReport />} />
-            <Route path="events" element={<EventsReport />} />
-            <Route path="communications" element={<CommunicationsReport />} />
+            <Route path="events-communications" element={<EventsCommunicationsReport />} />
             <Route path="visitors" element={<VisitorsReport />} />
           </Route>
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
