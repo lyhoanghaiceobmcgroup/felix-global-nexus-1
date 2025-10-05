@@ -1,18 +1,50 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Megaphone, CheckCircle2, Clock, FileText, TrendingUp, Users, Send } from "lucide-react";
+import { Megaphone, CheckCircle2, TrendingUp, Send, Plus, ChevronDown, ChevronUp } from "lucide-react";
 import { useState } from "react";
 import { useChapterData } from "@/contexts/ChapterDataContext";
 import { toast } from "sonner";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import EventCalendar from "@/components/events/EventCalendar";
+import CreateEventDialog, { EventData } from "@/components/events/CreateEventDialog";
+import ContentGenerator from "@/components/events/ContentGenerator";
+import { Input } from "@/components/ui/input";
 
 export default function EventsCommunicationsReport() {
   const { chapterData, submitReport } = useChapterData();
   const [weekDate, setWeekDate] = useState(new Date().toISOString().split('T')[0]);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [events, setEvents] = useState<EventData[]>([
+    {
+      id: '1',
+      title: 'Lễ Chuyển giao Ban Điều hành Nhiệm kỳ XI',
+      date: '2025-10-07',
+      objectives: 'Chuyển giao quyền lực và trách nhiệm từ nhiệm kỳ cũ sang nhiệm kỳ mới',
+      preparationPlan: 'Đã chốt địa điểm, hoàn thiện kịch bản, phân công nhiệm vụ',
+      communicationPlan: 'Đã gửi email mời, đang thực hiện series bài đăng',
+      budget: '50.000.000 VNĐ',
+      prepStatus: 'completed',
+      commsStatus: 'in-progress',
+    },
+    {
+      id: '2',
+      title: 'Gala Dinner & Business Matching Cuối năm',
+      date: '2025-12-15',
+      objectives: 'Tạo không gian kết nối kinh doanh trang trọng, tổng kết năm',
+      preparationPlan: 'Đã lên ý tưởng, đang khảo sát địa điểm',
+      communicationPlan: 'Sẽ khởi động chiến dịch 6 tuần trước sự kiện',
+      budget: '100.000.000 VNĐ',
+      prepStatus: 'in-progress',
+      commsStatus: 'not-started',
+    },
+  ]);
+  const [isEventDetailsOpen, setIsEventDetailsOpen] = useState(false);
+  const [fanpageReach, setFanpageReach] = useState("15");
+  const [fanpageEngagement, setFanpageEngagement] = useState("20");
 
   return (
     <div className="space-y-8">
@@ -35,311 +67,126 @@ export default function EventsCommunicationsReport() {
       {/* I. LỊCH SỰ KIỆN & TRUYỀN THÔNG SẮP TỚI */}
       <Card className="shadow-lg border-bni-gold border-2">
         <CardHeader className="bg-gradient-to-r from-bni-red/10 to-bni-gold/10">
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <Calendar className="h-6 w-6 text-bni-red" />
+          <CardTitle className="text-2xl">
             I. LỊCH SỰ KIỆN & TRUYỀN THÔNG SẮP TỚI
           </CardTitle>
-          <CardDescription className="text-base">Tổng hợp lịch trình và trạng thái chuẩn bị</CardDescription>
+          <CardDescription className="text-base">
+            Lịch đầy đủ 12 tháng với nhắc nhở tự động 7 ngày trước
+          </CardDescription>
         </CardHeader>
         <CardContent className="pt-6">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="font-bold text-base">Ngày</TableHead>
-                <TableHead className="font-bold text-base">Tên Sự kiện</TableHead>
-                <TableHead className="font-bold text-base">Trạng thái Chuẩn bị</TableHead>
-                <TableHead className="font-bold text-base">Trạng thái Truyền thông</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell>
-                  <Input type="date" defaultValue="2025-10-07" className="w-40" />
-                </TableCell>
-                <TableCell>
-                  <Input 
-                    placeholder="Lễ Chuyển giao Ban Điều hành Nhiệm kỳ XI" 
-                    className="font-semibold"
-                    defaultValue="Lễ Chuyển giao Ban Điều hành Nhiệm kỳ XI"
-                  />
-                </TableCell>
-                <TableCell>
-                  <Badge className="bg-green-500 flex items-center gap-1 w-fit">
-                    <CheckCircle2 className="h-3 w-3" />
-                    Hoàn thành
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Badge className="bg-yellow-500 flex items-center gap-1 w-fit">
-                    <Clock className="h-3 w-3" />
-                    Đang diễn ra
-                  </Badge>
-                </TableCell>
-              </TableRow>
-              
-              <TableRow>
-                <TableCell>
-                  <Input type="month" defaultValue="2025-12" className="w-40" />
-                </TableCell>
-                <TableCell>
-                  <Input 
-                    placeholder="Gala Dinner & Business Matching Cuối năm" 
-                    className="font-semibold"
-                    defaultValue="Gala Dinner & Business Matching Cuối năm"
-                  />
-                </TableCell>
-                <TableCell>
-                  <Badge className="bg-yellow-500 flex items-center gap-1 w-fit">
-                    <Clock className="h-3 w-3" />
-                    Đang lên kế hoạch
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Badge className="bg-gray-500 flex items-center gap-1 w-fit">
-                    <FileText className="h-3 w-3" />
-                    Chưa bắt đầu
-                  </Badge>
-                </TableCell>
-              </TableRow>
-
-              <TableRow>
-                <TableCell>
-                  <Input type="month" defaultValue="2026-01" className="w-40" />
-                </TableCell>
-                <TableCell>
-                  <Input 
-                    placeholder="Workshop: Xây dựng Kế hoạch Kinh doanh 2026" 
-                    className="font-semibold"
-                    defaultValue="Workshop: Xây dựng Kế hoạch Kinh doanh 2026"
-                  />
-                </TableCell>
-                <TableCell>
-                  <Badge className="bg-gray-500 flex items-center gap-1 w-fit">
-                    <FileText className="h-3 w-3" />
-                    Chưa bắt đầu
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Badge className="bg-gray-500 flex items-center gap-1 w-fit">
-                    <FileText className="h-3 w-3" />
-                    Chưa bắt đầu
-                  </Badge>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-
-          <div className="mt-4 flex justify-end">
-            <Button className="bg-bni-gold text-bni-black hover:bg-bni-gold/90">
-              Xuất sang Trang tính
-            </Button>
-          </div>
+          <EventCalendar
+            events={events.map(e => ({
+              id: e.id,
+              date: new Date(e.date),
+              title: e.title,
+              prepStatus: e.prepStatus,
+              commsStatus: e.commsStatus,
+            }))}
+            onDateSelect={(date) => setSelectedDate(date)}
+            onCreateEvent={() => setIsCreateDialogOpen(true)}
+          />
         </CardContent>
       </Card>
 
       {/* II. CHI TIẾT KẾ HOẠCH & TIẾN ĐỘ */}
       <Card className="shadow-lg border-bni-red border-2">
         <CardHeader className="bg-gradient-to-r from-bni-gold/10 to-bni-red/10">
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <Calendar className="h-6 w-6 text-bni-red" />
-            II. CHI TIẾT KẾ HOẠCH & TIẾN ĐỘ
-          </CardTitle>
-          <CardDescription className="text-base">Báo cáo chi tiết từng sự kiện</CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-2xl">
+                II. CHI TIẾT KẾ HOẠCH & TIẾN ĐỘ
+              </CardTitle>
+              <CardDescription className="text-base">
+                Danh sách sự kiện và tiến độ chi tiết
+              </CardDescription>
+            </div>
+            <Button 
+              onClick={() => setIsCreateDialogOpen(true)}
+              className="bg-bni-red hover:bg-bni-red/90"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              Tạo Sự kiện
+            </Button>
+          </div>
         </CardHeader>
-        <CardContent className="pt-6 space-y-8">
-          
-          {/* 1. Sự kiện: Lễ Chuyển giao */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-2 pb-2 border-b-2 border-bni-gold">
-              <h3 className="text-xl font-bold text-bni-red">
-                1. Sự kiện: Lễ Chuyển giao Ban Điều hành Nhiệm kỳ XI
-              </h3>
-              <Badge className="bg-green-500">07/10/2025</Badge>
-            </div>
-
-            {/* Báo cáo Ban Sự kiện */}
-            <div className="bg-blue-50 dark:bg-blue-950/20 p-6 rounded-lg border-l-4 border-blue-500">
-              <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-blue-600" />
-                Báo cáo Ban Sự kiện:
-              </h4>
-              
-              <div className="space-y-4">
-                <div className="bg-white dark:bg-background p-4 rounded-lg">
-                  <Label className="font-semibold block mb-2">Địa điểm & Thời gian:</Label>
-                  <Textarea 
-                    rows={2}
-                    placeholder="Nhập thông tin địa điểm và thời gian..."
-                    defaultValue="Đã chốt, thông tin đã được gửi tới thành viên."
-                  />
-                </div>
-
-                <div className="bg-white dark:bg-background p-4 rounded-lg">
-                  <Label className="font-semibold block mb-2">Kịch bản chương trình:</Label>
-                  <Textarea 
-                    rows={2}
-                    placeholder="Nhập thông tin kịch bản..."
-                    defaultValue="Đã hoàn thiện và duyệt lần cuối."
-                  />
-                </div>
-
-                <div className="bg-white dark:bg-background p-4 rounded-lg">
-                  <Label className="font-semibold block mb-2">Nhân sự & Phân công:</Label>
-                  <Textarea 
-                    rows={2}
-                    placeholder="Nhập thông tin phân công nhân sự..."
-                    defaultValue="Đã phân công nhiệm vụ cho các vị trí hỗ trợ."
-                  />
-                </div>
-
-                <div className="bg-white dark:bg-background p-4 rounded-lg border-2 border-green-500">
-                  <Label className="font-semibold block mb-2">Tình trạng:</Label>
-                  <div className="flex items-center gap-2">
-                    <Badge className="bg-green-500 text-lg px-4 py-2">HOÀN TẤT CHUẨN BỊ</Badge>
-                    <Input 
-                      placeholder="Mọi công tác hậu cần đã sẵn sàng." 
-                      className="flex-1"
-                      defaultValue="Mọi công tác hậu cần đã sẵn sàng."
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Báo cáo Ban Truyền thông */}
-            <div className="bg-purple-50 dark:bg-purple-950/20 p-6 rounded-lg border-l-4 border-purple-500">
-              <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
-                <Megaphone className="h-5 w-5 text-purple-600" />
-                Báo cáo Ban Truyền thông:
-              </h4>
-              
-              <div className="space-y-4">
-                <div className="bg-white dark:bg-background p-4 rounded-lg">
-                  <Label className="font-semibold block mb-3">Trước sự kiện:</Label>
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-green-500 shrink-0">HOÀN THÀNH</Badge>
-                      <Input 
-                        placeholder="Hoạt động..."
-                        defaultValue="Gửi email mời và poster chính thức tới toàn bộ thành viên."
+        <CardContent className="pt-6 space-y-4">
+          <Collapsible open={isEventDetailsOpen} onOpenChange={setIsEventDetailsOpen}>
+            <CollapsibleTrigger asChild>
+              <Button variant="outline" className="w-full justify-between">
+                <span>Xem Chi tiết Sự kiện ({events.length})</span>
+                {isEventDetailsOpen ? <ChevronUp /> : <ChevronDown />}
+              </Button>
+            </CollapsibleTrigger>
+            <CollapsibleContent className="space-y-6 mt-4">
+              {events.map((event, index) => (
+                <Card key={event.id} className="border-2 border-bni-gold">
+                  <CardHeader>
+                    <div className="flex items-center justify-between">
+                      <CardTitle className="text-lg">
+                        {index + 1}. {event.title}
+                      </CardTitle>
+                      <Badge className="bg-bni-red">{new Date(event.date).toLocaleDateString('vi-VN')}</Badge>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label className="font-semibold">Trạng thái Chuẩn bị:</Label>
+                        <Badge className={
+                          event.prepStatus === 'completed' ? 'bg-green-500' :
+                          event.prepStatus === 'in-progress' ? 'bg-yellow-500' : 'bg-gray-500'
+                        }>
+                          {event.prepStatus === 'completed' ? 'Hoàn thành' :
+                           event.prepStatus === 'in-progress' ? 'Đang tiến hành' : 'Chưa bắt đầu'}
+                        </Badge>
+                      </div>
+                      <div className="space-y-2">
+                        <Label className="font-semibold">Trạng thái Truyền thông:</Label>
+                        <Badge className={
+                          event.commsStatus === 'completed' ? 'bg-green-500' :
+                          event.commsStatus === 'in-progress' ? 'bg-yellow-500' : 'bg-gray-500'
+                        }>
+                          {event.commsStatus === 'completed' ? 'Hoàn thành' :
+                           event.commsStatus === 'in-progress' ? 'Đang tiến hành' : 'Chưa bắt đầu'}
+                        </Badge>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="font-semibold">Mục tiêu:</Label>
+                      <p className="text-sm text-muted-foreground">{event.objectives}</p>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="font-semibold">Kế hoạch Chuẩn bị:</Label>
+                      <Textarea 
+                        rows={3}
+                        defaultValue={event.preparationPlan}
+                        className="text-sm"
                       />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-yellow-500 shrink-0">ĐANG TIẾN HÀNH</Badge>
-                      <Input 
-                        placeholder="Hoạt động..."
-                        defaultValue='Thực hiện chuỗi bài đăng "Nhìn lại Nhiệm kỳ X" trên fanpage.'
+                    
+                    <div className="space-y-2">
+                      <Label className="font-semibold">Kế hoạch Truyền thông:</Label>
+                      <Textarea 
+                        rows={3}
+                        defaultValue={event.communicationPlan}
+                        className="text-sm"
                       />
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Badge className="bg-green-500 shrink-0">HOÀN THÀNH</Badge>
-                      <Input 
-                        placeholder="Hoạt động..."
-                        defaultValue="Thiết kế và gửi thư mời online cho khách mời của thành viên."
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-white dark:bg-background p-4 rounded-lg">
-                  <Label className="font-semibold block mb-3">Trong và Sau sự kiện:</Label>
-                  <Textarea 
-                    rows={3}
-                    placeholder="Nhập kế hoạch truyền thông trong và sau sự kiện..."
-                    defaultValue="- Lên kế hoạch Livestream phần Lễ chuyển giao quan trọng.&#10;- Tổng hợp hình ảnh và đăng bài recap sự kiện trong vòng 24h."
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 2. Sự kiện: Gala Dinner */}
-          <div className="space-y-6">
-            <div className="flex items-center gap-2 pb-2 border-b-2 border-bni-gold">
-              <h3 className="text-xl font-bold text-bni-red">
-                2. Sự kiện: Gala Dinner & Business Matching Cuối năm
-              </h3>
-              <Badge className="bg-yellow-500">Dự kiến Tháng 12/2025</Badge>
-            </div>
-
-            {/* Báo cáo Ban Sự kiện */}
-            <div className="bg-blue-50 dark:bg-blue-950/20 p-6 rounded-lg border-l-4 border-blue-500">
-              <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
-                <Calendar className="h-5 w-5 text-blue-600" />
-                Báo cáo Ban Sự kiện:
-              </h4>
-              
-              <div className="space-y-4">
-                <div className="bg-white dark:bg-background p-4 rounded-lg">
-                  <Label className="font-semibold block mb-2">Mục tiêu:</Label>
-                  <Textarea 
-                    rows={2}
-                    placeholder="Nhập mục tiêu sự kiện..."
-                    defaultValue="Tạo không gian kết nối kinh doanh trang trọng, tổng kết năm và vinh danh thành viên."
-                  />
-                </div>
-
-                <div className="bg-white dark:bg-background p-4 rounded-lg">
-                  <Label className="font-semibold block mb-3">Tiến độ:</Label>
-                  <Textarea 
-                    rows={4}
-                    placeholder="Nhập tiến độ chuẩn bị..."
-                    defaultValue="- Đã lên ý tưởng và chủ đề chính.&#10;- Đang trong quá trình khảo sát 3 địa điểm tiềm năng.&#10;- Dự kiến ngân sách và bắt đầu lên kế hoạch kêu gọi tài trợ."
-                  />
-                </div>
-
-                <div className="bg-orange-50 dark:bg-orange-950/20 p-4 rounded-lg border-l-4 border-orange-500">
-                  <Label className="font-semibold block mb-2 text-orange-700 dark:text-orange-400">
-                    Cần hỗ trợ:
-                  </Label>
-                  <Textarea 
-                    rows={2}
-                    className="bg-white dark:bg-background"
-                    placeholder="Nhập yêu cầu hỗ trợ..."
-                    defaultValue="Các thành viên có mối quan hệ với các trung tâm hội nghị, nhà hàng lớn vui lòng kết nối với Ban Sự kiện."
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Báo cáo Ban Truyền thông */}
-            <div className="bg-purple-50 dark:bg-purple-950/20 p-6 rounded-lg border-l-4 border-purple-500">
-              <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
-                <Megaphone className="h-5 w-5 text-purple-600" />
-                Báo cáo Ban Truyền thông:
-              </h4>
-              
-              <div className="space-y-4">
-                <div className="bg-white dark:bg-background p-4 rounded-lg">
-                  <Label className="font-semibold block mb-2">Kế hoạch:</Label>
-                  <Textarea 
-                    rows={2}
-                    placeholder="Nhập kế hoạch truyền thông tổng thể..."
-                    defaultValue="Sẽ khởi động chiến dịch truyền thông 6 tuần trước sự kiện."
-                  />
-                </div>
-
-                <div className="bg-white dark:bg-background p-4 rounded-lg">
-                  <Label className="font-semibold block mb-3">Giai đoạn 1 (Lên ý tưởng):</Label>
-                  <Textarea 
-                    rows={2}
-                    placeholder="Nhập hoạt động giai đoạn 1..."
-                    defaultValue="Đang thiết kế bộ nhận diện (logo, theme) cho sự kiện."
-                  />
-                </div>
-
-                <div className="bg-white dark:bg-background p-4 rounded-lg">
-                  <Label className="font-semibold block mb-3">Giai đoạn 2 (Truyền thông sớm):</Label>
-                  <Textarea 
-                    rows={2}
-                    placeholder="Nhập hoạt động giai đoạn 2..."
-                    defaultValue='Sẽ tung "Save the Date" và các gói tài trợ vào đầu tháng 11.'
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-
+                    
+                    {event.budget && (
+                      <div className="space-y-2">
+                        <Label className="font-semibold">Ngân sách:</Label>
+                        <p className="text-sm font-medium text-bni-red">{event.budget}</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </CollapsibleContent>
+          </Collapsible>
         </CardContent>
       </Card>
 
@@ -350,70 +197,70 @@ export default function EventsCommunicationsReport() {
             <Megaphone className="h-6 w-6 text-bni-red" />
             III. HOẠT ĐỘNG TRUYỀN THÔNG THƯỜNG XUYÊN
           </CardTitle>
-          <CardDescription className="text-base">Các hoạt động truyền thông định kỳ và hiệu quả</CardDescription>
+          <CardDescription className="text-base">
+            Tạo nội dung với AI hoặc tự điền, chia sẻ trực tiếp lên mạng xã hội
+          </CardDescription>
         </CardHeader>
         <CardContent className="pt-6 space-y-6">
-          
-          {/* Thành viên của Tuần */}
-          <div className="bg-gradient-to-r from-bni-gold/20 to-bni-red/20 p-6 rounded-lg border-2 border-bni-gold">
-            <Label className="font-bold text-lg block mb-3">Thành viên của Tuần:</Label>
-            <Textarea 
-              rows={2}
-              className="bg-white dark:bg-background"
-              placeholder="Nhập thông tin về series vinh danh thành viên..."
-              defaultValue="Series bài viết vinh danh thành viên trên fanpage đang nhận được sự tương tác rất tốt."
-            />
-          </div>
-
-          {/* Bản tin Chapter */}
-          <div className="bg-white dark:bg-background p-6 rounded-lg border-2 border-blue-500">
-            <Label className="font-bold text-lg block mb-3">Bản tin Chapter:</Label>
-            <Textarea 
-              rows={2}
-              placeholder="Nhập thông tin về bản tin..."
-              defaultValue="Bản tin email tổng hợp hoạt động tháng 9 sẽ được gửi vào cuối tuần này."
-            />
+          {/* Content Generators */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <ContentGenerator contentType="member-of-week" />
+            <ContentGenerator contentType="newsletter" />
+            <ContentGenerator contentType="event-announcement" />
+            <ContentGenerator contentType="fanpage-growth" />
           </div>
 
           {/* Hiệu quả Fanpage */}
-          <div className="bg-green-50 dark:bg-green-950/20 p-6 rounded-lg border-l-4 border-green-500">
-            <h4 className="font-bold text-lg mb-4 flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-green-600" />
-              Hiệu quả Fanpage (7 ngày qua):
-            </h4>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div className="bg-white dark:bg-background p-4 rounded-lg border">
-                <Label className="font-semibold block mb-2">Lượt tiếp cận bài viết:</Label>
-                <div className="flex items-center gap-2">
-                  <Input type="number" placeholder="15" className="text-2xl font-bold w-24" defaultValue="15" />
-                  <span className="text-2xl font-bold">%</span>
-                  <Badge className="bg-green-500">Tăng</Badge>
+          <Card className="bg-green-50 dark:bg-green-950/20 border-l-4 border-green-500">
+            <CardHeader>
+              <CardTitle className="text-lg flex items-center gap-2">
+                <TrendingUp className="h-5 w-5 text-green-600" />
+                Hiệu quả Fanpage (7 ngày qua)
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-white dark:bg-background p-4 rounded-lg border">
+                  <Label className="font-semibold block mb-2">Lượt tiếp cận bài viết:</Label>
+                  <div className="flex items-center gap-2">
+                    <Input 
+                      type="number" 
+                      value={fanpageReach}
+                      onChange={(e) => setFanpageReach(e.target.value)}
+                      className="text-2xl font-bold w-24" 
+                    />
+                    <span className="text-2xl font-bold">%</span>
+                    <Badge className="bg-green-500">Tăng</Badge>
+                  </div>
+                </div>
+
+                <div className="bg-white dark:bg-background p-4 rounded-lg border">
+                  <Label className="font-semibold block mb-2">Lượt tương tác:</Label>
+                  <div className="flex items-center gap-2">
+                    <Input 
+                      type="number" 
+                      value={fanpageEngagement}
+                      onChange={(e) => setFanpageEngagement(e.target.value)}
+                      className="text-2xl font-bold w-24" 
+                    />
+                    <span className="text-2xl font-bold">%</span>
+                    <Badge className="bg-green-500">Tăng</Badge>
+                  </div>
                 </div>
               </div>
 
-              <div className="bg-white dark:bg-background p-4 rounded-lg border">
-                <Label className="font-semibold block mb-2">Lượt tương tác:</Label>
-                <div className="flex items-center gap-2">
-                  <Input type="number" placeholder="20" className="text-2xl font-bold w-24" defaultValue="20" />
-                  <span className="text-2xl font-bold">%</span>
-                  <Badge className="bg-green-500">Tăng</Badge>
-                </div>
+              <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border-l-4 border-blue-500">
+                <p className="font-semibold text-blue-900 dark:text-blue-300 mb-2">
+                  📊 Hành động đề xuất:
+                </p>
+                <Textarea 
+                  rows={2}
+                  className="bg-white dark:bg-background"
+                  defaultValue="Khuyến khích tất cả thành viên tích cực chia sẻ các bài đăng từ fanpage của Chapter để lan tỏa hình ảnh của chúng ta mạnh mẽ hơn."
+                />
               </div>
-            </div>
-
-            <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border-l-4 border-blue-500">
-              <p className="font-semibold text-blue-900 dark:text-blue-300 mb-2">
-                📊 Hành động đề xuất:
-              </p>
-              <Textarea 
-                rows={2}
-                className="bg-white dark:bg-background"
-                defaultValue="Khuyến khích tất cả thành viên tích cực chia sẻ các bài đăng từ fanpage của Chapter để lan tỏa hình ảnh của chúng ta mạnh mẽ hơn."
-              />
-            </div>
-          </div>
-
+            </CardContent>
+          </Card>
         </CardContent>
       </Card>
 
@@ -446,6 +293,16 @@ export default function EventsCommunicationsReport() {
           Báo cáo
         </Button>
       </div>
+
+      {/* Create Event Dialog */}
+      <CreateEventDialog
+        open={isCreateDialogOpen}
+        onOpenChange={setIsCreateDialogOpen}
+        preselectedDate={selectedDate}
+        onCreateEvent={(newEvent) => {
+          setEvents(prev => [...prev, newEvent]);
+        }}
+      />
     </div>
   );
 }
