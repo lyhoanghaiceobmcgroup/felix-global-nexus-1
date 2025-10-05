@@ -2,43 +2,94 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Users, TrendingUp, Calendar, Award, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { Users, TrendingUp, Calendar, Award, Target, CheckCircle2, UserPlus, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
-// Mockup data
-const stats = [
+// Mockup data - Mục tiêu nhiệm kỳ
+const termGoals = [
   {
-    title: "Tổng thành viên",
-    value: "45",
-    change: "+12%",
-    trend: "up",
+    title: "Mục tiêu thành viên",
+    target: "60",
+    current: "45",
     icon: Users,
-    description: "So với tháng trước"
+    percentage: 75,
+    color: "text-blue-600"
   },
   {
-    title: "Referrals tháng này",
-    value: "128",
-    change: "+23%",
-    trend: "up",
-    icon: TrendingUp,
-    description: "Tăng trưởng tốt"
+    title: "Mục tiêu khách mời",
+    target: "200",
+    current: "156",
+    icon: UserPlus,
+    percentage: 78,
+    color: "text-green-600"
   },
   {
-    title: "Cuộc họp",
-    value: "16",
-    change: "0%",
-    trend: "neutral",
+    title: "Cuộc họp & Sự kiện",
+    target: "48",
+    current: "32",
     icon: Calendar,
-    description: "Buổi trong tháng"
+    percentage: 67,
+    color: "text-purple-600"
   },
   {
     title: "Tổng TYFCB",
-    value: "2.4M",
-    change: "+18%",
-    trend: "up",
+    target: "5B",
+    current: "3.2B",
     icon: Award,
-    description: "Thank You For Closed Business"
+    percentage: 64,
+    color: "text-bni-gold"
+  }
+];
+
+// Dữ liệu biểu đồ 6 tháng
+const chartData = [
+  {
+    month: "Tháng 5",
+    thanhVien: 38,
+    khachMoi: 112,
+    cuocHop: 24,
+    tyfcb: 1.8
+  },
+  {
+    month: "Tháng 6",
+    thanhVien: 40,
+    khachMoi: 128,
+    cuocHop: 26,
+    tyfcb: 2.1
+  },
+  {
+    month: "Tháng 7",
+    thanhVien: 42,
+    khachMoi: 135,
+    cuocHop: 26,
+    tyfcb: 2.4
+  },
+  {
+    month: "Tháng 8",
+    thanhVien: 43,
+    khachMoi: 142,
+    cuocHop: 26,
+    tyfcb: 2.7
+  },
+  {
+    month: "Tháng 9",
+    thanhVien: 44,
+    khachMoi: 150,
+    cuocHop: 26,
+    tyfcb: 2.9
+  },
+  {
+    month: "Tháng 10",
+    thanhVien: 45,
+    khachMoi: 156,
+    cuocHop: 32,
+    tyfcb: 3.2
   }
 ];
 
@@ -187,45 +238,150 @@ const Dashboard = () => {
       </header>
 
       <main className="max-w-7xl mx-auto px-4 md:px-8 py-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                  <CardTitle className="text-sm font-medium">
-                    {stat.title}
-                  </CardTitle>
-                  <Icon className="h-5 w-5 text-muted-foreground" />
+        {/* Mục tiêu nhiệm kỳ */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+            <Target className="h-6 w-6 text-bni-red" />
+            Mục tiêu nhiệm kỳ
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {termGoals.map((goal, index) => {
+              const Icon = goal.icon;
+              return (
+                <Card key={index} className="hover:shadow-lg transition-shadow border-l-4 border-l-bni-red">
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">
+                      {goal.title}
+                    </CardTitle>
+                    <Icon className={`h-5 w-5 ${goal.color}`} />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-end">
+                        <div>
+                          <div className="text-3xl font-bold">{goal.current}</div>
+                          <div className="text-xs text-muted-foreground">Mục tiêu: {goal.target}</div>
+                        </div>
+                        <div className={`text-2xl font-bold ${goal.color}`}>
+                          {goal.percentage}%
+                        </div>
+                      </div>
+                      <div className="w-full bg-secondary rounded-full h-2">
+                        <div 
+                          className="bg-bni-red h-2 rounded-full transition-all" 
+                          style={{ width: `${goal.percentage}%` }}
+                        />
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Biểu đồ theo dõi 6 tháng */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-bni-red" />
+              Theo dõi hoạt động 6 tháng
+            </CardTitle>
+            <CardDescription>
+              Biểu đồ thống kê các chỉ số hoạt động chính
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={400}>
+              <LineChart data={chartData}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="month" />
+                <YAxis yAxisId="left" />
+                <YAxis yAxisId="right" orientation="right" />
+                <Tooltip />
+                <Legend />
+                <Line yAxisId="left" type="monotone" dataKey="thanhVien" stroke="#dc2626" name="Thành viên" strokeWidth={2} />
+                <Line yAxisId="left" type="monotone" dataKey="khachMoi" stroke="#16a34a" name="Khách mời" strokeWidth={2} />
+                <Line yAxisId="left" type="monotone" dataKey="cuocHop" stroke="#9333ea" name="Cuộc họp" strokeWidth={2} />
+                <Line yAxisId="right" type="monotone" dataKey="tyfcb" stroke="#ca8a04" name="TYFCB (tỷ)" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        {/* Main Content Tabs */}
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview">Tổng quan</TabsTrigger>
+            <TabsTrigger value="referrals">Referrals</TabsTrigger>
+            <TabsTrigger value="meetings">Lịch họp</TabsTrigger>
+            <TabsTrigger value="lt-reports">Báo cáo LT</TabsTrigger>
+          </TabsList>
+
+          {/* Overview Tab */}
+          <TabsContent value="overview" className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Top thành viên xuất sắc</CardTitle>
+                  <CardDescription>
+                    Bảng xếp hạng hoạt động tháng này
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold">{stat.value}</div>
-                  <div className="flex items-center text-xs mt-2">
-                    {stat.trend === "up" && (
-                      <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />
-                    )}
-                    {stat.trend === "down" && (
-                      <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />
-                    )}
-                    <span className={stat.trend === "up" ? "text-green-500" : stat.trend === "down" ? "text-red-500" : "text-muted-foreground"}>
-                      {stat.change}
-                    </span>
-                    <span className="text-muted-foreground ml-2">{stat.description}</span>
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Hạng</TableHead>
+                        <TableHead>Tên</TableHead>
+                        <TableHead>TYFCB</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {topMembers.slice(0, 5).map((member) => (
+                        <TableRow key={member.id}>
+                          <TableCell>
+                            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-bni-gold/20 text-bni-gold font-bold">
+                              {member.rank}
+                            </div>
+                          </TableCell>
+                          <TableCell className="font-medium">{member.name}</TableCell>
+                          <TableCell className="font-semibold text-bni-gold">{member.tyfcb}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle>Lịch họp sắp tới</CardTitle>
+                  <CardDescription>
+                    Các cuộc họp trong tuần này
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {upcomingMeetings.slice(0, 3).map((meeting) => (
+                      <div
+                        key={meeting.id}
+                        className="flex items-start space-x-4 p-3 rounded-lg border bg-card"
+                      >
+                        <Calendar className="h-8 w-8 text-bni-red flex-shrink-0" />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold">{meeting.title}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {new Date(meeting.date).toLocaleDateString('vi-VN')} • {meeting.time}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </CardContent>
               </Card>
-            );
-          })}
-        </div>
-
-        {/* Main Content Tabs */}
-        <Tabs defaultValue="referrals" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="referrals">Referrals</TabsTrigger>
-            <TabsTrigger value="meetings">Lịch họp</TabsTrigger>
-            <TabsTrigger value="members">Thành viên</TabsTrigger>
-          </TabsList>
+            </div>
+          </TabsContent>
 
           {/* Referrals Tab */}
           <TabsContent value="referrals" className="space-y-4">
@@ -310,50 +466,172 @@ const Dashboard = () => {
             </Card>
           </TabsContent>
 
-          {/* Members Tab */}
-          <TabsContent value="members" className="space-y-4">
+          {/* LT Reports Tab */}
+          <TabsContent value="lt-reports" className="space-y-4">
             <Card>
               <CardHeader>
-                <CardTitle>Top thành viên xuất sắc</CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5 text-bni-red" />
+                  Báo cáo Leadership Team
+                </CardTitle>
                 <CardDescription>
-                  Bảng xếp hạng dựa trên hoạt động referral và TYFCB
+                  Nhập báo cáo hoạt động theo từng vị trí LT
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="lt-position">Vị trí LT</Label>
+                      <Select>
+                        <SelectTrigger id="lt-position">
+                          <SelectValue placeholder="Chọn vị trí" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="president">President (Chủ tịch)</SelectItem>
+                          <SelectItem value="vice-president">Vice President (Phó Chủ tịch)</SelectItem>
+                          <SelectItem value="secretary">Secretary/Treasurer (Thư ký/Thủ quỹ)</SelectItem>
+                          <SelectItem value="membership">Membership Coordinator (Điều phối viên thành viên)</SelectItem>
+                          <SelectItem value="visitor">Visitor Host (Tiếp khách)</SelectItem>
+                          <SelectItem value="education">Education Coordinator (Điều phối viên đào tạo)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="report-period">Kỳ báo cáo</Label>
+                      <Input type="date" id="report-period" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="report-title">Tiêu đề báo cáo</Label>
+                    <Input 
+                      id="report-title" 
+                      placeholder="Ví dụ: Báo cáo hoạt động tháng 10/2025"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="achievements">Thành tích đạt được</Label>
+                    <Textarea 
+                      id="achievements"
+                      placeholder="Mô tả các thành tích, mục tiêu đã hoàn thành..."
+                      rows={4}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="challenges">Thách thức gặp phải</Label>
+                    <Textarea 
+                      id="challenges"
+                      placeholder="Các khó khăn, vấn đề cần giải quyết..."
+                      rows={4}
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="next-steps">Kế hoạch tiếp theo</Label>
+                    <Textarea 
+                      id="next-steps"
+                      placeholder="Kế hoạch hành động cho kỳ tiếp theo..."
+                      rows={4}
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="metric-1">Chỉ số 1</Label>
+                      <Input 
+                        id="metric-1" 
+                        type="number"
+                        placeholder="Ví dụ: Số lượng referrals"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="metric-2">Chỉ số 2</Label>
+                      <Input 
+                        id="metric-2" 
+                        type="number"
+                        placeholder="Ví dụ: Số khách mời"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="metric-3">Chỉ số 3</Label>
+                      <Input 
+                        id="metric-3" 
+                        type="number"
+                        placeholder="Ví dụ: Số 1-to-1"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-4 pt-4">
+                    <Button type="button" variant="outline">
+                      Hủy
+                    </Button>
+                    <Button type="submit" className="bg-bni-red hover:bg-bni-red/90">
+                      <CheckCircle2 className="h-4 w-4 mr-2" />
+                      Gửi báo cáo
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+
+            {/* Danh sách báo cáo đã gửi */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Lịch sử báo cáo</CardTitle>
+                <CardDescription>
+                  Các báo cáo đã được gửi
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Hạng</TableHead>
-                      <TableHead>Tên</TableHead>
-                      <TableHead>Ngành nghề</TableHead>
-                      <TableHead>Referrals cho</TableHead>
-                      <TableHead>Referrals nhận</TableHead>
-                      <TableHead>TYFCB</TableHead>
+                      <TableHead>Ngày</TableHead>
+                      <TableHead>Vị trí</TableHead>
+                      <TableHead>Tiêu đề</TableHead>
+                      <TableHead>Trạng thái</TableHead>
+                      <TableHead>Hành động</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {topMembers.map((member) => (
-                      <TableRow key={member.id}>
-                        <TableCell>
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-bni-gold/20 text-bni-gold font-bold">
-                            {member.rank}
-                          </div>
-                        </TableCell>
-                        <TableCell className="font-medium">{member.name}</TableCell>
-                        <TableCell>{member.category}</TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="bg-green-500/10 text-green-700 border-green-200">
-                            {member.referralsGiven}
-                          </Badge>
-                        </TableCell>
-                        <TableCell>
-                          <Badge variant="outline" className="bg-blue-500/10 text-blue-700 border-blue-200">
-                            {member.referralsReceived}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="font-semibold text-bni-gold">{member.tyfcb}</TableCell>
-                      </TableRow>
-                    ))}
+                    <TableRow>
+                      <TableCell>01/10/2025</TableCell>
+                      <TableCell>President</TableCell>
+                      <TableCell>Báo cáo tháng 9/2025</TableCell>
+                      <TableCell>
+                        <Badge>Đã duyệt</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="ghost" size="sm">Xem</Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>01/09/2025</TableCell>
+                      <TableCell>Membership Coordinator</TableCell>
+                      <TableCell>Báo cáo tháng 8/2025</TableCell>
+                      <TableCell>
+                        <Badge>Đã duyệt</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="ghost" size="sm">Xem</Button>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell>01/08/2025</TableCell>
+                      <TableCell>Visitor Host</TableCell>
+                      <TableCell>Báo cáo tháng 7/2025</TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">Chờ duyệt</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Button variant="ghost" size="sm">Xem</Button>
+                      </TableCell>
+                    </TableRow>
                   </TableBody>
                 </Table>
               </CardContent>
