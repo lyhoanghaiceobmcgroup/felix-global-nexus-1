@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Megaphone, CheckCircle2, TrendingUp, Send, Plus, ChevronDown, ChevronUp, X } from "lucide-react";
+import { Megaphone, CheckCircle2, TrendingUp, Send, Plus, ChevronDown, ChevronUp, X, Edit } from "lucide-react";
 import { useState } from "react";
 import { useChapterData } from "@/contexts/ChapterDataContext";
 import { toast } from "sonner";
@@ -12,6 +12,8 @@ import EventCalendar from "@/components/events/EventCalendar";
 import CreateEventDialog, { EventData } from "@/components/events/CreateEventDialog";
 import ContentGenerator from "@/components/events/ContentGenerator";
 import { Input } from "@/components/ui/input";
+import EventTaskManager, { TaskAssignment } from "@/components/events/EventTaskManager";
+import { Progress } from "@/components/ui/progress";
 
 export default function EventsCommunicationsReport() {
   const { chapterData, submitReport } = useChapterData();
@@ -29,6 +31,22 @@ export default function EventsCommunicationsReport() {
       budget: '50.000.000 VNĐ',
       prepStatus: 'completed',
       commsStatus: 'in-progress',
+      tasks: [
+        {
+          id: '1',
+          personName: 'Nguyễn Văn A',
+          role: 'Trưởng ban Sự kiện',
+          task: 'Tổng hợp danh sách khách mời và gửi thiệp',
+          status: 'completed',
+        },
+        {
+          id: '2',
+          personName: 'Trần Thị B',
+          role: 'Thành viên Ban Truyền thông',
+          task: 'Chuẩn bị nội dung đăng fanpage và kênh Zalo',
+          status: 'in-progress',
+        },
+      ],
     },
     {
       id: '2',
@@ -40,9 +58,12 @@ export default function EventsCommunicationsReport() {
       budget: '100.000.000 VNĐ',
       prepStatus: 'in-progress',
       commsStatus: 'not-started',
+      tasks: [],
     },
   ]);
   const [isEventDetailsOpen, setIsEventDetailsOpen] = useState(false);
+  const [taskManagerOpen, setTaskManagerOpen] = useState(false);
+  const [selectedEventForTasks, setSelectedEventForTasks] = useState<EventData | null>(null);
   const [fanpageReach, setFanpageReach] = useState("15");
   const [fanpageEngagement, setFanpageEngagement] = useState("20");
   const [communicationActivities, setCommunicationActivities] = useState([
@@ -136,7 +157,7 @@ export default function EventsCommunicationsReport() {
                       <Badge className="bg-bni-red">{new Date(event.date).toLocaleDateString('vi-VN')}</Badge>
                     </div>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                   <CardContent className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
                         <Label className="font-semibold">Trạng thái Chuẩn bị:</Label>
@@ -159,6 +180,27 @@ export default function EventsCommunicationsReport() {
                         </Badge>
                       </div>
                     </div>
+
+                    {/* Task Progress */}
+                    {event.tasks && event.tasks.length > 0 && (
+                      <div className="space-y-2">
+                        <Label className="font-semibold">Tiến độ Công việc:</Label>
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <span>
+                              {event.tasks.filter(t => t.status === 'completed').length}/{event.tasks.length} nhiệm vụ
+                            </span>
+                            <span className="font-bold">
+                              {Math.round((event.tasks.filter(t => t.status === 'completed').length / event.tasks.length) * 100)}%
+                            </span>
+                          </div>
+                          <Progress 
+                            value={(event.tasks.filter(t => t.status === 'completed').length / event.tasks.length) * 100} 
+                            className="h-2"
+                          />
+                        </div>
+                      </div>
+                    )}
                     
                     <div className="space-y-2">
                       <Label className="font-semibold">Mục tiêu:</Label>
@@ -189,6 +231,18 @@ export default function EventsCommunicationsReport() {
                         <p className="text-sm font-medium text-bni-red">{event.budget}</p>
                       </div>
                     )}
+
+                    {/* Update Button */}
+                    <Button
+                      onClick={() => {
+                        setSelectedEventForTasks(event);
+                        setTaskManagerOpen(true);
+                      }}
+                      className="w-full bg-bni-red hover:bg-bni-red/90 text-white"
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Cập nhật Phân công & Tiến độ
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
@@ -349,9 +403,26 @@ export default function EventsCommunicationsReport() {
         onOpenChange={setIsCreateDialogOpen}
         preselectedDate={selectedDate}
         onCreateEvent={(newEvent) => {
-          setEvents(prev => [...prev, newEvent]);
+          setEvents(prev => [...prev, { ...newEvent, tasks: [] }]);
         }}
       />
+
+      {/* Task Manager Dialog */}
+      {selectedEventForTasks && (
+        <EventTaskManager
+          open={taskManagerOpen}
+          onOpenChange={setTaskManagerOpen}
+          eventTitle={selectedEventForTasks.title}
+          tasks={selectedEventForTasks.tasks || []}
+          onSaveTasks={(updatedTasks) => {
+            setEvents(prev => prev.map(e => 
+              e.id === selectedEventForTasks.id 
+                ? { ...e, tasks: updatedTasks }
+                : e
+            ));
+          }}
+        />
+      )}
     </div>
   );
 }

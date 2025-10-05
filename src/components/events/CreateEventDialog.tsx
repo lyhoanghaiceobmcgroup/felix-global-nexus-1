@@ -15,6 +15,14 @@ interface CreateEventDialogProps {
   preselectedDate?: Date;
 }
 
+export interface TaskAssignment {
+  id: string;
+  personName: string;
+  role: string;
+  task: string;
+  status: 'not-started' | 'in-progress' | 'completed';
+}
+
 export interface EventData {
   id: string;
   title: string;
@@ -25,6 +33,7 @@ export interface EventData {
   budget: string;
   prepStatus: 'completed' | 'in-progress' | 'not-started';
   commsStatus: 'completed' | 'in-progress' | 'not-started';
+  tasks?: TaskAssignment[];
 }
 
 const EVENT_TEMPLATES = [
