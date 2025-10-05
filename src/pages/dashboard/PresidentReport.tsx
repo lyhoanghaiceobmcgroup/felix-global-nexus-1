@@ -39,6 +39,31 @@ export default function PresidentReport() {
     upcomingEvent: chapterData.performanceMetrics.upcomingEvent,
   });
 
+  // Sync local state with context when context changes
+  useEffect(() => {
+    setObjectives({
+      memberTarget: chapterData.strategicObjectives.memberCount.target,
+      memberCurrent: chapterData.strategicObjectives.memberCount.current,
+      revenueTarget: chapterData.strategicObjectives.revenue.target,
+      attendanceTarget: chapterData.strategicObjectives.attendance.target,
+      attendanceCurrent: chapterData.strategicObjectives.attendance.current,
+      kpiGreenTarget: chapterData.strategicObjectives.kpiGreenMembers.target,
+      kpiGreenCurrent: chapterData.strategicObjectives.kpiGreenMembers.current,
+      oneToOneTarget: chapterData.strategicObjectives.oneToOneMeetings?.target || "344 – 544",
+      oneToOneCurrent: chapterData.strategicObjectives.oneToOneMeetings?.current || 344,
+    });
+    
+    setMetrics({
+      referralsThisWeek: chapterData.performanceMetrics.referralsThisWeek,
+      revenueLastMonth: chapterData.performanceMetrics.revenueLastMonth,
+      visitorsLastWeek: chapterData.performanceMetrics.visitorsLastWeek,
+      newMemberApplications: chapterData.performanceMetrics.newMemberApplications,
+      membersNeedingRenewal: chapterData.performanceMetrics.membersNeedingRenewal,
+      trainingPointsLastMonth: chapterData.performanceMetrics.trainingPointsLastMonth,
+      upcomingEvent: chapterData.performanceMetrics.upcomingEvent,
+    });
+  }, [chapterData]);
+
   const handleSaveReport = () => {
     // Calculate progress for each objective
     const memberProgress = typeof objectives.memberCurrent === 'number' 
@@ -97,10 +122,21 @@ export default function PresidentReport() {
     <div className="space-y-8">
       {/* Header */}
       <div className="border-b pb-6">
-        <h1 className="text-4xl font-bold text-bni-red mb-4 flex items-center gap-3">
-          <Crown className="h-10 w-10 text-bni-gold" />
-          BÁO CÁO CỦA CHỦ TỊCH
-        </h1>
+        <div className="flex justify-between items-start mb-4">
+          <h1 className="text-4xl font-bold text-bni-red flex items-center gap-3">
+            <Crown className="h-10 w-10 text-bni-gold" />
+            BÁO CÁO CỦA CHỦ TỊCH
+          </h1>
+          <div className="flex gap-2">
+            <Badge variant="outline" className="text-xs">
+              Cập nhật: {chapterData.lastUpdated}
+            </Badge>
+            <Badge className="bg-green-500 text-xs">
+              <CheckCircle2 className="h-3 w-3 mr-1" />
+              Đồng bộ với Tổng quan
+            </Badge>
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="flex items-center gap-2">
             <Label className="font-semibold shrink-0">Buổi họp ngày:</Label>
@@ -138,16 +174,53 @@ export default function PresidentReport() {
         </CardContent>
       </Card>
 
+      {/* Thông tin Đồng bộ */}
+      <Card className="bg-blue-50 dark:bg-blue-950/20 border-2 border-blue-500">
+        <CardContent className="pt-6">
+          <div className="flex items-start gap-4">
+            <div className="bg-blue-500 text-white p-3 rounded-lg">
+              <CheckCircle2 className="h-6 w-6" />
+            </div>
+            <div className="flex-1">
+              <h3 className="font-bold text-lg text-blue-900 dark:text-blue-300 mb-2">
+                📊 Đồng bộ Tự động với Tổng quan Dashboard
+              </h3>
+              <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-500 font-bold">•</span>
+                  <span><strong>Mục tiêu Chiến lược</strong> và <strong>Ban Lãnh đạo</strong> được hiển thị từ dữ liệu tập trung tại Tổng quan</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-500 font-bold">•</span>
+                  <span>Khi bạn cập nhật số liệu ở đây và nhấn <strong>"Lưu & Cập nhật Tổng quan"</strong>, tất cả thay đổi sẽ được phản ánh ngay lập tức</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-blue-500 font-bold">•</span>
+                  <span>Dữ liệu được lưu tự động trong trình duyệt và sẽ khôi phục khi bạn quay lại</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* I. NHÌN LẠI TẦM NHÌN & MỤC TIÊU NHIỆM KỲ */}
       <Card className="shadow-lg border-bni-red border-2">
         <CardHeader className="bg-gradient-to-r from-bni-red/10 to-bni-gold/10">
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <Target className="h-6 w-6 text-bni-red" />
-            I. NHÌN LẠI TẦM NHÌN & MỤC TIÊU NHIỆM KỲ
-          </CardTitle>
-          <CardDescription className="text-base">
-            Hãy cùng nhắc lại những mục tiêu mà chúng ta đã cam kết cùng nhau đạt được
-          </CardDescription>
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle className="text-2xl flex items-center gap-2">
+                <Target className="h-6 w-6 text-bni-red" />
+                I. NHÌN LẠI TẦM NHÌN & MỤC TIÊU NHIỆM KỲ
+              </CardTitle>
+              <CardDescription className="text-base">
+                Hãy cùng nhắc lại những mục tiêu mà chúng ta đã cam kết cùng nhau đạt được ({chapterData.termName})
+              </CardDescription>
+            </div>
+            <Badge variant="secondary" className="text-sm">
+              Liên kết với Tổng quan
+            </Badge>
+          </div>
         </CardHeader>
         <CardContent className="pt-6">
           <Table>
@@ -289,11 +362,18 @@ export default function PresidentReport() {
       {/* II. BẢNG ĐIỀU KHIỂN TỔNG QUAN CHAPTER */}
       <Card className="shadow-lg border-bni-gold border-2">
         <CardHeader className="bg-gradient-to-r from-bni-gold/10 to-bni-red/10">
-          <CardTitle className="text-2xl flex items-center gap-2">
-            <TrendingUp className="h-6 w-6 text-bni-red" />
-            II. BẢNG ĐIỀU KHIỂN (DASHBOARD) TỔNG QUAN CHAPTER
-          </CardTitle>
-          <CardDescription className="text-base">(Số liệu cập nhật từ các Trưởng ban)</CardDescription>
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle className="text-2xl flex items-center gap-2">
+                <TrendingUp className="h-6 w-6 text-bni-red" />
+                II. BẢNG ĐIỀU KHIỂN (DASHBOARD) TỔNG QUAN CHAPTER
+              </CardTitle>
+              <CardDescription className="text-base">(Số liệu cập nhật từ các Trưởng ban)</CardDescription>
+            </div>
+            <Badge variant="secondary" className="text-sm">
+              Đồng bộ real-time
+            </Badge>
+          </div>
         </CardHeader>
         <CardContent className="pt-6 space-y-6">
           
@@ -401,6 +481,54 @@ export default function PresidentReport() {
             </div>
           </div>
 
+        </CardContent>
+      </Card>
+
+      {/* IIA. BAN LÃNH ĐẠO NHIỆM KỲ */}
+      <Card className="shadow-lg border-bni-gold border-2">
+        <CardHeader className="bg-gradient-to-r from-bni-gold/10 to-bni-red/10">
+          <div className="flex justify-between items-center">
+            <div>
+              <CardTitle className="text-2xl flex items-center gap-2">
+                <Users className="h-6 w-6 text-bni-gold" />
+                Ban Lãnh đạo {chapterData.termName}
+              </CardTitle>
+              <CardDescription className="text-base">
+                Thông tin được đồng bộ từ Tổng quan Dashboard
+              </CardDescription>
+            </div>
+            <Badge variant="outline" className="text-sm">
+              <CheckCircle2 className="h-3 w-3 mr-1" />
+              Đã đồng bộ
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {chapterData.leadership.map((leader, index) => (
+              leader.isPrimary ? (
+                <div key={index} className="col-span-full p-4 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
+                  <div className="flex items-center gap-2">
+                    <Crown className="h-5 w-5 text-bni-gold" />
+                    <span className="font-semibold">{leader.role}:</span>
+                    <span className="font-bold text-bni-red">{leader.name}</span>
+                  </div>
+                </div>
+              ) : (
+                <div key={index} className="p-3 border rounded-lg bg-card hover:bg-muted/50 transition-colors">
+                  <div className="font-semibold text-sm text-bni-red">{leader.role}</div>
+                  <div className="text-sm mt-1">{leader.name}</div>
+                </div>
+              )
+            ))}
+          </div>
+          
+          <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border-l-4 border-blue-500">
+            <p className="text-sm text-blue-900 dark:text-blue-300">
+              💡 <strong>Ghi chú:</strong> Thông tin Ban Lãnh đạo được quản lý tập trung tại Tổng quan Dashboard. 
+              Mọi thay đổi sẽ tự động cập nhật ở đây.
+            </p>
+          </div>
         </CardContent>
       </Card>
 
