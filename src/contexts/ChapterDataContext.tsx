@@ -7,6 +7,7 @@ interface ChapterDataContextType {
   updateStrategicObjectives: (objectives: Partial<ChapterData['strategicObjectives']>) => void;
   updateLeadership: (leadership: ChapterData['leadership']) => void;
   updatePerformanceMetrics: (metrics: Partial<ChapterData['performanceMetrics']>) => void;
+  submitReport: (reportType: keyof ChapterData['reports'], completedBy: string) => void;
 }
 
 const ChapterDataContext = createContext<ChapterDataContextType | undefined>(undefined);
@@ -71,6 +72,21 @@ export function ChapterDataProvider({ children }: { children: React.ReactNode })
     }));
   };
 
+  const submitReport = (reportType: keyof ChapterData['reports'], completedBy: string) => {
+    setChapterData(prev => ({
+      ...prev,
+      reports: {
+        ...prev.reports,
+        [reportType]: {
+          isCompleted: true,
+          completedAt: new Date().toISOString(),
+          completedBy
+        }
+      },
+      lastUpdated: new Date().toISOString().split('T')[0]
+    }));
+  };
+
   return (
     <ChapterDataContext.Provider
       value={{
@@ -78,7 +94,8 @@ export function ChapterDataProvider({ children }: { children: React.ReactNode })
         updateChapterData,
         updateStrategicObjectives,
         updateLeadership,
-        updatePerformanceMetrics
+        updatePerformanceMetrics,
+        submitReport
       }}
     >
       {children}

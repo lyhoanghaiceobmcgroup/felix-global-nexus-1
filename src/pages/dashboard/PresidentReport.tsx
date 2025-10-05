@@ -5,13 +5,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Crown, Target, TrendingUp, Users, Calendar, CheckCircle2, AlertTriangle, Lightbulb, ChevronLeft, ChevronRight, Play, Edit, Download, Link, Save } from "lucide-react";
+import { Crown, Target, TrendingUp, Users, Calendar, CheckCircle2, AlertTriangle, Lightbulb, ChevronLeft, ChevronRight, Play, Edit, Download, Link, Save, Send } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useChapterData } from "@/contexts/ChapterDataContext";
 import { toast } from "sonner";
 
 export default function PresidentReport() {
-  const { chapterData, updateStrategicObjectives, updatePerformanceMetrics } = useChapterData();
+  const { chapterData, updateStrategicObjectives, updatePerformanceMetrics, submitReport } = useChapterData();
   const [meetingDate, setMeetingDate] = useState(new Date().toISOString().split('T')[0]);
   const [currentSlide, setCurrentSlide] = useState(1);
   const totalSlides = 5;
@@ -1028,12 +1028,27 @@ export default function PresidentReport() {
           Xuất sang Trang tính
         </Button>
         <Button 
-          className="bg-bni-red hover:bg-bni-red/90 text-white" 
+          className="bg-blue-600 hover:bg-blue-700 text-white" 
           size="lg"
           onClick={handleSaveReport}
         >
           <Save className="h-5 w-5 mr-2" />
           Lưu & Cập nhật Tổng quan
+        </Button>
+        <Button 
+          className="bg-bni-red hover:bg-bni-red/90 text-white" 
+          size="lg"
+          onClick={() => {
+            handleSaveReport();
+            submitReport('president', chapterData.leadership.find(l => l.role === 'Chủ tịch')?.name || 'Chủ tịch');
+            toast.success('Báo cáo đã hoàn thành', {
+              description: 'Báo cáo Chủ tịch đã được gửi và đồng bộ real-time lên Tổng quan',
+              duration: 5000,
+            });
+          }}
+        >
+          <Send className="h-5 w-5 mr-2" />
+          Báo cáo
         </Button>
       </div>
     </div>

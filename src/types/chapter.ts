@@ -31,6 +31,12 @@ export interface PerformanceMetrics {
   upcomingEvent: string;
 }
 
+export interface ReportStatus {
+  isCompleted: boolean;
+  completedAt?: string;
+  completedBy?: string;
+}
+
 export interface ChapterData {
   termName: string;
   termStart: string;
@@ -39,6 +45,13 @@ export interface ChapterData {
   strategicObjectives: StrategicObjectives;
   leadership: LeadershipMember[];
   performanceMetrics: PerformanceMetrics;
+  reports: {
+    president: ReportStatus;
+    vicePresident: ReportStatus;
+    secretaryTraining: ReportStatus;
+    eventsCommunications: ReportStatus;
+    visitors: ReportStatus;
+  };
 }
 
 export const initialChapterData: ChapterData = {
@@ -96,5 +109,12 @@ export const initialChapterData: ChapterData = {
     membersNeedingRenewal: 7,
     trainingPointsLastMonth: 486,
     upcomingEvent: "Lễ Chuyển giao BĐH (07/10/2025)"
+  },
+  reports: {
+    president: { isCompleted: false },
+    vicePresident: { isCompleted: false },
+    secretaryTraining: { isCompleted: false },
+    eventsCommunications: { isCompleted: false },
+    visitors: { isCompleted: false }
   }
 };

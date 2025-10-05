@@ -5,10 +5,13 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Megaphone, CheckCircle2, Clock, FileText, TrendingUp, Users } from "lucide-react";
+import { Calendar, Megaphone, CheckCircle2, Clock, FileText, TrendingUp, Users, Send } from "lucide-react";
 import { useState } from "react";
+import { useChapterData } from "@/contexts/ChapterDataContext";
+import { toast } from "sonner";
 
 export default function EventsCommunicationsReport() {
+  const { chapterData, submitReport } = useChapterData();
   const [weekDate, setWeekDate] = useState(new Date().toISOString().split('T')[0]);
 
   return (
@@ -422,9 +425,25 @@ export default function EventsCommunicationsReport() {
         <Button className="bg-bni-gold text-bni-black hover:bg-bni-gold/90" size="lg">
           Xuất sang Trang tính
         </Button>
-        <Button className="bg-bni-red hover:bg-bni-red/90 text-white" size="lg">
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white" size="lg">
           <CheckCircle2 className="h-5 w-5 mr-2" />
           Lưu Báo cáo
+        </Button>
+        <Button 
+          className="bg-bni-red hover:bg-bni-red/90 text-white" 
+          size="lg"
+          onClick={() => {
+            const eventsLead = chapterData.leadership.find(l => l.role === 'Ban Sự kiện')?.name || '';
+            const commsLead = chapterData.leadership.find(l => l.role === 'Ban Truyền thông')?.name || '';
+            submitReport('eventsCommunications', `${eventsLead} & ${commsLead}`);
+            toast.success('Báo cáo đã hoàn thành', {
+              description: 'Báo cáo Sự kiện & Truyền thông đã được gửi và đồng bộ real-time lên Tổng quan',
+              duration: 5000,
+            });
+          }}
+        >
+          <Send className="h-5 w-5 mr-2" />
+          Báo cáo
         </Button>
       </div>
     </div>
