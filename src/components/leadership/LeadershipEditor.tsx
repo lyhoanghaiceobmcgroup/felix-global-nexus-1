@@ -82,7 +82,7 @@ export function LeadershipEditor({ open, onOpenChange, leadership, onSave }: Lea
               <div className="grid gap-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Tên chính</Label>
+                    <Label>{member.role}</Label>
                     <Input
                       value={member.name}
                       onChange={(e) => handleUpdateMember(index, 'name', e.target.value)}
