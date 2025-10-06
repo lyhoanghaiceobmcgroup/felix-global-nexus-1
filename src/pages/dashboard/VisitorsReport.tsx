@@ -5,14 +5,63 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { UserPlus, CheckCircle2, Clock, MessageSquare, TrendingUp, AlertCircle, FileCheck, Send } from "lucide-react";
+import { UserPlus, CheckCircle2, Clock, MessageSquare, TrendingUp, AlertCircle, FileCheck, Send, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useChapterData } from "@/contexts/ChapterDataContext";
 import { toast } from "sonner";
 
+interface VisitorInfo {
+  id: string;
+  meetingDate: string;
+  fullName: string;
+  phone: string;
+  industry: string;
+  email: string;
+  guestOf: string;
+}
+
 export default function VisitorsReport() {
   const { chapterData, submitReport } = useChapterData();
   const [meetingDate, setMeetingDate] = useState(new Date().toISOString().split('T')[0]);
+  const [visitors, setVisitors] = useState<VisitorInfo[]>([]);
+  const [newVisitor, setNewVisitor] = useState<VisitorInfo>({
+    id: '',
+    meetingDate: new Date().toISOString().split('T')[0],
+    fullName: '',
+    phone: '',
+    industry: '',
+    email: '',
+    guestOf: ''
+  });
+
+  const handleAddVisitor = () => {
+    if (!newVisitor.fullName || !newVisitor.phone || !newVisitor.email) {
+      toast.error("Vui lòng điền đầy đủ thông tin bắt buộc (Họ tên, SĐT, Email)");
+      return;
+    }
+    
+    const visitorToAdd = {
+      ...newVisitor,
+      id: Date.now().toString()
+    };
+    
+    setVisitors([...visitors, visitorToAdd]);
+    setNewVisitor({
+      id: '',
+      meetingDate: new Date().toISOString().split('T')[0],
+      fullName: '',
+      phone: '',
+      industry: '',
+      email: '',
+      guestOf: ''
+    });
+    toast.success("Đã thêm thông tin khách mời");
+  };
+
+  const handleDeleteVisitor = (id: string) => {
+    setVisitors(visitors.filter(v => v.id !== id));
+    toast.success("Đã xóa thông tin khách mời");
+  };
 
   return (
     <div className="space-y-6 sm:space-y-8">
@@ -74,6 +123,126 @@ export default function VisitorsReport() {
             </TableBody>
           </Table>
             </div>
+          </div>
+
+          <div className="mt-6 pt-6 border-t-2 border-bni-gold/30">
+            <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+              <UserPlus className="h-5 w-5 text-bni-red" />
+              Thông tin Khách mời
+            </h3>
+            
+            {/* Add Visitor Form */}
+            <div className="bg-gradient-to-br from-bni-red/5 to-bni-gold/5 p-6 rounded-lg border-2 border-bni-gold/30 mb-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <Label className="font-semibold mb-2 block">Ngày họp *</Label>
+                  <Input 
+                    type="date"
+                    value={newVisitor.meetingDate}
+                    onChange={(e) => setNewVisitor({...newVisitor, meetingDate: e.target.value})}
+                  />
+                </div>
+                
+                <div>
+                  <Label className="font-semibold mb-2 block">Họ tên *</Label>
+                  <Input 
+                    placeholder="Nhập họ tên"
+                    value={newVisitor.fullName}
+                    onChange={(e) => setNewVisitor({...newVisitor, fullName: e.target.value})}
+                  />
+                </div>
+                
+                <div>
+                  <Label className="font-semibold mb-2 block">SĐT *</Label>
+                  <Input 
+                    placeholder="Nhập số điện thoại"
+                    value={newVisitor.phone}
+                    onChange={(e) => setNewVisitor({...newVisitor, phone: e.target.value})}
+                  />
+                </div>
+                
+                <div>
+                  <Label className="font-semibold mb-2 block">Ngành nghề</Label>
+                  <Input 
+                    placeholder="Nhập ngành nghề"
+                    value={newVisitor.industry}
+                    onChange={(e) => setNewVisitor({...newVisitor, industry: e.target.value})}
+                  />
+                </div>
+                
+                <div>
+                  <Label className="font-semibold mb-2 block">Email *</Label>
+                  <Input 
+                    type="email"
+                    placeholder="Nhập email"
+                    value={newVisitor.email}
+                    onChange={(e) => setNewVisitor({...newVisitor, email: e.target.value})}
+                  />
+                </div>
+                
+                <div>
+                  <Label className="font-semibold mb-2 block">Khách của ai</Label>
+                  <Input 
+                    placeholder="Nhập tên thành viên"
+                    value={newVisitor.guestOf}
+                    onChange={(e) => setNewVisitor({...newVisitor, guestOf: e.target.value})}
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end">
+                <Button 
+                  onClick={handleAddVisitor}
+                  className="bg-bni-red text-white hover:bg-bni-red/90"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Bổ sung khách mời
+                </Button>
+              </div>
+            </div>
+
+            {/* Visitors List */}
+            {visitors.length > 0 && (
+              <div className="overflow-x-auto -mx-6 sm:mx-0">
+                <div className="min-w-[800px] px-6 sm:px-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="font-bold">Ngày họp</TableHead>
+                        <TableHead className="font-bold">Họ tên</TableHead>
+                        <TableHead className="font-bold">SĐT</TableHead>
+                        <TableHead className="font-bold">Ngành nghề</TableHead>
+                        <TableHead className="font-bold">Email</TableHead>
+                        <TableHead className="font-bold">Khách của</TableHead>
+                        <TableHead className="font-bold text-center">Hành động</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {visitors.map((visitor) => (
+                        <TableRow key={visitor.id}>
+                          <TableCell>{new Date(visitor.meetingDate).toLocaleDateString('vi-VN')}</TableCell>
+                          <TableCell className="font-semibold">{visitor.fullName}</TableCell>
+                          <TableCell>{visitor.phone}</TableCell>
+                          <TableCell>{visitor.industry || '-'}</TableCell>
+                          <TableCell>{visitor.email}</TableCell>
+                          <TableCell>{visitor.guestOf || '-'}</TableCell>
+                          <TableCell className="text-center">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteVisitor(visitor.id)}
+                              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="mt-4 flex justify-end">
