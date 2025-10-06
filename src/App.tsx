@@ -21,6 +21,7 @@ import VicePresidentReport from "./pages/dashboard/VicePresidentReport";
 import SecretaryTrainingReport from "./pages/dashboard/SecretaryTrainingReport";
 import EventsCommunicationsReport from "./pages/dashboard/EventsCommunicationsReport";
 import VisitorsReport from "./pages/dashboard/VisitorsReport";
+import MemberSlideshow from "./pages/dashboard/MemberSlideshow";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -46,6 +47,7 @@ const App = () => {
             <Route path="/referral" element={<Referral />} />
             <Route path="/checkin" element={<CheckIn />} />
             <Route path="/dashboard" element={<Dashboard />}>
+              <Route path="member-slideshow" element={<MemberSlideshow />} />
               <Route path="president" element={<PresidentReport />} />
               <Route path="vice-president" element={<VicePresidentReport />} />
               <Route path="secretary-training" element={<SecretaryTrainingReport />} />

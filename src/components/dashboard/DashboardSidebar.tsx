@@ -9,7 +9,8 @@ import {
   LayoutDashboard,
   ChevronLeft,
   ChevronRight,
-  LogOut
+  LogOut,
+  GraduationCap
 } from "lucide-react";
 import {
   Sidebar,
@@ -33,19 +34,24 @@ const menuItems = [
     icon: LayoutDashboard,
   },
   {
+    title: "Danh sách thành viên",
+    url: "/dashboard/member-slideshow",
+    icon: Users,
+  },
+  {
     title: "Báo cáo Chủ tịch",
     url: "/dashboard/president",
-    icon: FileText,
+    icon: UserCog,
   },
   {
     title: "Báo cáo Phó Chủ tịch",
     url: "/dashboard/vice-president",
-    icon: UserCog,
+    icon: Users,
   },
   {
     title: "Báo cáo Thư ký & Đào tạo",
     url: "/dashboard/secretary-training",
-    icon: FileText,
+    icon: GraduationCap,
   },
   {
     title: "Báo cáo Sự kiện & Truyền thông",
