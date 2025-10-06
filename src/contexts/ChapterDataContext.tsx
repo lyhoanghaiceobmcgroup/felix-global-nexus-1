@@ -20,7 +20,13 @@ export function ChapterDataProvider({ children }: { children: React.ReactNode })
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
-        return JSON.parse(stored);
+        const parsedData = JSON.parse(stored);
+        // Merge with initial data to ensure new leadership roles are included
+        return {
+          ...initialChapterData,
+          ...parsedData,
+          leadership: initialChapterData.leadership // Always use the latest leadership structure
+        };
       } catch (e) {
         console.error('Failed to parse stored chapter data:', e);
         return initialChapterData;
