@@ -430,76 +430,177 @@ const MemberSlideshow = () => {
             </Button>
           </div>
 
-          <Card>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Tên</TableHead>
-                  <TableHead>SĐT</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Ngành nghề</TableHead>
-                  <TableHead>Ngày gia nhập</TableHead>
-                  <TableHead>Power Team</TableHead>
-                  <TableHead>Ảnh 1</TableHead>
-                  <TableHead>Ảnh 2</TableHead>
-                  <TableHead className="text-right">Thao tác</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {members.map((member) => (
-                  <TableRow key={member.id}>
-                    <TableCell className="font-medium">{member.fullName}</TableCell>
-                    <TableCell>{member.phoneNumber}</TableCell>
-                    <TableCell>{member.email}</TableCell>
-                    <TableCell>{member.industry}</TableCell>
-                    <TableCell>
-                      {member.joinDate.toLocaleDateString('vi-VN')}
-                    </TableCell>
-                    <TableCell>
-                      <span className="px-2 py-1 bg-primary/10 text-primary rounded text-xs">
-                        {member.powerTeam || "Chưa phân"}
+          {/* Display members grouped by Power Team */}
+          <div className="space-y-6">
+            {powerTeams.map((team) => {
+              const teamMembers = members.filter(m => m.powerTeam === team.name);
+              
+              return (
+                <Card key={team.id}>
+                  <div className="p-4 border-b bg-muted/50">
+                    <div className="flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-foreground">
+                        {team.name}
+                      </h3>
+                      <span className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                        {teamMembers.length} thành viên
                       </span>
-                    </TableCell>
-                    <TableCell>
-                      {member.image1 && (
-                        <span className="text-xs text-muted-foreground">
-                          {member.image1Duration}s
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {member.image2 && (
-                        <span className="text-xs text-muted-foreground">
-                          {member.image2Duration}s
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => {
-                            setEditingMember(member);
-                            setIsAddMemberOpen(true);
-                          }}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteMember(member.id)}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
+                    </div>
+                  </div>
+                  
+                  {teamMembers.length > 0 ? (
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Tên</TableHead>
+                          <TableHead>SĐT</TableHead>
+                          <TableHead>Email</TableHead>
+                          <TableHead>Ngành nghề</TableHead>
+                          <TableHead>Ngày gia nhập</TableHead>
+                          <TableHead>Ảnh 1</TableHead>
+                          <TableHead>Ảnh 2</TableHead>
+                          <TableHead className="text-right">Thao tác</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {teamMembers.map((member) => (
+                          <TableRow key={member.id}>
+                            <TableCell className="font-medium">{member.fullName}</TableCell>
+                            <TableCell>{member.phoneNumber}</TableCell>
+                            <TableCell>{member.email}</TableCell>
+                            <TableCell>{member.industry}</TableCell>
+                            <TableCell>
+                              {member.joinDate.toLocaleDateString('vi-VN')}
+                            </TableCell>
+                            <TableCell>
+                              {member.image1 && (
+                                <span className="text-xs text-muted-foreground">
+                                  {member.image1Duration}s
+                                </span>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              {member.image2 && (
+                                <span className="text-xs text-muted-foreground">
+                                  {member.image2Duration}s
+                                </span>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex justify-end gap-2">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => {
+                                    setEditingMember(member);
+                                    setIsAddMemberOpen(true);
+                                  }}
+                                >
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() => handleDeleteMember(member.id)}
+                                >
+                                  <Trash2 className="h-4 w-4 text-destructive" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  ) : (
+                    <div className="p-8 text-center text-muted-foreground">
+                      Chưa có thành viên trong team này
+                    </div>
+                  )}
+                </Card>
+              );
+            })}
+
+            {/* Members without Power Team */}
+            {members.filter(m => !m.powerTeam || !powerTeams.find(t => t.name === m.powerTeam)).length > 0 && (
+              <Card>
+                <div className="p-4 border-b bg-muted/50">
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-foreground">
+                      Chưa phân Power Team
+                    </h3>
+                    <span className="px-3 py-1 bg-orange-500/10 text-orange-600 rounded-full text-sm font-medium">
+                      {members.filter(m => !m.powerTeam || !powerTeams.find(t => t.name === m.powerTeam)).length} thành viên
+                    </span>
+                  </div>
+                </div>
+                
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Tên</TableHead>
+                      <TableHead>SĐT</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Ngành nghề</TableHead>
+                      <TableHead>Ngày gia nhập</TableHead>
+                      <TableHead>Ảnh 1</TableHead>
+                      <TableHead>Ảnh 2</TableHead>
+                      <TableHead className="text-right">Thao tác</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {members
+                      .filter(m => !m.powerTeam || !powerTeams.find(t => t.name === m.powerTeam))
+                      .map((member) => (
+                        <TableRow key={member.id}>
+                          <TableCell className="font-medium">{member.fullName}</TableCell>
+                          <TableCell>{member.phoneNumber}</TableCell>
+                          <TableCell>{member.email}</TableCell>
+                          <TableCell>{member.industry}</TableCell>
+                          <TableCell>
+                            {member.joinDate.toLocaleDateString('vi-VN')}
+                          </TableCell>
+                          <TableCell>
+                            {member.image1 && (
+                              <span className="text-xs text-muted-foreground">
+                                {member.image1Duration}s
+                              </span>
+                            )}
+                          </TableCell>
+                          <TableCell>
+                            {member.image2 && (
+                              <span className="text-xs text-muted-foreground">
+                                {member.image2Duration}s
+                              </span>
+                            )}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <div className="flex justify-end gap-2">
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => {
+                                  setEditingMember(member);
+                                  setIsAddMemberOpen(true);
+                                }}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                onClick={() => handleDeleteMember(member.id)}
+                              >
+                                <Trash2 className="h-4 w-4 text-destructive" />
+                              </Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                  </TableBody>
+                </Table>
+              </Card>
+            )}
+          </div>
         </TabsContent>
       </Tabs>
 
