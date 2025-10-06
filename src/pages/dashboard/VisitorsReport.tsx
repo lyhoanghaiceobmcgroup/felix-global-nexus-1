@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { UserPlus, CheckCircle2, Clock, MessageSquare, TrendingUp, AlertCircle, FileCheck, Send, Plus, Trash2 } from "lucide-react";
+import { UserPlus, CheckCircle2, Clock, MessageSquare, TrendingUp, AlertCircle, FileCheck, Send, Plus, X } from "lucide-react";
 import { useState } from "react";
 import { useChapterData } from "@/contexts/ChapterDataContext";
 import { toast } from "sonner";
@@ -247,7 +247,7 @@ export default function VisitorsReport() {
                         <TableHead className="font-bold">Ngành nghề</TableHead>
                         <TableHead className="font-bold">Email</TableHead>
                         <TableHead className="font-bold">Khách của</TableHead>
-                        <TableHead className="font-bold text-center">Hành động</TableHead>
+                        <TableHead className="w-10"></TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -262,11 +262,11 @@ export default function VisitorsReport() {
                           <TableCell className="text-center">
                             <Button
                               variant="ghost"
-                              size="sm"
+                              size="icon"
                               onClick={() => handleDeleteVisitor(visitor.id)}
-                              className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                              className="h-6 w-6 text-red-600 hover:text-red-700 hover:bg-red-50"
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <X className="h-4 w-4" />
                             </Button>
                           </TableCell>
                         </TableRow>
