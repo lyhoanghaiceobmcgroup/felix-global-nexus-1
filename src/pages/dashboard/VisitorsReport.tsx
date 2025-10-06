@@ -18,6 +18,18 @@ interface VisitorInfo {
   industry: string;
   email: string;
   guestOf: string;
+  // Care process status
+  beforeMeeting: {
+    calledPhone: boolean;
+    sentMessage: boolean;
+  };
+  duringMeeting: {
+    guided: boolean;
+  };
+  afterMeeting: {
+    calledPhone: boolean;
+    sentMessage: boolean;
+  };
 }
 
 export default function VisitorsReport() {
@@ -31,7 +43,10 @@ export default function VisitorsReport() {
     phone: '',
     industry: '',
     email: '',
-    guestOf: ''
+    guestOf: '',
+    beforeMeeting: { calledPhone: false, sentMessage: false },
+    duringMeeting: { guided: false },
+    afterMeeting: { calledPhone: false, sentMessage: false }
   });
 
   const handleAddVisitor = () => {
@@ -53,7 +68,10 @@ export default function VisitorsReport() {
       phone: '',
       industry: '',
       email: '',
-      guestOf: ''
+      guestOf: '',
+      beforeMeeting: { calledPhone: false, sentMessage: false },
+      duringMeeting: { guided: false },
+      afterMeeting: { calledPhone: false, sentMessage: false }
     });
     toast.success("Đã thêm thông tin khách mời");
   };
@@ -61,6 +79,21 @@ export default function VisitorsReport() {
   const handleDeleteVisitor = (id: string) => {
     setVisitors(visitors.filter(v => v.id !== id));
     toast.success("Đã xóa thông tin khách mời");
+  };
+
+  const handleToggleStatus = (id: string, phase: 'beforeMeeting' | 'duringMeeting' | 'afterMeeting', field: string) => {
+    setVisitors(visitors.map(v => {
+      if (v.id === id) {
+        return {
+          ...v,
+          [phase]: {
+            ...v[phase],
+            [field]: !v[phase][field as keyof typeof v[typeof phase]]
+          }
+        };
+      }
+      return v;
+    }));
   };
 
   return (
@@ -264,6 +297,120 @@ export default function VisitorsReport() {
         </CardHeader>
         <CardContent className="pt-6 space-y-8">
           
+          {/* Danh sách Khách mời và Trạng thái Chăm sóc */}
+          {visitors.length > 0 && (
+            <div className="space-y-4">
+              <h3 className="text-xl font-bold flex items-center gap-2 pb-2 border-b-2 border-bni-gold">
+                <UserPlus className="h-5 w-5 text-bni-red" />
+                Danh sách Khách mời và Quy trình Chăm sóc
+              </h3>
+              
+              <div className="overflow-x-auto -mx-6 sm:mx-0">
+                <div className="min-w-[1000px] px-6 sm:px-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="font-bold w-[150px]">Họ tên</TableHead>
+                        <TableHead className="font-bold w-[120px]">Ngành nghề</TableHead>
+                        <TableHead className="font-bold w-[110px]">SĐT</TableHead>
+                        <TableHead className="font-bold w-[150px]">Email</TableHead>
+                        <TableHead className="font-bold text-center" colSpan={2}>Trước họp</TableHead>
+                        <TableHead className="font-bold text-center">Trong họp</TableHead>
+                        <TableHead className="font-bold text-center" colSpan={2}>Sau họp</TableHead>
+                      </TableRow>
+                      <TableRow className="bg-muted/50">
+                        <TableHead colSpan={4}></TableHead>
+                        <TableHead className="text-center text-xs">Gọi điện</TableHead>
+                        <TableHead className="text-center text-xs">Nhắn tin</TableHead>
+                        <TableHead className="text-center text-xs">Hướng dẫn</TableHead>
+                        <TableHead className="text-center text-xs">Gọi điện</TableHead>
+                        <TableHead className="text-center text-xs">Nhắn tin</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {visitors.map((visitor) => (
+                        <TableRow key={visitor.id}>
+                          <TableCell className="font-semibold">{visitor.fullName}</TableCell>
+                          <TableCell>{visitor.industry || '-'}</TableCell>
+                          <TableCell>{visitor.phone}</TableCell>
+                          <TableCell className="text-sm">{visitor.email}</TableCell>
+                          
+                          {/* Trước họp - Gọi điện */}
+                          <TableCell className="text-center">
+                            <Button
+                              variant={visitor.beforeMeeting.calledPhone ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleToggleStatus(visitor.id, 'beforeMeeting', 'calledPhone')}
+                              className={visitor.beforeMeeting.calledPhone ? "bg-green-600 hover:bg-green-700" : ""}
+                            >
+                              {visitor.beforeMeeting.calledPhone ? <CheckCircle2 className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
+                            </Button>
+                          </TableCell>
+                          
+                          {/* Trước họp - Nhắn tin */}
+                          <TableCell className="text-center">
+                            <Button
+                              variant={visitor.beforeMeeting.sentMessage ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleToggleStatus(visitor.id, 'beforeMeeting', 'sentMessage')}
+                              className={visitor.beforeMeeting.sentMessage ? "bg-green-600 hover:bg-green-700" : ""}
+                            >
+                              {visitor.beforeMeeting.sentMessage ? <CheckCircle2 className="h-4 w-4" /> : <MessageSquare className="h-4 w-4" />}
+                            </Button>
+                          </TableCell>
+                          
+                          {/* Trong họp - Hướng dẫn */}
+                          <TableCell className="text-center">
+                            <Button
+                              variant={visitor.duringMeeting.guided ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleToggleStatus(visitor.id, 'duringMeeting', 'guided')}
+                              className={visitor.duringMeeting.guided ? "bg-green-600 hover:bg-green-700" : ""}
+                            >
+                              {visitor.duringMeeting.guided ? <CheckCircle2 className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
+                            </Button>
+                          </TableCell>
+                          
+                          {/* Sau họp - Gọi điện */}
+                          <TableCell className="text-center">
+                            <Button
+                              variant={visitor.afterMeeting.calledPhone ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleToggleStatus(visitor.id, 'afterMeeting', 'calledPhone')}
+                              className={visitor.afterMeeting.calledPhone ? "bg-green-600 hover:bg-green-700" : ""}
+                            >
+                              {visitor.afterMeeting.calledPhone ? <CheckCircle2 className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
+                            </Button>
+                          </TableCell>
+                          
+                          {/* Sau họp - Nhắn tin */}
+                          <TableCell className="text-center">
+                            <Button
+                              variant={visitor.afterMeeting.sentMessage ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => handleToggleStatus(visitor.id, 'afterMeeting', 'sentMessage')}
+                              className={visitor.afterMeeting.sentMessage ? "bg-green-600 hover:bg-green-700" : ""}
+                            >
+                              {visitor.afterMeeting.sentMessage ? <CheckCircle2 className="h-4 w-4" /> : <MessageSquare className="h-4 w-4" />}
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </div>
+              
+              <div className="bg-gradient-to-r from-bni-gold/20 to-bni-red/20 p-4 rounded-lg border border-bni-gold/30">
+                <p className="text-sm flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4 text-bni-red" />
+                  <span className="font-semibold">Hướng dẫn:</span> 
+                  Click vào các nút để đánh dấu hoàn thành các hoạt động chăm sóc khách mời.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* 1. Hoạt động TRƯỚC buổi họp */}
           <div className="space-y-4">
             <h3 className="text-xl font-bold flex items-center gap-2 pb-2 border-b-2 border-bni-gold">
