@@ -315,14 +315,12 @@ export default function VisitorsReport() {
                         <TableHead className="font-bold w-[110px]">SĐT</TableHead>
                         <TableHead className="font-bold w-[150px]">Email</TableHead>
                         <TableHead className="font-bold text-center" colSpan={2}>Trước họp</TableHead>
-                        <TableHead className="font-bold text-center">Trong họp</TableHead>
                         <TableHead className="font-bold text-center" colSpan={2}>Sau họp</TableHead>
                       </TableRow>
                       <TableRow className="bg-muted/50">
                         <TableHead colSpan={4}></TableHead>
                         <TableHead className="text-center text-xs">Gọi điện</TableHead>
                         <TableHead className="text-center text-xs">Nhắn tin</TableHead>
-                        <TableHead className="text-center text-xs">Hướng dẫn</TableHead>
                         <TableHead className="text-center text-xs">Gọi điện</TableHead>
                         <TableHead className="text-center text-xs">Nhắn tin</TableHead>
                       </TableRow>
@@ -356,18 +354,6 @@ export default function VisitorsReport() {
                               className={visitor.beforeMeeting.sentMessage ? "bg-green-600 hover:bg-green-700" : ""}
                             >
                               {visitor.beforeMeeting.sentMessage ? <CheckCircle2 className="h-4 w-4" /> : <MessageSquare className="h-4 w-4" />}
-                            </Button>
-                          </TableCell>
-                          
-                          {/* Trong họp - Hướng dẫn */}
-                          <TableCell className="text-center">
-                            <Button
-                              variant={visitor.duringMeeting.guided ? "default" : "outline"}
-                              size="sm"
-                              onClick={() => handleToggleStatus(visitor.id, 'duringMeeting', 'guided')}
-                              className={visitor.duringMeeting.guided ? "bg-green-600 hover:bg-green-700" : ""}
-                            >
-                              {visitor.duringMeeting.guided ? <CheckCircle2 className="h-4 w-4" /> : <UserPlus className="h-4 w-4" />}
                             </Button>
                           </TableCell>
                           
