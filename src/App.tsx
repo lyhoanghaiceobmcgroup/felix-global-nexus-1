@@ -20,6 +20,7 @@ import SecretaryTrainingReport from "./pages/dashboard/SecretaryTrainingReport";
 import EventsCommunicationsReport from "./pages/dashboard/EventsCommunicationsReport";
 import VisitorsReport from "./pages/dashboard/VisitorsReport";
 import MemberSlideshow from "./pages/dashboard/MemberSlideshow";
+import WebsiteAdmin from "./pages/dashboard/WebsiteAdmin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -49,6 +50,7 @@ const App = () => {
               <Route path="secretary-training" element={<SecretaryTrainingReport />} />
               <Route path="events-communications" element={<EventsCommunicationsReport />} />
               <Route path="visitors" element={<VisitorsReport />} />
+              <Route path="website-admin" element={<WebsiteAdmin />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

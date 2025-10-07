@@ -1,0 +1,539 @@
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
+import { Globe, Home, Info, Users, Calendar, Trophy, Image, Mail, Save, Upload, Edit, Trash2, Plus } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+
+export default function WebsiteAdmin() {
+  const [activeTab, setActiveTab] = useState("home");
+  const [isSaving, setIsSaving] = useState(false);
+
+  // Home Page Content
+  const [homeContent, setHomeContent] = useState({
+    heroTitle: "Chào mừng đến với BNI FELIX Chapter",
+    heroSubtitle: "Kết nối - Phát triển - Thành công",
+    heroDescription: "FELIX là cộng đồng doanh nhân năng động, nơi kết nối các chuyên gia và doanh nghiệp...",
+    heroImage: "/placeholder.svg",
+    stats: [
+      { label: "Thành viên", value: "53+", icon: "Users" },
+      { label: "Referrals/năm", value: "1,200+", icon: "TrendingUp" },
+      { label: "Doanh thu", value: ">50 tỷ", icon: "DollarSign" },
+      { label: "Cuộc họp 1-1", value: "1,000+", icon: "Calendar" }
+    ]
+  });
+
+  // About Page Content
+  const [aboutContent, setAboutContent] = useState({
+    mission: "Kết nối cộng đồng doanh nghiệp thành công – bền vững – nhân văn.",
+    vision: "Trở thành chapter dẫn đầu về chỉ số Referral, văn hóa kết nối và giá trị cộng đồng trong hệ thống BNI toàn quốc.",
+    values: [
+      "Givers Gain® – Cho là Nhận",
+      "Xây dựng mối quan hệ lâu dài",
+      "Trách nhiệm & Cam kết",
+      "Truyền cảm hứng & hỗ trợ"
+    ]
+  });
+
+  // Contact Info
+  const [contactInfo, setContactInfo] = useState({
+    phone: "084 890 5555",
+    email: "info@bnifelix.vn",
+    address: "Cung văn hóa Hữu Nghị Việt Xô, 91 Trần Hưng Đạo, Hà Nội",
+    meetingTime: "06:45 – 8:45 (Thứ 3 hàng tuần)",
+    facebook: "https://facebook.com/bnifelix",
+    youtube: "https://youtube.com/@bnifelix",
+    linkedin: "https://linkedin.com/company/bnifelix"
+  });
+
+  const handleSave = (section: string) => {
+    setIsSaving(true);
+    // Simulate API call
+    setTimeout(() => {
+      setIsSaving(false);
+      toast.success(`Đã lưu thay đổi cho ${section}`);
+    }, 1000);
+  };
+
+  return (
+    <div className="space-y-6 sm:space-y-8">
+      {/* Header */}
+      <div className="border-b pb-4 sm:pb-6">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4">
+          <div>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-bni-red flex items-center gap-2 sm:gap-3">
+              <Globe className="h-8 w-8" />
+              <span>QUẢN TRỊ TRANG WEBSITE</span>
+            </h1>
+            <p className="text-muted-foreground mt-2">
+              Cập nhật và quản lý nội dung các trang website của BNI FELIX Chapter
+            </p>
+          </div>
+          <Badge variant="outline" className="text-xs">
+            Chế độ Developer
+          </Badge>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 gap-2">
+          <TabsTrigger value="home" className="data-[state=active]:bg-bni-red data-[state=active]:text-white">
+            <Home className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">Trang chủ</span>
+          </TabsTrigger>
+          <TabsTrigger value="about" className="data-[state=active]:bg-bni-red data-[state=active]:text-white">
+            <Info className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">Giới thiệu</span>
+          </TabsTrigger>
+          <TabsTrigger value="members" className="data-[state=active]:bg-bni-red data-[state=active]:text-white">
+            <Users className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">Thành viên</span>
+          </TabsTrigger>
+          <TabsTrigger value="schedule" className="data-[state=active]:bg-bni-red data-[state=active]:text-white">
+            <Calendar className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">Lịch họp</span>
+          </TabsTrigger>
+          <TabsTrigger value="kpi" className="data-[state=active]:bg-bni-red data-[state=active]:text-white">
+            <Trophy className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">KPI Hall</span>
+          </TabsTrigger>
+          <TabsTrigger value="media" className="data-[state=active]:bg-bni-red data-[state=active]:text-white">
+            <Image className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">Media Hub</span>
+          </TabsTrigger>
+          <TabsTrigger value="contact" className="data-[state=active]:bg-bni-red data-[state=active]:text-white">
+            <Mail className="h-4 w-4 mr-2" />
+            <span className="hidden sm:inline">Liên hệ</span>
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Trang chủ */}
+        <TabsContent value="home" className="space-y-6">
+          <Card className="shadow-lg border-bni-red border-2">
+            <CardHeader className="bg-gradient-to-r from-bni-red/10 to-bni-gold/10">
+              <CardTitle className="flex items-center gap-2">
+                <Home className="h-6 w-6 text-bni-red" />
+                Quản lý Trang chủ
+              </CardTitle>
+              <CardDescription>Chỉnh sửa nội dung Hero Section và thông tin tổng quan</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-6">
+              {/* Hero Section */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Hero Section</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề chính *</Label>
+                  <Input
+                    value={homeContent.heroTitle}
+                    onChange={(e) => setHomeContent({...homeContent, heroTitle: e.target.value})}
+                    placeholder="Nhập tiêu đề chính"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Phụ đề</Label>
+                  <Input
+                    value={homeContent.heroSubtitle}
+                    onChange={(e) => setHomeContent({...homeContent, heroSubtitle: e.target.value})}
+                    placeholder="Nhập phụ đề"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Mô tả</Label>
+                  <Textarea
+                    value={homeContent.heroDescription}
+                    onChange={(e) => setHomeContent({...homeContent, heroDescription: e.target.value})}
+                    placeholder="Nhập mô tả"
+                    rows={4}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Hình ảnh Hero</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      value={homeContent.heroImage}
+                      onChange={(e) => setHomeContent({...homeContent, heroImage: e.target.value})}
+                      placeholder="URL hình ảnh"
+                    />
+                    <Button variant="outline">
+                      <Upload className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Stats Section */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Thống kê Tổng quan</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {homeContent.stats.map((stat, index) => (
+                    <Card key={index} className="border-bni-gold">
+                      <CardContent className="pt-4 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label className="font-semibold">Chỉ số {index + 1}</Label>
+                          <Button variant="ghost" size="sm">
+                            <Trash2 className="h-4 w-4 text-red-600" />
+                          </Button>
+                        </div>
+                        <Input
+                          placeholder="Nhãn"
+                          value={stat.label}
+                          onChange={(e) => {
+                            const newStats = [...homeContent.stats];
+                            newStats[index].label = e.target.value;
+                            setHomeContent({...homeContent, stats: newStats});
+                          }}
+                        />
+                        <Input
+                          placeholder="Giá trị"
+                          value={stat.value}
+                          onChange={(e) => {
+                            const newStats = [...homeContent.stats];
+                            newStats[index].value = e.target.value;
+                            setHomeContent({...homeContent, stats: newStats});
+                          }}
+                        />
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+                <Button variant="outline" className="w-full">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Thêm chỉ số
+                </Button>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4 border-t">
+                <Button variant="outline">Xem trước</Button>
+                <Button 
+                  onClick={() => handleSave("Trang chủ")}
+                  disabled={isSaving}
+                  className="bg-bni-red hover:bg-bni-red/90 text-white"
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  {isSaving ? "Đang lưu..." : "Lưu thay đổi"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Giới thiệu */}
+        <TabsContent value="about" className="space-y-6">
+          <Card className="shadow-lg border-bni-red border-2">
+            <CardHeader className="bg-gradient-to-r from-bni-red/10 to-bni-gold/10">
+              <CardTitle className="flex items-center gap-2">
+                <Info className="h-6 w-6 text-bni-red" />
+                Quản lý Trang Giới thiệu
+              </CardTitle>
+              <CardDescription>Chỉnh sửa Sứ mệnh, Tầm nhìn và Giá trị cốt lõi</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-6">
+              <div className="space-y-2">
+                <Label>Sứ mệnh *</Label>
+                <Textarea
+                  value={aboutContent.mission}
+                  onChange={(e) => setAboutContent({...aboutContent, mission: e.target.value})}
+                  placeholder="Nhập sứ mệnh"
+                  rows={3}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Tầm nhìn *</Label>
+                <Textarea
+                  value={aboutContent.vision}
+                  onChange={(e) => setAboutContent({...aboutContent, vision: e.target.value})}
+                  placeholder="Nhập tầm nhìn"
+                  rows={3}
+                />
+              </div>
+
+              <div className="space-y-4">
+                <Label className="text-lg font-bold">Giá trị cốt lõi</Label>
+                {aboutContent.values.map((value, index) => (
+                  <div key={index} className="flex gap-2">
+                    <Input
+                      value={value}
+                      onChange={(e) => {
+                        const newValues = [...aboutContent.values];
+                        newValues[index] = e.target.value;
+                        setAboutContent({...aboutContent, values: newValues});
+                      }}
+                      placeholder={`Giá trị ${index + 1}`}
+                    />
+                    <Button variant="ghost" size="icon">
+                      <Trash2 className="h-4 w-4 text-red-600" />
+                    </Button>
+                  </div>
+                ))}
+                <Button variant="outline" className="w-full">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Thêm giá trị
+                </Button>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4 border-t">
+                <Button variant="outline">Xem trước</Button>
+                <Button 
+                  onClick={() => handleSave("Giới thiệu")}
+                  disabled={isSaving}
+                  className="bg-bni-red hover:bg-bni-red/90 text-white"
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  {isSaving ? "Đang lưu..." : "Lưu thay đổi"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Thành viên */}
+        <TabsContent value="members" className="space-y-6">
+          <Card className="shadow-lg border-bni-red border-2">
+            <CardHeader className="bg-gradient-to-r from-bni-red/10 to-bni-gold/10">
+              <CardTitle className="flex items-center gap-2">
+                <Users className="h-6 w-6 text-bni-red" />
+                Quản lý Trang Thành viên
+              </CardTitle>
+              <CardDescription>Quản lý danh sách và thông tin thành viên</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="text-center py-8 text-muted-foreground">
+                <Users className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                <p className="text-lg font-semibold mb-2">Quản lý thành viên</p>
+                <p className="mb-4">Sử dụng trang "Danh sách thành viên" trong Dashboard để quản lý chi tiết</p>
+                <Button variant="outline">
+                  Đi đến Danh sách thành viên
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Lịch họp */}
+        <TabsContent value="schedule" className="space-y-6">
+          <Card className="shadow-lg border-bni-red border-2">
+            <CardHeader className="bg-gradient-to-r from-bni-red/10 to-bni-gold/10">
+              <CardTitle className="flex items-center gap-2">
+                <Calendar className="h-6 w-6 text-bni-red" />
+                Quản lý Lịch họp
+              </CardTitle>
+              <CardDescription>Cập nhật thông tin lịch họp và diễn giả</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="space-y-2">
+                <Label>Thời gian họp cố định</Label>
+                <Input defaultValue="Thứ Ba hàng tuần, 6:45 AM – 8:45 AM" />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Địa điểm họp</Label>
+                <Textarea
+                  defaultValue="Cung Văn Hóa Hữu Nghị Việt Xô, số 91 Trần Hưng Đạo, Hà Nội"
+                  rows={2}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Link Google Maps</Label>
+                <Input placeholder="https://maps.google.com/..." />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4 border-t">
+                <Button variant="outline">Xem trước</Button>
+                <Button 
+                  onClick={() => handleSave("Lịch họp")}
+                  disabled={isSaving}
+                  className="bg-bni-red hover:bg-bni-red/90 text-white"
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  {isSaving ? "Đang lưu..." : "Lưu thay đổi"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* KPI Hall */}
+        <TabsContent value="kpi" className="space-y-6">
+          <Card className="shadow-lg border-bni-red border-2">
+            <CardHeader className="bg-gradient-to-r from-bni-red/10 to-bni-gold/10">
+              <CardTitle className="flex items-center gap-2">
+                <Trophy className="h-6 w-6 text-bni-red" />
+                Quản lý KPI & Hall of Impact
+              </CardTitle>
+              <CardDescription>Cập nhật tiêu đề và mô tả trang</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-4">
+              <div className="space-y-2">
+                <Label>Tiêu đề trang</Label>
+                <Input defaultValue="KPI & Hall of Impact" />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Mô tả</Label>
+                <Textarea
+                  defaultValue="Bảng thành tích và vinh danh thành viên xuất sắc BNI FELIX"
+                  rows={3}
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4 border-t">
+                <Button variant="outline">Xem trước</Button>
+                <Button 
+                  onClick={() => handleSave("KPI Hall")}
+                  disabled={isSaving}
+                  className="bg-bni-red hover:bg-bni-red/90 text-white"
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  {isSaving ? "Đang lưu..." : "Lưu thay đổi"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Media Hub */}
+        <TabsContent value="media" className="space-y-6">
+          <Card className="shadow-lg border-bni-red border-2">
+            <CardHeader className="bg-gradient-to-r from-bni-red/10 to-bni-gold/10">
+              <CardTitle className="flex items-center gap-2">
+                <Image className="h-6 w-6 text-bni-red" />
+                Quản lý Media Hub
+              </CardTitle>
+              <CardDescription>Quản lý tài liệu, hình ảnh và video</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="text-center py-8 text-muted-foreground">
+                <Image className="h-16 w-16 mx-auto mb-4 opacity-50" />
+                <p className="text-lg font-semibold mb-2">Quản lý Media</p>
+                <p className="mb-4">Tải lên và quản lý tài liệu, hình ảnh, video</p>
+                <div className="flex gap-2 justify-center">
+                  <Button variant="outline">
+                    <Upload className="h-4 w-4 mr-2" />
+                    Tải tài liệu
+                  </Button>
+                  <Button variant="outline">
+                    <Upload className="h-4 w-4 mr-2" />
+                    Tải hình ảnh
+                  </Button>
+                  <Button variant="outline">
+                    <Upload className="h-4 w-4 mr-2" />
+                    Tải video
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Liên hệ */}
+        <TabsContent value="contact" className="space-y-6">
+          <Card className="shadow-lg border-bni-red border-2">
+            <CardHeader className="bg-gradient-to-r from-bni-red/10 to-bni-gold/10">
+              <CardTitle className="flex items-center gap-2">
+                <Mail className="h-6 w-6 text-bni-red" />
+                Quản lý Thông tin Liên hệ
+              </CardTitle>
+              <CardDescription>Cập nhật thông tin liên lạc và mạng xã hội</CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6 space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label>Số điện thoại *</Label>
+                  <Input
+                    value={contactInfo.phone}
+                    onChange={(e) => setContactInfo({...contactInfo, phone: e.target.value})}
+                    placeholder="Số điện thoại"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Email *</Label>
+                  <Input
+                    value={contactInfo.email}
+                    onChange={(e) => setContactInfo({...contactInfo, email: e.target.value})}
+                    placeholder="Email"
+                    type="email"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Địa chỉ *</Label>
+                <Textarea
+                  value={contactInfo.address}
+                  onChange={(e) => setContactInfo({...contactInfo, address: e.target.value})}
+                  placeholder="Địa chỉ"
+                  rows={2}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Thời gian họp</Label>
+                <Input
+                  value={contactInfo.meetingTime}
+                  onChange={(e) => setContactInfo({...contactInfo, meetingTime: e.target.value})}
+                  placeholder="Thời gian họp"
+                />
+              </div>
+
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold border-b pb-2">Mạng xã hội</h3>
+                
+                <div className="space-y-2">
+                  <Label>Facebook</Label>
+                  <Input
+                    value={contactInfo.facebook}
+                    onChange={(e) => setContactInfo({...contactInfo, facebook: e.target.value})}
+                    placeholder="Link Facebook"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>YouTube</Label>
+                  <Input
+                    value={contactInfo.youtube}
+                    onChange={(e) => setContactInfo({...contactInfo, youtube: e.target.value})}
+                    placeholder="Link YouTube"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>LinkedIn</Label>
+                  <Input
+                    value={contactInfo.linkedin}
+                    onChange={(e) => setContactInfo({...contactInfo, linkedin: e.target.value})}
+                    placeholder="Link LinkedIn"
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4 border-t">
+                <Button variant="outline">Xem trước</Button>
+                <Button 
+                  onClick={() => handleSave("Liên hệ")}
+                  disabled={isSaving}
+                  className="bg-bni-red hover:bg-bni-red/90 text-white"
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  {isSaving ? "Đang lưu..." : "Lưu thay đổi"}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}

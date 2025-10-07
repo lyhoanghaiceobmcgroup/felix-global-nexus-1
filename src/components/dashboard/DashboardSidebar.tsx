@@ -10,7 +10,8 @@ import {
   ChevronLeft,
   ChevronRight,
   LogOut,
-  GraduationCap
+  GraduationCap,
+  Globe
 } from "lucide-react";
 import {
   Sidebar,
@@ -62,6 +63,11 @@ const menuItems = [
     title: "Báo cáo Khách mời",
     url: "/dashboard/visitors",
     icon: UserPlus,
+  },
+  {
+    title: "Quản trị Website",
+    url: "/dashboard/website-admin",
+    icon: Globe,
   },
 ];
 
