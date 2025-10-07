@@ -11,9 +11,7 @@ import Schedule from "./pages/Schedule";
 import KpiHallOfImpact from "./pages/KpiHallOfImpact";
 import Contact from "./pages/Contact";
 import MediaHub from "./pages/MediaHub";
-import Register from "./pages/Register";
 import MeetingRegister from "./pages/MeetingRegister";
-import Referral from "./pages/Referral";
 import CheckIn from "./pages/CheckIn";
 import Dashboard from "./pages/Dashboard";
 import PresidentReport from "./pages/dashboard/PresidentReport";
@@ -42,9 +40,7 @@ const App = () => {
             <Route path="/kpi-hall-of-impact" element={<KpiHallOfImpact />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/media" element={<MediaHub />} />
-            <Route path="/register" element={<Register />} />
             <Route path="/meeting-register" element={<MeetingRegister />} />
-            <Route path="/referral" element={<Referral />} />
             <Route path="/checkin" element={<CheckIn />} />
             <Route path="/dashboard" element={<Dashboard />}>
               <Route path="member-slideshow" element={<MemberSlideshow />} />
