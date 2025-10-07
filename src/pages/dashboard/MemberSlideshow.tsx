@@ -9,13 +9,16 @@ import {
   CarouselPrevious,
   type CarouselApi 
 } from "@/components/ui/carousel";
-import { Clock, Users, Play, Pause, Settings, Plus, Trash2, Edit } from "lucide-react";
+import { Clock, Users, Play, Pause, Settings, Plus, Trash2, Edit, ChevronDown, ChevronUp } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from "recharts";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 
 interface MemberCheckIn {
   id: string;
@@ -30,6 +33,11 @@ interface MemberCheckIn {
   image2?: string;
   image2Duration?: number;
   powerTeam?: string;
+  gains?: string;
+  discD?: number;
+  discI?: number;
+  discS?: number;
+  discC?: number;
 }
 
 interface PowerTeam {
@@ -450,7 +458,7 @@ const MemberSlideshow = () => {
                   
                   {teamMembers.length > 0 ? (
                     <Table>
-                      <TableHeader>
+                       <TableHeader>
                         <TableRow>
                           <TableHead>Tên</TableHead>
                           <TableHead>SĐT</TableHead>
@@ -464,50 +472,15 @@ const MemberSlideshow = () => {
                       </TableHeader>
                       <TableBody>
                         {teamMembers.map((member) => (
-                          <TableRow key={member.id}>
-                            <TableCell className="font-medium">{member.fullName}</TableCell>
-                            <TableCell>{member.phoneNumber}</TableCell>
-                            <TableCell>{member.email}</TableCell>
-                            <TableCell>{member.industry}</TableCell>
-                            <TableCell>
-                              {member.joinDate.toLocaleDateString('vi-VN')}
-                            </TableCell>
-                            <TableCell>
-                              {member.image1 && (
-                                <span className="text-xs text-muted-foreground">
-                                  {member.image1Duration}s
-                                </span>
-                              )}
-                            </TableCell>
-                            <TableCell>
-                              {member.image2 && (
-                                <span className="text-xs text-muted-foreground">
-                                  {member.image2Duration}s
-                                </span>
-                              )}
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <div className="flex justify-end gap-2">
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => {
-                                    setEditingMember(member);
-                                    setIsAddMemberOpen(true);
-                                  }}
-                                >
-                                  <Edit className="h-4 w-4" />
-                                </Button>
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() => handleDeleteMember(member.id)}
-                                >
-                                  <Trash2 className="h-4 w-4 text-destructive" />
-                                </Button>
-                              </div>
-                            </TableCell>
-                          </TableRow>
+                          <MemberRow 
+                            key={member.id} 
+                            member={member}
+                            onEdit={(m) => {
+                              setEditingMember(m);
+                              setIsAddMemberOpen(true);
+                            }}
+                            onDelete={handleDeleteMember}
+                          />
                         ))}
                       </TableBody>
                     </Table>
@@ -551,50 +524,15 @@ const MemberSlideshow = () => {
                     {members
                       .filter(m => !m.powerTeam || !powerTeams.find(t => t.name === m.powerTeam))
                       .map((member) => (
-                        <TableRow key={member.id}>
-                          <TableCell className="font-medium">{member.fullName}</TableCell>
-                          <TableCell>{member.phoneNumber}</TableCell>
-                          <TableCell>{member.email}</TableCell>
-                          <TableCell>{member.industry}</TableCell>
-                          <TableCell>
-                            {member.joinDate.toLocaleDateString('vi-VN')}
-                          </TableCell>
-                          <TableCell>
-                            {member.image1 && (
-                              <span className="text-xs text-muted-foreground">
-                                {member.image1Duration}s
-                              </span>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            {member.image2 && (
-                              <span className="text-xs text-muted-foreground">
-                                {member.image2Duration}s
-                              </span>
-                            )}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <div className="flex justify-end gap-2">
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => {
-                                  setEditingMember(member);
-                                  setIsAddMemberOpen(true);
-                                }}
-                              >
-                                <Edit className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                onClick={() => handleDeleteMember(member.id)}
-                              >
-                                <Trash2 className="h-4 w-4 text-destructive" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
+                        <MemberRow 
+                          key={member.id} 
+                          member={member}
+                          onEdit={(m) => {
+                            setEditingMember(m);
+                            setIsAddMemberOpen(true);
+                          }}
+                          onDelete={handleDeleteMember}
+                        />
                       ))}
                   </TableBody>
                 </Table>
@@ -613,6 +551,158 @@ const MemberSlideshow = () => {
         onSave={handleSaveMember}
       />
     </div>
+  );
+};
+
+// Member Row Component with Collapsible Details
+const MemberRow = ({ 
+  member, 
+  onEdit, 
+  onDelete 
+}: { 
+  member: MemberCheckIn; 
+  onEdit: (member: MemberCheckIn) => void;
+  onDelete: (id: string) => void;
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const discData = [
+    { name: 'D - Thống trị', value: member.discD || 0, color: '#ef4444' },
+    { name: 'I - Ảnh hưởng', value: member.discI || 0, color: '#f59e0b' },
+    { name: 'S - Kiên định', value: member.discS || 0, color: '#10b981' },
+    { name: 'C - Tuân thủ', value: member.discC || 0, color: '#3b82f6' },
+  ];
+
+  const hasDiscData = (member.discD || 0) + (member.discI || 0) + (member.discS || 0) + (member.discC || 0) > 0;
+
+  return (
+    <>
+      <TableRow>
+        <TableCell className="font-medium">
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {isOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+            </Button>
+            {member.fullName}
+          </div>
+        </TableCell>
+        <TableCell>{member.phoneNumber}</TableCell>
+        <TableCell>{member.email}</TableCell>
+        <TableCell>{member.industry}</TableCell>
+        <TableCell>
+          {member.joinDate.toLocaleDateString('vi-VN')}
+        </TableCell>
+        <TableCell>
+          {member.image1 && (
+            <span className="text-xs text-muted-foreground">
+              {member.image1Duration}s
+            </span>
+          )}
+        </TableCell>
+        <TableCell>
+          {member.image2 && (
+            <span className="text-xs text-muted-foreground">
+              {member.image2Duration}s
+            </span>
+          )}
+        </TableCell>
+        <TableCell className="text-right">
+          <div className="flex justify-end gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onEdit(member)}
+            >
+              <Edit className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onDelete(member.id)}
+            >
+              <Trash2 className="h-4 w-4 text-destructive" />
+            </Button>
+          </div>
+        </TableCell>
+      </TableRow>
+      {isOpen && (
+        <TableRow>
+          <TableCell colSpan={8} className="bg-muted/30 p-4">
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* BNI Gains Section */}
+              <Card className="p-4">
+                <h4 className="font-semibold text-sm mb-3 text-foreground">BNI Gains - Thông tin cá nhân</h4>
+                {member.gains ? (
+                  <div className="text-sm text-muted-foreground whitespace-pre-wrap">
+                    {member.gains}
+                  </div>
+                ) : (
+                  <div className="text-sm text-muted-foreground italic">
+                    Chưa có thông tin Gains
+                  </div>
+                )}
+              </Card>
+
+              {/* DISC Chart Section */}
+              <Card className="p-4">
+                <h4 className="font-semibold text-sm mb-3 text-foreground">DISC - Phân tích tính cách</h4>
+                {hasDiscData ? (
+                  <div className="space-y-3">
+                    <ResponsiveContainer width="100%" height={180}>
+                      <PieChart>
+                        <Pie
+                          data={discData}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={40}
+                          outerRadius={70}
+                          paddingAngle={2}
+                          dataKey="value"
+                        >
+                          {discData.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={entry.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip 
+                          formatter={(value: number) => `${value}%`}
+                          contentStyle={{ 
+                            backgroundColor: 'hsl(var(--background))', 
+                            border: '1px solid hsl(var(--border))',
+                            borderRadius: '6px'
+                          }}
+                        />
+                      </PieChart>
+                    </ResponsiveContainer>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      {discData.map((item) => (
+                        <div key={item.name} className="flex items-center gap-2">
+                          <div 
+                            className="w-3 h-3 rounded-full" 
+                            style={{ backgroundColor: item.color }}
+                          />
+                          <span className="text-muted-foreground">
+                            {item.name}: {item.value}%
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-sm text-muted-foreground italic">
+                    Chưa có dữ liệu DISC
+                  </div>
+                )}
+              </Card>
+            </div>
+          </TableCell>
+        </TableRow>
+      )}
+    </>
   );
 };
 
@@ -640,6 +730,11 @@ const MemberFormDialog = ({
     image1Duration: 5,
     image2Duration: 5,
     powerTeam: "",
+    gains: "",
+    discD: 0,
+    discI: 0,
+    discS: 0,
+    discC: 0,
   });
 
   useEffect(() => {
@@ -656,6 +751,11 @@ const MemberFormDialog = ({
         image1Duration: 5,
         image2Duration: 5,
         powerTeam: "",
+        gains: "",
+        discD: 0,
+        discI: 0,
+        discS: 0,
+        discC: 0,
       });
     }
   }, [member, open]);
@@ -776,6 +876,86 @@ const MemberFormDialog = ({
                 />
               </div>
             </div>
+          </div>
+
+          {/* BNI Gains Section */}
+          <div className="col-span-2 space-y-2">
+            <Label>BNI Gains - Thông tin cá nhân</Label>
+            <Textarea
+              value={formData.gains}
+              onChange={(e) => setFormData({ ...formData, gains: e.target.value })}
+              placeholder="Goals, Accomplishments, Interests, Networks, Skills..."
+              className="min-h-[100px]"
+            />
+            <p className="text-xs text-muted-foreground">
+              Nhập thông tin theo mẫu BNI Gains: Mục tiêu, Thành tựu, Sở thích, Mạng lưới, Kỹ năng
+            </p>
+          </div>
+
+          {/* DISC Personality Section */}
+          <div className="col-span-2 space-y-3">
+            <Label>DISC - Phân tích tính cách (%)</Label>
+            <div className="grid grid-cols-4 gap-3">
+              <div className="space-y-2">
+                <Label className="text-xs flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-red-500" />
+                  D - Thống trị
+                </Label>
+                <Input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={formData.discD}
+                  onChange={(e) => setFormData({ ...formData, discD: parseInt(e.target.value) || 0 })}
+                  placeholder="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-xs flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-orange-500" />
+                  I - Ảnh hưởng
+                </Label>
+                <Input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={formData.discI}
+                  onChange={(e) => setFormData({ ...formData, discI: parseInt(e.target.value) || 0 })}
+                  placeholder="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-xs flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-green-500" />
+                  S - Kiên định
+                </Label>
+                <Input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={formData.discS}
+                  onChange={(e) => setFormData({ ...formData, discS: parseInt(e.target.value) || 0 })}
+                  placeholder="0"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-xs flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-blue-500" />
+                  C - Tuân thủ
+                </Label>
+                <Input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={formData.discC}
+                  onChange={(e) => setFormData({ ...formData, discC: parseInt(e.target.value) || 0 })}
+                  placeholder="0"
+                />
+              </div>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Tổng phần trăm nên bằng 100%. D (Dominance), I (Influence), S (Steadiness), C (Compliance)
+            </p>
           </div>
         </div>
         <div className="flex justify-end gap-2">
