@@ -10,9 +10,14 @@ import { useState, useEffect } from "react";
 import { useChapterData } from "@/contexts/ChapterDataContext";
 import { toast } from "sonner";
 import { LeadershipEditor } from "@/components/leadership/LeadershipEditor";
-
 export default function PresidentReport() {
-  const { chapterData, updateStrategicObjectives, updatePerformanceMetrics, submitReport, updateLeadership } = useChapterData();
+  const {
+    chapterData,
+    updateStrategicObjectives,
+    updatePerformanceMetrics,
+    submitReport,
+    updateLeadership
+  } = useChapterData();
   const [meetingDate, setMeetingDate] = useState(new Date().toISOString().split('T')[0]);
   const [currentSlide, setCurrentSlide] = useState(1);
   const totalSlides = 5;
@@ -28,9 +33,8 @@ export default function PresidentReport() {
     kpiGreenTarget: chapterData.strategicObjectives.kpiGreenMembers.target,
     kpiGreenCurrent: chapterData.strategicObjectives.kpiGreenMembers.current,
     oneToOneTarget: chapterData.strategicObjectives.oneToOneMeetings?.target || "344 – 544",
-    oneToOneCurrent: chapterData.strategicObjectives.oneToOneMeetings?.current || 344,
+    oneToOneCurrent: chapterData.strategicObjectives.oneToOneMeetings?.current || 344
   });
-
   const [metrics, setMetrics] = useState({
     referralsThisWeek: chapterData.performanceMetrics.referralsThisWeek,
     revenueLastMonth: chapterData.performanceMetrics.revenueLastMonth,
@@ -38,7 +42,7 @@ export default function PresidentReport() {
     newMemberApplications: chapterData.performanceMetrics.newMemberApplications,
     membersNeedingRenewal: chapterData.performanceMetrics.membersNeedingRenewal,
     trainingPointsLastMonth: chapterData.performanceMetrics.trainingPointsLastMonth,
-    upcomingEvent: chapterData.performanceMetrics.upcomingEvent,
+    upcomingEvent: chapterData.performanceMetrics.upcomingEvent
   });
 
   // Sync local state with context when context changes
@@ -52,9 +56,8 @@ export default function PresidentReport() {
       kpiGreenTarget: chapterData.strategicObjectives.kpiGreenMembers.target,
       kpiGreenCurrent: chapterData.strategicObjectives.kpiGreenMembers.current,
       oneToOneTarget: chapterData.strategicObjectives.oneToOneMeetings?.target || "344 – 544",
-      oneToOneCurrent: chapterData.strategicObjectives.oneToOneMeetings?.current || 344,
+      oneToOneCurrent: chapterData.strategicObjectives.oneToOneMeetings?.current || 344
     });
-    
     setMetrics({
       referralsThisWeek: chapterData.performanceMetrics.referralsThisWeek,
       revenueLastMonth: chapterData.performanceMetrics.revenueLastMonth,
@@ -62,23 +65,14 @@ export default function PresidentReport() {
       newMemberApplications: chapterData.performanceMetrics.newMemberApplications,
       membersNeedingRenewal: chapterData.performanceMetrics.membersNeedingRenewal,
       trainingPointsLastMonth: chapterData.performanceMetrics.trainingPointsLastMonth,
-      upcomingEvent: chapterData.performanceMetrics.upcomingEvent,
+      upcomingEvent: chapterData.performanceMetrics.upcomingEvent
     });
   }, [chapterData]);
-
   const handleSaveReport = () => {
     // Calculate progress for each objective
-    const memberProgress = typeof objectives.memberCurrent === 'number' 
-      ? Math.round((objectives.memberCurrent / 75) * 100) 
-      : 56;
-    
-    const attendanceProgress = typeof objectives.attendanceCurrent === 'string' && objectives.attendanceCurrent.includes('%')
-      ? 100
-      : 100;
-
-    const kpiGreenProgress = typeof objectives.kpiGreenCurrent === 'string' && objectives.kpiGreenCurrent.includes('%')
-      ? 100
-      : 100;
+    const memberProgress = typeof objectives.memberCurrent === 'number' ? Math.round(objectives.memberCurrent / 75 * 100) : 56;
+    const attendanceProgress = typeof objectives.attendanceCurrent === 'string' && objectives.attendanceCurrent.includes('%') ? 100 : 100;
+    const kpiGreenProgress = typeof objectives.kpiGreenCurrent === 'string' && objectives.kpiGreenCurrent.includes('%') ? 100 : 100;
 
     // Update strategic objectives
     updateStrategicObjectives({
@@ -109,24 +103,21 @@ export default function PresidentReport() {
       oneToOneMeetings: {
         target: objectives.oneToOneTarget.toString(),
         current: objectives.oneToOneCurrent,
-        progress: typeof objectives.oneToOneCurrent === 'number' ? Math.round((objectives.oneToOneCurrent / 344) * 100) : 100,
+        progress: typeof objectives.oneToOneCurrent === 'number' ? Math.round(objectives.oneToOneCurrent / 344 * 100) : 100,
         status: 'achieved'
       }
     });
 
     // Update performance metrics
     updatePerformanceMetrics(metrics);
-
     toast.success("Đã lưu báo cáo và cập nhật Tổng quan!");
   };
-
-  return (
-    <div className="space-y-6 sm:space-y-8">
+  return <div className="space-y-6 sm:space-y-8">
       {/* Header */}
       <div className="border-b pb-4 sm:pb-6">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3 sm:gap-4 mb-4">
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-bni-red flex items-center gap-2 sm:gap-3">
-            <Crown className="h-8 w-8 sm:h-10 sm:w-10 text-bni-gold flex-shrink-0" />
+            
             <span>BÁO CÁO CỦA CHỦ TỊCH</span>
           </h1>
           <div className="flex flex-wrap gap-2">
@@ -142,21 +133,11 @@ export default function PresidentReport() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex items-center gap-2">
             <Label className="font-semibold shrink-0">Buổi họp ngày:</Label>
-            <Input 
-              type="date" 
-              value={meetingDate}
-              onChange={(e) => setMeetingDate(e.target.value)}
-              className="w-auto"
-            />
+            <Input type="date" value={meetingDate} onChange={e => setMeetingDate(e.target.value)} className="w-auto" />
           </div>
           <div className="flex items-center gap-2">
             <Label className="font-semibold shrink-0">Nhiệm kỳ:</Label>
-            <Input 
-              type="text" 
-              value={chapterData.termName}
-              disabled
-              className="w-32 bg-muted"
-            />
+            <Input type="text" value={chapterData.termName} disabled className="w-32 bg-muted" />
             <span className="text-muted-foreground">
               ({chapterData.termStart} – {chapterData.termEnd})
             </span>
@@ -165,46 +146,10 @@ export default function PresidentReport() {
       </div>
 
       {/* Lời chào */}
-      <Card className="shadow-lg border-bni-gold border-2 bg-gradient-to-r from-bni-gold/5 to-bni-red/5">
-        <CardContent className="pt-6">
-          <Textarea 
-            rows={4}
-            className="text-base bg-white dark:bg-background"
-            placeholder="Nhập lời chào và thông điệp mở đầu từ Chủ tịch..."
-            defaultValue="Chào buổi sáng toàn thể các thành viên BNI Felix Chapter!&#10;&#10;Chúng ta đang ở buổi họp cuối cùng của Nhiệm kỳ X và chuẩn bị bước sang một chặng đường mới với Nhiệm kỳ XI. Đây là thời điểm để chúng ta cùng nhìn lại, và quan trọng hơn, là cùng nhau hướng về những mục tiêu lớn phía trước."
-          />
-        </CardContent>
-      </Card>
+      
 
       {/* Thông tin Đồng bộ */}
-      <Card className="bg-blue-50 dark:bg-blue-950/20 border-2 border-blue-500">
-        <CardContent className="pt-6">
-          <div className="flex items-start gap-4">
-            <div className="bg-blue-500 text-white p-3 rounded-lg">
-              <CheckCircle2 className="h-6 w-6" />
-            </div>
-            <div className="flex-1">
-              <h3 className="font-bold text-lg text-blue-900 dark:text-blue-300 mb-2">
-                📊 Đồng bộ Tự động với Tổng quan Dashboard
-              </h3>
-              <ul className="space-y-2 text-sm text-blue-800 dark:text-blue-200">
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-500 font-bold">•</span>
-                  <span><strong>Mục tiêu Chiến lược</strong> và <strong>Ban Lãnh đạo</strong> được hiển thị từ dữ liệu tập trung tại Tổng quan</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-500 font-bold">•</span>
-                  <span>Khi bạn cập nhật số liệu ở đây và nhấn <strong>"Lưu & Cập nhật Tổng quan"</strong>, tất cả thay đổi sẽ được phản ánh ngay lập tức</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-blue-500 font-bold">•</span>
-                  <span>Dữ liệu được lưu tự động trong trình duyệt và sẽ khôi phục khi bạn quay lại</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      
 
       {/* I. NHÌN LẠI TẦM NHÌN & MỤC TIÊU NHIỆM KỲ */}
       <Card className="shadow-lg border-bni-red border-2">
@@ -239,32 +184,25 @@ export default function PresidentReport() {
               <TableRow>
                 <TableCell className="font-semibold">Số lượng Thành viên</TableCell>
                 <TableCell className="text-center">
-                  <Input 
-                    placeholder="75+" 
-                    className="w-32 mx-auto font-bold" 
-                    value={objectives.memberTarget}
-                    onChange={(e) => setObjectives({...objectives, memberTarget: e.target.value})}
-                  />
+                  <Input placeholder="75+" className="w-32 mx-auto font-bold" value={objectives.memberTarget} onChange={e => setObjectives({
+                      ...objectives,
+                      memberTarget: e.target.value
+                    })} />
                 </TableCell>
                 <TableCell className="text-center">
-                  <Input 
-                    type="number" 
-                    placeholder="42" 
-                    className="w-32 mx-auto font-bold" 
-                    value={objectives.memberCurrent}
-                    onChange={(e) => setObjectives({...objectives, memberCurrent: parseInt(e.target.value) || 0})}
-                  />
+                  <Input type="number" placeholder="42" className="w-32 mx-auto font-bold" value={objectives.memberCurrent} onChange={e => setObjectives({
+                      ...objectives,
+                      memberCurrent: parseInt(e.target.value) || 0
+                    })} />
                 </TableCell>
               </TableRow>
               <TableRow>
                 <TableCell className="font-semibold">Doanh thu Cả nhiệm kỳ</TableCell>
                 <TableCell className="text-center">
-                  <Input 
-                    placeholder="33 Tỷ VNĐ" 
-                    className="w-40 mx-auto font-bold" 
-                    value={objectives.revenueTarget}
-                    onChange={(e) => setObjectives({...objectives, revenueTarget: e.target.value})}
-                  />
+                  <Input placeholder="33 Tỷ VNĐ" className="w-40 mx-auto font-bold" value={objectives.revenueTarget} onChange={e => setObjectives({
+                      ...objectives,
+                      revenueTarget: e.target.value
+                    })} />
                 </TableCell>
                 <TableCell className="text-center text-muted-foreground">
                   (Bắt đầu tính từ 01/10)
@@ -274,22 +212,18 @@ export default function PresidentReport() {
                 <TableCell className="font-semibold">Tỷ lệ Hiện diện</TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <Input 
-                      placeholder="98%" 
-                      className="w-24 mx-auto font-bold" 
-                      value={objectives.attendanceTarget}
-                      onChange={(e) => setObjectives({...objectives, attendanceTarget: e.target.value})}
-                    />
+                    <Input placeholder="98%" className="w-24 mx-auto font-bold" value={objectives.attendanceTarget} onChange={e => setObjectives({
+                        ...objectives,
+                        attendanceTarget: e.target.value
+                      })} />
                   </div>
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <Input 
-                      placeholder="98%" 
-                      className="w-24 mx-auto font-bold" 
-                      value={objectives.attendanceCurrent}
-                      onChange={(e) => setObjectives({...objectives, attendanceCurrent: e.target.value})}
-                    />
+                    <Input placeholder="98%" className="w-24 mx-auto font-bold" value={objectives.attendanceCurrent} onChange={e => setObjectives({
+                        ...objectives,
+                        attendanceCurrent: e.target.value
+                      })} />
                     <Badge className="bg-green-500">Đạt</Badge>
                   </div>
                 </TableCell>
@@ -298,22 +232,18 @@ export default function PresidentReport() {
                 <TableCell className="font-semibold">Tỷ lệ Thành viên KPI Xanh</TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <Input 
-                      placeholder="50%" 
-                      className="w-24 mx-auto font-bold" 
-                      value={objectives.kpiGreenTarget}
-                      onChange={(e) => setObjectives({...objectives, kpiGreenTarget: e.target.value})}
-                    />
+                    <Input placeholder="50%" className="w-24 mx-auto font-bold" value={objectives.kpiGreenTarget} onChange={e => setObjectives({
+                        ...objectives,
+                        kpiGreenTarget: e.target.value
+                      })} />
                   </div>
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <Input 
-                      placeholder="50%" 
-                      className="w-24 mx-auto font-bold" 
-                      value={objectives.kpiGreenCurrent}
-                      onChange={(e) => setObjectives({...objectives, kpiGreenCurrent: e.target.value})}
-                    />
+                    <Input placeholder="50%" className="w-24 mx-auto font-bold" value={objectives.kpiGreenCurrent} onChange={e => setObjectives({
+                        ...objectives,
+                        kpiGreenCurrent: e.target.value
+                      })} />
                     <Badge className="bg-green-500">Đạt</Badge>
                   </div>
                 </TableCell>
@@ -321,22 +251,17 @@ export default function PresidentReport() {
               <TableRow>
                 <TableCell className="font-semibold">Số lượt 1-2-1 / tháng</TableCell>
                 <TableCell className="text-center">
-                  <Input 
-                    placeholder="344 – 544" 
-                    className="w-40 mx-auto font-bold" 
-                    value={objectives.oneToOneTarget}
-                    onChange={(e) => setObjectives({...objectives, oneToOneTarget: e.target.value})}
-                  />
+                  <Input placeholder="344 – 544" className="w-40 mx-auto font-bold" value={objectives.oneToOneTarget} onChange={e => setObjectives({
+                      ...objectives,
+                      oneToOneTarget: e.target.value
+                    })} />
                 </TableCell>
                 <TableCell className="text-center">
                   <div className="flex items-center justify-center gap-2">
-                    <Input 
-                      type="number" 
-                      placeholder="344" 
-                      className="w-24 mx-auto font-bold" 
-                      value={objectives.oneToOneCurrent}
-                      onChange={(e) => setObjectives({...objectives, oneToOneCurrent: parseInt(e.target.value) || 0})}
-                    />
+                    <Input type="number" placeholder="344" className="w-24 mx-auto font-bold" value={objectives.oneToOneCurrent} onChange={e => setObjectives({
+                        ...objectives,
+                        oneToOneCurrent: parseInt(e.target.value) || 0
+                      })} />
                     <Badge className="bg-green-500">Đạt tối thiểu</Badge>
                   </div>
                 </TableCell>
@@ -356,11 +281,7 @@ export default function PresidentReport() {
             <p className="font-semibold text-blue-900 dark:text-blue-300 mb-2">
               💭 Góc nhìn của Chủ tịch:
             </p>
-            <Textarea 
-              rows={2}
-              className="bg-white dark:bg-background"
-              defaultValue="Chúng ta đang làm rất tốt việc duy trì sự hiện diện và chất lượng hoạt động. Nền tảng con người đã vững, giờ là lúc tập trung vào sự tăng trưởng về quy mô và doanh thu trong nhiệm kỳ mới."
-            />
+            <Textarea rows={2} className="bg-white dark:bg-background" defaultValue="Chúng ta đang làm rất tốt việc duy trì sự hiện diện và chất lượng hoạt động. Nền tảng con người đã vững, giờ là lúc tập trung vào sự tăng trưởng về quy mô và doanh thu trong nhiệm kỳ mới." />
           </div>
         </CardContent>
       </Card>
@@ -391,51 +312,40 @@ export default function PresidentReport() {
                 <Label className="font-semibold text-sm text-muted-foreground block mb-2">
                   Cơ hội Kinh doanh (Tuần qua):
                 </Label>
-                <Input 
-                  type="number" 
-                  placeholder="53" 
-                  className="text-3xl font-bold" 
-                  value={metrics.referralsThisWeek}
-                  onChange={(e) => setMetrics({...metrics, referralsThisWeek: parseInt(e.target.value) || 0})}
-                />
+                <Input type="number" placeholder="53" className="text-3xl font-bold" value={metrics.referralsThisWeek} onChange={e => setMetrics({
+                ...metrics,
+                referralsThisWeek: parseInt(e.target.value) || 0
+              })} />
               </div>
 
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950/20 dark:to-blue-900/20 p-6 rounded-lg border-2 border-blue-500">
                 <Label className="font-semibold text-sm text-muted-foreground block mb-2">
                   Giá trị Giao dịch (Tháng trước):
                 </Label>
-                <Input 
-                  placeholder="> 1,23 Tỷ VNĐ" 
-                  className="text-3xl font-bold" 
-                  value={metrics.revenueLastMonth}
-                  onChange={(e) => setMetrics({...metrics, revenueLastMonth: e.target.value})}
-                />
+                <Input placeholder="> 1,23 Tỷ VNĐ" className="text-3xl font-bold" value={metrics.revenueLastMonth} onChange={e => setMetrics({
+                ...metrics,
+                revenueLastMonth: e.target.value
+              })} />
               </div>
 
               <div className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950/20 dark:to-purple-900/20 p-6 rounded-lg border-2 border-purple-500">
                 <Label className="font-semibold text-sm text-muted-foreground block mb-2">
                   Số lượng Khách mời (Tuần trước):
                 </Label>
-                <Input 
-                  type="number" 
-                  placeholder="4" 
-                  className="text-3xl font-bold" 
-                  value={metrics.visitorsLastWeek}
-                  onChange={(e) => setMetrics({...metrics, visitorsLastWeek: parseInt(e.target.value) || 0})}
-                />
+                <Input type="number" placeholder="4" className="text-3xl font-bold" value={metrics.visitorsLastWeek} onChange={e => setMetrics({
+                ...metrics,
+                visitorsLastWeek: parseInt(e.target.value) || 0
+              })} />
               </div>
 
               <div className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950/20 dark:to-orange-900/20 p-6 rounded-lg border-2 border-orange-500">
                 <Label className="font-semibold text-sm text-muted-foreground block mb-2">
                   Số hồ sơ TV mới đã nộp:
                 </Label>
-                <Input 
-                  type="number" 
-                  placeholder="1" 
-                  className="text-3xl font-bold" 
-                  value={metrics.newMemberApplications}
-                  onChange={(e) => setMetrics({...metrics, newMemberApplications: parseInt(e.target.value) || 0})}
-                />
+                <Input type="number" placeholder="1" className="text-3xl font-bold" value={metrics.newMemberApplications} onChange={e => setMetrics({
+                ...metrics,
+                newMemberApplications: parseInt(e.target.value) || 0
+              })} />
               </div>
             </div>
           </div>
@@ -448,13 +358,10 @@ export default function PresidentReport() {
                 <Label className="font-semibold text-sm text-muted-foreground block mb-2">
                   Thành viên cần gia hạn (90 ngày tới):
                 </Label>
-                <Input 
-                  type="number" 
-                  placeholder="7" 
-                  className="text-3xl font-bold" 
-                  value={metrics.membersNeedingRenewal}
-                  onChange={(e) => setMetrics({...metrics, membersNeedingRenewal: parseInt(e.target.value) || 0})}
-                />
+                <Input type="number" placeholder="7" className="text-3xl font-bold" value={metrics.membersNeedingRenewal} onChange={e => setMetrics({
+                ...metrics,
+                membersNeedingRenewal: parseInt(e.target.value) || 0
+              })} />
               </div>
 
               <div className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950/20 dark:to-green-900/20 p-6 rounded-lg border-2 border-green-500">
@@ -462,13 +369,10 @@ export default function PresidentReport() {
                   Tổng điểm Đào tạo (Tháng trước):
                 </Label>
                 <div className="flex items-center gap-2">
-                  <Input 
-                    type="number" 
-                    placeholder="486" 
-                    className="text-3xl font-bold" 
-                    value={metrics.trainingPointsLastMonth}
-                    onChange={(e) => setMetrics({...metrics, trainingPointsLastMonth: parseInt(e.target.value) || 0})}
-                  />
+                  <Input type="number" placeholder="486" className="text-3xl font-bold" value={metrics.trainingPointsLastMonth} onChange={e => setMetrics({
+                  ...metrics,
+                  trainingPointsLastMonth: parseInt(e.target.value) || 0
+                })} />
                   <Badge className="bg-green-500">Vượt MTC</Badge>
                 </div>
               </div>
@@ -477,12 +381,10 @@ export default function PresidentReport() {
                 <Label className="font-semibold text-sm text-muted-foreground block mb-2">
                   Sự kiện quan trọng sắp tới:
                 </Label>
-                <Input 
-                  placeholder="Lễ Chuyển giao BĐH (07/10/2025)" 
-                  className="text-lg font-bold"
-                  value={metrics.upcomingEvent}
-                  onChange={(e) => setMetrics({...metrics, upcomingEvent: e.target.value})}
-                />
+                <Input placeholder="Lễ Chuyển giao BĐH (07/10/2025)" className="text-lg font-bold" value={metrics.upcomingEvent} onChange={e => setMetrics({
+                ...metrics,
+                upcomingEvent: e.target.value
+              })} />
               </div>
             </div>
           </div>
@@ -504,12 +406,7 @@ export default function PresidentReport() {
               </CardDescription>
             </div>
             <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsLeadershipEditorOpen(true)}
-                className="gap-2"
-              >
+              <Button variant="outline" size="sm" onClick={() => setIsLeadershipEditorOpen(true)} className="gap-2">
                 <Edit className="h-4 w-4" />
                 Sửa thông tin
               </Button>
@@ -522,32 +419,22 @@ export default function PresidentReport() {
         </CardHeader>
         <CardContent className="pt-6">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {chapterData.leadership.map((leader, index) => (
-              leader.isPrimary ? (
-                <div key={index} className="col-span-full p-4 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
+            {chapterData.leadership.map((leader, index) => leader.isPrimary ? <div key={index} className="col-span-full p-4 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
                   <div className="flex items-center gap-2 mb-2">
                     <Crown className="h-5 w-5 text-bni-gold" />
                     <span className="font-semibold">{leader.role}:</span>
                     <span className="font-bold text-bni-red">{leader.name}</span>
                   </div>
-                  {leader.support && (
-                    <div className="ml-7 text-sm text-muted-foreground">
+                  {leader.support && <div className="ml-7 text-sm text-muted-foreground">
                       Hỗ trợ: <span className="font-medium">{leader.support}</span>
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div key={index} className="p-3 border rounded-lg bg-card hover:bg-muted/50 transition-colors">
+                    </div>}
+                </div> : <div key={index} className="p-3 border rounded-lg bg-card hover:bg-muted/50 transition-colors">
                   <div className="font-semibold text-sm text-bni-red">{leader.role}</div>
                   <div className="text-sm mt-1">{leader.name}</div>
-                  {leader.support && (
-                    <div className="text-xs text-muted-foreground mt-1">
+                  {leader.support && <div className="text-xs text-muted-foreground mt-1">
                       Hỗ trợ: {leader.support}
-                    </div>
-                  )}
-                </div>
-              )
-            ))}
+                    </div>}
+                </div>)}
           </div>
           
           <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border-l-4 border-blue-500">
@@ -559,15 +446,10 @@ export default function PresidentReport() {
         </CardContent>
       </Card>
 
-      <LeadershipEditor
-        open={isLeadershipEditorOpen}
-        onOpenChange={setIsLeadershipEditorOpen}
-        leadership={chapterData.leadership}
-        onSave={(updatedLeadership) => {
-          updateLeadership(updatedLeadership);
-          toast.success("Đã cập nhật thông tin lãnh đạo!");
-        }}
-      />
+      <LeadershipEditor open={isLeadershipEditorOpen} onOpenChange={setIsLeadershipEditorOpen} leadership={chapterData.leadership} onSave={updatedLeadership => {
+      updateLeadership(updatedLeadership);
+      toast.success("Đã cập nhật thông tin lãnh đạo!");
+    }} />
 
       {/* III. GÓC NHÌN & ĐỊNH HƯỚNG CỦA CHỦ TỊCH */}
       <Card className="shadow-lg border-bni-red border-2">
@@ -590,29 +472,17 @@ export default function PresidentReport() {
             <div className="space-y-4">
               <div className="bg-white dark:bg-background p-4 rounded-lg">
                 <Label className="font-semibold block mb-2">✨ Năng lượng & Sự Gắn kết:</Label>
-                <Textarea 
-                  rows={2}
-                  placeholder="Nhập đánh giá..."
-                  defaultValue="Tỷ lệ hiện diện 98% và số lượt 1-2-1 đạt mức tối thiểu cho thấy sự cam kết mạnh mẽ của Chapter. Đây là nền tảng vững chắc nhất của chúng ta."
-                />
+                <Textarea rows={2} placeholder="Nhập đánh giá..." defaultValue="Tỷ lệ hiện diện 98% và số lượt 1-2-1 đạt mức tối thiểu cho thấy sự cam kết mạnh mẽ của Chapter. Đây là nền tảng vững chắc nhất của chúng ta." />
               </div>
 
               <div className="bg-white dark:bg-background p-4 rounded-lg">
                 <Label className="font-semibold block mb-2">📚 Tinh thần Học tập:</Label>
-                <Textarea 
-                  rows={2}
-                  placeholder="Nhập đánh giá..."
-                  defaultValue="Việc vượt mục tiêu điểm đào tạo cho thấy chúng ta là một tập thể ham học hỏi, luôn nỗ lực để trở nên tốt hơn."
-                />
+                <Textarea rows={2} placeholder="Nhập đánh giá..." defaultValue="Việc vượt mục tiêu điểm đào tạo cho thấy chúng ta là một tập thể ham học hỏi, luôn nỗ lực để trở nên tốt hơn." />
               </div>
 
               <div className="bg-white dark:bg-background p-4 rounded-lg">
                 <Label className="font-semibold block mb-2">🤝 Trải nghiệm Khách mời:</Label>
-                <Textarea 
-                  rows={2}
-                  placeholder="Nhập đánh giá..."
-                  defaultValue="Quy trình chăm sóc khách mời đang phát huy hiệu quả, bằng chứng là chúng ta đã có 1 hồ sơ tiềm năng được nộp ngay sau buổi họp."
-                />
+                <Textarea rows={2} placeholder="Nhập đánh giá..." defaultValue="Quy trình chăm sóc khách mời đang phát huy hiệu quả, bằng chứng là chúng ta đã có 1 hồ sơ tiềm năng được nộp ngay sau buổi họp." />
               </div>
             </div>
           </div>
@@ -627,20 +497,12 @@ export default function PresidentReport() {
             <div className="space-y-4">
               <div className="bg-white dark:bg-background p-4 rounded-lg">
                 <Label className="font-semibold block mb-2">📈 Tăng trưởng Sĩ số:</Label>
-                <Textarea 
-                  rows={2}
-                  placeholder="Nhập phân tích..."
-                  defaultValue="Chúng ta cần một cú hích mạnh mẽ để đạt được mục tiêu 75+ thành viên. Sức mạnh của tập thể đến từ sự đa dạng và quy mô."
-                />
+                <Textarea rows={2} placeholder="Nhập phân tích..." defaultValue="Chúng ta cần một cú hích mạnh mẽ để đạt được mục tiêu 75+ thành viên. Sức mạnh của tập thể đến từ sự đa dạng và quy mô." />
               </div>
 
               <div className="bg-white dark:bg-background p-4 rounded-lg">
                 <Label className="font-semibold block mb-2">💎 Chất lượng Cơ hội Kinh doanh:</Label>
-                <Textarea 
-                  rows={2}
-                  placeholder="Nhập phân tích..."
-                  defaultValue='Số lượng referral rất tốt, nhưng chúng ta cần tập trung hơn nữa vào việc tìm kiếm những cơ hội kinh doanh "cấp 7-8", những cơ hội thực sự chất lượng và có khả năng chuyển đổi cao.'
-                />
+                <Textarea rows={2} placeholder="Nhập phân tích..." defaultValue='Số lượng referral rất tốt, nhưng chúng ta cần tập trung hơn nữa vào việc tìm kiếm những cơ hội kinh doanh "cấp 7-8", những cơ hội thực sự chất lượng và có khả năng chuyển đổi cao.' />
               </div>
             </div>
           </div>
@@ -666,11 +528,7 @@ export default function PresidentReport() {
               <Badge className="bg-bni-red text-lg px-3 py-1 shrink-0">Hành động 1</Badge>
               <Label className="font-bold text-lg">Mỗi thành viên mời 1 khách mời:</Label>
             </div>
-            <Textarea 
-              rows={3}
-              placeholder="Nhập chi tiết hành động..."
-              defaultValue="Tuần tới là Lễ Chuyển giao, một sự kiện rất đặc biệt. Hãy mời một khách mời chất lượng, đúng ngành nghề Chapter đang tìm kiếm, để họ cảm nhận được năng lượng và văn hóa của chúng ta. Đây là trách nhiệm của tất cả mọi người, không chỉ riêng Ban Khách mời."
-            />
+            <Textarea rows={3} placeholder="Nhập chi tiết hành động..." defaultValue="Tuần tới là Lễ Chuyển giao, một sự kiện rất đặc biệt. Hãy mời một khách mời chất lượng, đúng ngành nghề Chapter đang tìm kiếm, để họ cảm nhận được năng lượng và văn hóa của chúng ta. Đây là trách nhiệm của tất cả mọi người, không chỉ riêng Ban Khách mời." />
           </div>
 
           <div className="bg-white dark:bg-background p-6 rounded-lg border-2 border-bni-gold">
@@ -678,11 +536,7 @@ export default function PresidentReport() {
               <Badge className="bg-bni-gold text-bni-black text-lg px-3 py-1 shrink-0">Hành động 2</Badge>
               <Label className="font-bold text-lg">Lên lịch 1-2-1 với Ban Điều hành mới:</Label>
             </div>
-            <Textarea 
-              rows={3}
-              placeholder="Nhập chi tiết hành động..."
-              defaultValue="Hãy chủ động đặt lịch 1-2-1 với các thành viên trong Ban Điều hành nhiệm kỳ mới. Hãy chia sẻ cho họ biết mục tiêu của bạn, mong muốn của bạn và bạn sẽ đóng góp gì cho Chapter. Sự thấu hiểu này sẽ là chất keo kết dính chúng ta trong 6 tháng tới."
-            />
+            <Textarea rows={3} placeholder="Nhập chi tiết hành động..." defaultValue="Hãy chủ động đặt lịch 1-2-1 với các thành viên trong Ban Điều hành nhiệm kỳ mới. Hãy chia sẻ cho họ biết mục tiêu của bạn, mong muốn của bạn và bạn sẽ đóng góp gì cho Chapter. Sự thấu hiểu này sẽ là chất keo kết dính chúng ta trong 6 tháng tới." />
           </div>
 
         </CardContent>
@@ -732,32 +586,16 @@ export default function PresidentReport() {
             
             {/* Navigation Header */}
             <div className="flex items-center justify-between mb-6 pb-4 border-b">
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setCurrentSlide(Math.max(1, currentSlide - 1))}
-                disabled={currentSlide === 1}
-              >
+              <Button variant="outline" size="sm" onClick={() => setCurrentSlide(Math.max(1, currentSlide - 1))} disabled={currentSlide === 1}>
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 Slide Trước
               </Button>
               
               <div className="font-semibold text-lg">
-                Slide {currentSlide}/{totalSlides}: {
-                  currentSlide === 1 ? "CHÀO MỪNG & TUYÊN BỐ SỨ MỆNH" :
-                  currentSlide === 2 ? "TẦM NHÌN & MỤC TIÊU NHIỆM KỲ XI" :
-                  currentSlide === 3 ? "CÁC THÔNG BÁO QUAN TRỌNG" :
-                  currentSlide === 4 ? "TÍCH HỢP BÁO CÁO BAN KHÁCH MỜI" :
-                  "KÊU GỌI HÀNH ĐỘNG"
-                }
+                Slide {currentSlide}/{totalSlides}: {currentSlide === 1 ? "CHÀO MỪNG & TUYÊN BỐ SỨ MỆNH" : currentSlide === 2 ? "TẦM NHÌN & MỤC TIÊU NHIỆM KỲ XI" : currentSlide === 3 ? "CÁC THÔNG BÁO QUAN TRỌNG" : currentSlide === 4 ? "TÍCH HỢP BÁO CÁO BAN KHÁCH MỜI" : "KÊU GỌI HÀNH ĐỘNG"}
               </div>
               
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setCurrentSlide(Math.min(totalSlides, currentSlide + 1))}
-                disabled={currentSlide === totalSlides}
-              >
+              <Button variant="outline" size="sm" onClick={() => setCurrentSlide(Math.min(totalSlides, currentSlide + 1))} disabled={currentSlide === totalSlides}>
                 Slide Tiếp
                 <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
@@ -767,8 +605,7 @@ export default function PresidentReport() {
             <div className="min-h-[400px] bg-white dark:bg-background p-8 rounded-lg">
               
               {/* Slide 1: Welcome */}
-              {currentSlide === 1 && (
-                <div className="space-y-6">
+              {currentSlide === 1 && <div className="space-y-6">
                   <div className="text-center space-y-4">
                     <h2 className="text-3xl font-bold text-bni-red">
                       CHÀO MỪNG ĐẾN VỚI BUỔI HỌP BNI FELIX CHAPTER
@@ -785,28 +622,18 @@ export default function PresidentReport() {
                   <div className="space-y-4 mt-8">
                     <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
                       <Label className="font-bold text-lg block mb-2">Sứ mệnh của chúng ta:</Label>
-                      <Textarea 
-                        rows={3}
-                        className="bg-white dark:bg-background"
-                        defaultValue="Giúp các thành viên phát triển kinh doanh thông qua một chương trình referral marketing chuyên nghiệp, tích cực và có cấu trúc, tạo điều kiện cho các thành viên phát triển những mối quan hệ ý nghĩa và lâu dài."
-                      />
+                      <Textarea rows={3} className="bg-white dark:bg-background" defaultValue="Giúp các thành viên phát triển kinh doanh thông qua một chương trình referral marketing chuyên nghiệp, tích cực và có cấu trúc, tạo điều kiện cho các thành viên phát triển những mối quan hệ ý nghĩa và lâu dài." />
                     </div>
 
                     <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
                       <Label className="font-bold text-lg block mb-2">Triết lý cốt lõi:</Label>
-                      <Textarea 
-                        rows={2}
-                        className="bg-white dark:bg-background"
-                        defaultValue="Givers Gain® - Cho là Nhận. Bằng việc cho đi cơ hội kinh doanh, bạn cũng sẽ nhận lại cơ hội kinh doanh cho mình."
-                      />
+                      <Textarea rows={2} className="bg-white dark:bg-background" defaultValue="Givers Gain® - Cho là Nhận. Bằng việc cho đi cơ hội kinh doanh, bạn cũng sẽ nhận lại cơ hội kinh doanh cho mình." />
                     </div>
                   </div>
-                </div>
-              )}
+                </div>}
 
               {/* Slide 2: Vision & Goals */}
-              {currentSlide === 2 && (
-                <div className="space-y-6">
+              {currentSlide === 2 && <div className="space-y-6">
                   <div className="text-center space-y-4">
                     <h2 className="text-3xl font-bold text-bni-red">
                       TẦM NHÌN & MỤC TIÊU NHIỆM KỲ XI
@@ -820,11 +647,7 @@ export default function PresidentReport() {
                   <div className="space-y-4 mt-8">
                     <div className="p-4 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
                       <Label className="font-bold text-lg block mb-2">Tầm nhìn:</Label>
-                      <Textarea 
-                        rows={2}
-                        className="bg-white dark:bg-background"
-                        defaultValue="Trở thành Chapter Platinum với 75+ thành viên, dẫn đầu khu vực về giá trị giao dịch và mức độ gắn kết."
-                      />
+                      <Textarea rows={2} className="bg-white dark:bg-background" defaultValue="Trở thành Chapter Platinum với 75+ thành viên, dẫn đầu khu vực về giá trị giao dịch và mức độ gắn kết." />
                     </div>
 
                     <div className="p-4 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
@@ -845,12 +668,10 @@ export default function PresidentReport() {
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                </div>}
 
               {/* Slide 3: Announcements */}
-              {currentSlide === 3 && (
-                <div className="space-y-6">
+              {currentSlide === 3 && <div className="space-y-6">
                   <div className="text-center space-y-4">
                     <h2 className="text-3xl font-bold text-bni-red">
                       THÔNG BÁO & SỰ KIỆN SẮP TỚI
@@ -864,46 +685,30 @@ export default function PresidentReport() {
                   <div className="space-y-4 mt-8">
                     <div className="p-4 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
                       <Label className="font-semibold block mb-2">📅 Lễ Chuyển giao BĐH Nhiệm kỳ XI:</Label>
-                      <Textarea 
-                        rows={2}
-                        className="bg-white dark:bg-background"
-                        defaultValue="Sẽ diễn ra vào tuần tới, ngày 07/10/2025. Đề nghị tất cả thành viên tham dự đầy đủ và đúng giờ."
-                      />
+                      <Textarea rows={2} className="bg-white dark:bg-background" defaultValue="Sẽ diễn ra vào tuần tới, ngày 07/10/2025. Đề nghị tất cả thành viên tham dự đầy đủ và đúng giờ." />
                     </div>
 
                     <div className="p-4 bg-yellow-50 dark:bg-yellow-950/20 rounded-lg">
                       <Label className="font-semibold block mb-2">🎯 Kêu gọi ngành nghề:</Label>
-                      <Textarea 
-                        rows={2}
-                        className="bg-white dark:bg-background"
-                        defaultValue="Chapter đang tập trung tìm kiếm các ngành nghề trong Power Team Xây dựng như: Thi công ME, Thang máy, Lọc nước, PCCC."
-                      />
+                      <Textarea rows={2} className="bg-white dark:bg-background" defaultValue="Chapter đang tập trung tìm kiếm các ngành nghề trong Power Team Xây dựng như: Thi công ME, Thang máy, Lọc nước, PCCC." />
                     </div>
 
                     <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
                       <Label className="font-semibold block mb-2">🏆 Vinh danh Thành viên:</Label>
                       <div className="space-y-2">
                         <div className="p-3 bg-white dark:bg-background rounded">
-                          <Textarea 
-                            rows={1}
-                            defaultValue="Chúc mừng Mrs. Hà Thị Hạnh, thành viên trao giá trị thương vụ lớn nhất tháng 8 (>312 triệu VNĐ)."
-                          />
+                          <Textarea rows={1} defaultValue="Chúc mừng Mrs. Hà Thị Hạnh, thành viên trao giá trị thương vụ lớn nhất tháng 8 (>312 triệu VNĐ)." />
                         </div>
                         <div className="p-3 bg-white dark:bg-background rounded">
-                          <Textarea 
-                            rows={1}
-                            defaultValue="Chúc mừng Mrs. Lưu Thị Châu, thành viên trao nhiều cơ hội kinh doanh nhất tháng 8 (12 cơ hội)."
-                          />
+                          <Textarea rows={1} defaultValue="Chúc mừng Mrs. Lưu Thị Châu, thành viên trao nhiều cơ hội kinh doanh nhất tháng 8 (12 cơ hội)." />
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
+                </div>}
 
               {/* Slide 4: Visitor Report */}
-              {currentSlide === 4 && (
-                <div className="space-y-6">
+              {currentSlide === 4 && <div className="space-y-6">
                   <div className="text-center space-y-4">
                     <h2 className="text-3xl font-bold text-bni-red">
                       CHÀO ĐÓN KHÁCH MỜI & BÁO CÁO
@@ -941,19 +746,13 @@ export default function PresidentReport() {
 
                     <div className="p-4 bg-green-50 dark:bg-green-950/20 rounded-lg">
                       <Label className="font-bold text-lg block mb-2">💬 Phản hồi nổi bật:</Label>
-                      <Textarea 
-                        rows={2}
-                        className="bg-white dark:bg-background italic"
-                        defaultValue="Khách mời rất ấn tượng với năng lượng và sự chuyên nghiệp của Chapter."
-                      />
+                      <Textarea rows={2} className="bg-white dark:bg-background italic" defaultValue="Khách mời rất ấn tượng với năng lượng và sự chuyên nghiệp của Chapter." />
                     </div>
                   </div>
-                </div>
-              )}
+                </div>}
 
               {/* Slide 5: Call to Action */}
-              {currentSlide === 5 && (
-                <div className="space-y-6">
+              {currentSlide === 5 && <div className="space-y-6">
                   <div className="text-center space-y-4">
                     <h2 className="text-3xl font-bold text-bni-red">
                       KÊU GỌI HÀNH ĐỘNG TRỌNG TÂM
@@ -970,11 +769,7 @@ export default function PresidentReport() {
                         <Badge className="bg-bni-red text-lg px-3 py-1 shrink-0">1</Badge>
                         <Label className="font-bold text-lg">Mỗi thành viên mời 1 khách mời:</Label>
                       </div>
-                      <Textarea 
-                        rows={2}
-                        className="bg-white dark:bg-background"
-                        defaultValue="Cho buổi Lễ Chuyển giao BĐH tuần tới. Hãy tập trung vào các ngành nghề chúng ta đang tìm kiếm."
-                      />
+                      <Textarea rows={2} className="bg-white dark:bg-background" defaultValue="Cho buổi Lễ Chuyển giao BĐH tuần tới. Hãy tập trung vào các ngành nghề chúng ta đang tìm kiếm." />
                     </div>
 
                     <div className="p-6 bg-gradient-to-br from-bni-gold/10 to-bni-red/10 rounded-lg border-2 border-bni-gold">
@@ -982,11 +777,7 @@ export default function PresidentReport() {
                         <Badge className="bg-bni-gold text-bni-black text-lg px-3 py-1 shrink-0">2</Badge>
                         <Label className="font-bold text-lg">Chủ động 1-2-1 với BĐH mới:</Label>
                       </div>
-                      <Textarea 
-                        rows={2}
-                        className="bg-white dark:bg-background"
-                        defaultValue="Để chia sẻ mục tiêu và mong muốn của bạn, tạo sự kết nối ngay từ đầu nhiệm kỳ."
-                      />
+                      <Textarea rows={2} className="bg-white dark:bg-background" defaultValue="Để chia sẻ mục tiêu và mong muốn của bạn, tạo sự kết nối ngay từ đầu nhiệm kỳ." />
                     </div>
 
                     <div className="mt-8 text-center p-6 bg-gradient-to-r from-bni-red to-bni-gold rounded-lg">
@@ -995,44 +786,24 @@ export default function PresidentReport() {
                       </p>
                     </div>
                   </div>
-                </div>
-              )}
+                </div>}
 
             </div>
 
             {/* Navigation Footer */}
             <div className="flex items-center justify-between mt-6 pt-4 border-t">
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setCurrentSlide(Math.max(1, currentSlide - 1))}
-                disabled={currentSlide === 1}
-              >
+              <Button variant="outline" size="sm" onClick={() => setCurrentSlide(Math.max(1, currentSlide - 1))} disabled={currentSlide === 1}>
                 <ChevronLeft className="h-4 w-4 mr-1" />
                 Slide Trước
               </Button>
               
               <div className="flex gap-2">
-                {Array.from({ length: totalSlides }, (_, i) => i + 1).map((num) => (
-                  <button
-                    key={num}
-                    onClick={() => setCurrentSlide(num)}
-                    className={`w-3 h-3 rounded-full transition-colors ${
-                      currentSlide === num 
-                        ? 'bg-bni-red' 
-                        : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
-                    }`}
-                    aria-label={`Go to slide ${num}`}
-                  />
-                ))}
+                {Array.from({
+                length: totalSlides
+              }, (_, i) => i + 1).map(num => <button key={num} onClick={() => setCurrentSlide(num)} className={`w-3 h-3 rounded-full transition-colors ${currentSlide === num ? 'bg-bni-red' : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'}`} aria-label={`Go to slide ${num}`} />)}
               </div>
               
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setCurrentSlide(Math.min(totalSlides, currentSlide + 1))}
-                disabled={currentSlide === totalSlides}
-              >
+              <Button variant="outline" size="sm" onClick={() => setCurrentSlide(Math.min(totalSlides, currentSlide + 1))} disabled={currentSlide === totalSlides}>
                 Slide Tiếp
                 <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
@@ -1046,12 +817,7 @@ export default function PresidentReport() {
       {/* Lời kết */}
       <Card className="shadow-lg border-bni-red border-2 bg-gradient-to-r from-bni-red/5 to-bni-gold/5">
         <CardContent className="pt-6">
-          <Textarea 
-            rows={2}
-            className="text-lg font-semibold text-center bg-white dark:bg-background"
-            placeholder="Nhập lời kết từ Chủ tịch..."
-            defaultValue="Chúng ta là BNI Felix Chapter, một Chapter của sự hành động và hiệu quả. Hãy cùng nhau biến những mục tiêu trên thành hiện thực!"
-          />
+          <Textarea rows={2} className="text-lg font-semibold text-center bg-white dark:bg-background" placeholder="Nhập lời kết từ Chủ tịch..." defaultValue="Chúng ta là BNI Felix Chapter, một Chapter của sự hành động và hiệu quả. Hãy cùng nhau biến những mục tiêu trên thành hiện thực!" />
         </CardContent>
       </Card>
 
@@ -1064,30 +830,21 @@ export default function PresidentReport() {
           <Download className="h-5 w-5 mr-2" />
           Xuất sang Trang tính
         </Button>
-        <Button 
-          className="bg-blue-600 hover:bg-blue-700 text-white" 
-          size="lg"
-          onClick={handleSaveReport}
-        >
+        <Button className="bg-blue-600 hover:bg-blue-700 text-white" size="lg" onClick={handleSaveReport}>
           <Save className="h-5 w-5 mr-2" />
           Lưu & Cập nhật Tổng quan
         </Button>
-        <Button 
-          className="bg-bni-red hover:bg-bni-red/90 text-white" 
-          size="lg"
-          onClick={() => {
-            handleSaveReport();
-            submitReport('president', chapterData.leadership.find(l => l.role === 'Chủ tịch')?.name || 'Chủ tịch');
-            toast.success('Báo cáo đã hoàn thành', {
-              description: 'Báo cáo Chủ tịch đã được gửi và đồng bộ real-time lên Tổng quan',
-              duration: 5000,
-            });
-          }}
-        >
+        <Button className="bg-bni-red hover:bg-bni-red/90 text-white" size="lg" onClick={() => {
+        handleSaveReport();
+        submitReport('president', chapterData.leadership.find(l => l.role === 'Chủ tịch')?.name || 'Chủ tịch');
+        toast.success('Báo cáo đã hoàn thành', {
+          description: 'Báo cáo Chủ tịch đã được gửi và đồng bộ real-time lên Tổng quan',
+          duration: 5000
+        });
+      }}>
           <Send className="h-5 w-5 mr-2" />
           Báo cáo
         </Button>
       </div>
-    </div>
-  );
+    </div>;
 }
