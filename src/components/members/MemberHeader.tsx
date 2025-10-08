@@ -38,6 +38,7 @@ export const MemberHeader = ({ language, toggleLanguage, currentText }: MemberHe
             <a href="/members" className="text-[#2E2E2E] font-semibold transition-colors">{currentText.nav.members}</a>
             <a href="/schedule" className="text-white hover:text-[#2E2E2E] transition-colors">{currentText.nav.schedule}</a>
             <a href="/kpi-hall-of-impact" className="text-white hover:text-[#2E2E2E] transition-colors">{currentText.nav.kpi}</a>
+            <a href="/media" className="text-white hover:text-[#2E2E2E] transition-colors">{currentText.nav.media}</a>
             <a href="/contact" className="text-white hover:text-[#2E2E2E] transition-colors">{currentText.nav.contact}</a>
           </nav>
 
@@ -57,6 +58,7 @@ export const MemberHeader = ({ language, toggleLanguage, currentText }: MemberHe
             <a href="/members" className="block px-3 py-2 text-[#2E2E2E] font-semibold">{currentText.nav.members}</a>
             <a href="/schedule" className="block px-3 py-2 text-white hover:text-[#2E2E2E]">{currentText.nav.schedule}</a>
             <a href="/kpi-hall-of-impact" className="block px-3 py-2 text-white hover:text-[#2E2E2E]">{currentText.nav.kpi}</a>
+            <a href="/media" className="block px-3 py-2 text-white hover:text-[#2E2E2E]">{currentText.nav.media}</a>
             <a href="/contact" className="block px-3 py-2 text-white hover:text-[#2E2E2E]">{currentText.nav.contact}</a>
             <button 
               onClick={toggleLanguage}

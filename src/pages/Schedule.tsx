@@ -58,6 +58,7 @@ const Schedule = () => {
         about: "Giới thiệu",
         members: "Thành viên",
         schedule: "Lịch họp",
+        kpi: "KPI Hall",
         media: "Media Hub",
         contact: "Liên hệ"
       },
@@ -116,6 +117,7 @@ const Schedule = () => {
         about: "About",
         members: "Members",
         schedule: "Schedule",
+        kpi: "KPI Hall",
         media: "Media Hub",
         contact: "Contact"
       },
@@ -241,6 +243,7 @@ const Schedule = () => {
               <a href="/about" className="text-white hover:text-[#2E2E2E] transition-colors">{currentText.nav.about}</a>
               <a href="/members" className="text-white hover:text-[#2E2E2E] transition-colors">{currentText.nav.members}</a>
               <a href="/schedule" className="text-[#2E2E2E] font-semibold transition-colors">{currentText.nav.schedule}</a>
+              <a href="/kpi-hall-of-impact" className="text-white hover:text-[#2E2E2E] transition-colors">{currentText.nav.kpi}</a>
               <a href="/media" className="text-white hover:text-[#2E2E2E] transition-colors">{currentText.nav.media}</a>
               <a href="/contact" className="text-white hover:text-[#2E2E2E] transition-colors">{currentText.nav.contact}</a>
             </nav>
@@ -259,6 +262,7 @@ const Schedule = () => {
               <a href="/about" className="block px-3 py-2 text-white hover:text-[#2E2E2E]">{currentText.nav.about}</a>
               <a href="/members" className="block px-3 py-2 text-white hover:text-[#2E2E2E]">{currentText.nav.members}</a>
               <a href="/schedule" className="block px-3 py-2 text-[#2E2E2E] font-semibold">{currentText.nav.schedule}</a>
+              <a href="/kpi-hall-of-impact" className="block px-3 py-2 text-white hover:text-[#2E2E2E]">{currentText.nav.kpi}</a>
               <a href="/media" className="block px-3 py-2 text-white hover:text-[#2E2E2E]">{currentText.nav.media}</a>
               <a href="/contact" className="block px-3 py-2 text-white hover:text-[#2E2E2E]">{currentText.nav.contact}</a>
               <button onClick={toggleLanguage} className="block px-3 py-2 text-white hover:text-[#2E2E2E] text-left w-full">

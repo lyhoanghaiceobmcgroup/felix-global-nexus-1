@@ -47,6 +47,7 @@ const Index = () => {
         members: "Thành viên",
         schedule: "Lịch họp",
         kpi: "KPI Hall",
+        media: "Media Hub",
         contact: "Liên hệ"
       },
       hero: {
@@ -121,6 +122,7 @@ const Index = () => {
         members: "Members",
         schedule: "Schedule",
         kpi: "KPI Hall",
+        media: "Media Hub",
         contact: "Contact"
       },
       hero: {
@@ -250,6 +252,7 @@ const Index = () => {
               <a href="/members" className="text-white hover:text-gray-200 transition-colors">{currentText.nav.members}</a>
               <a href="/schedule" className="text-white hover:text-gray-200 transition-colors">{currentText.nav.schedule}</a>
               <a href="/kpi-hall-of-impact" className="text-white hover:text-gray-200 transition-colors">{currentText.nav.kpi}</a>
+              <a href="/media" className="text-white hover:text-gray-200 transition-colors">{currentText.nav.media}</a>
               <a href="/contact" className="text-white hover:text-gray-200 transition-colors">{currentText.nav.contact}</a>
             </nav>
 
@@ -270,6 +273,7 @@ const Index = () => {
               <a href="/members" className="block px-3 py-2 text-white hover:text-gray-200">{currentText.nav.members}</a>
               <a href="/schedule" className="block px-3 py-2 text-white hover:text-gray-200">{currentText.nav.schedule}</a>
               <a href="/kpi-hall-of-impact" className="block px-3 py-2 text-white hover:text-gray-200">{currentText.nav.kpi}</a>
+              <a href="/media" className="block px-3 py-2 text-white hover:text-gray-200">{currentText.nav.media}</a>
               <a href="/contact" className="block px-3 py-2 text-white hover:text-gray-200">{currentText.nav.contact}</a>
               <button onClick={toggleLanguage} className="block px-3 py-2 text-white hover:text-gray-200 text-left w-full">
                 {language === 'vi' ? 'English' : 'Tiếng Việt'}

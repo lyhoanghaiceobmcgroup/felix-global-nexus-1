@@ -29,7 +29,8 @@ const Members = () => {
         about: "Giới thiệu", 
         members: "Thành viên",
         schedule: "Lịch họp",
-        kpi: "KPI & Vinh danh",
+        kpi: "KPI Hall",
+        media: "Media Hub",
         contact: "Liên hệ"
       },
       hero: {
@@ -91,7 +92,8 @@ const Members = () => {
         about: "About",
         members: "Members", 
         schedule: "Schedule",
-        kpi: "KPI & Recognition",
+        kpi: "KPI Hall",
+        media: "Media Hub",
         contact: "Contact"
       },
       hero: {
