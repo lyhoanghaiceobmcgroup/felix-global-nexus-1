@@ -4,11 +4,43 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { FileText, Image, Youtube, Download, Share2, Play, Search, Filter, Upload, Lock, Eye } from "lucide-react";
+import { FileText, Image, Youtube, Download, Share2, Play, Search, Filter, Upload, Lock, Eye, Menu, X } from "lucide-react";
 
 const MediaHub = () => {
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [language, setLanguage] = useState('vi');
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleLanguage = () => setLanguage(language === 'vi' ? 'en' : 'vi');
+
+  const text = {
+    vi: {
+      nav: {
+        home: "Trang chủ",
+        about: "Giới thiệu",
+        members: "Thành viên",
+        schedule: "Lịch họp",
+        kpi: "KPI Hall",
+        media: "Media Hub",
+        contact: "Liên hệ"
+      }
+    },
+    en: {
+      nav: {
+        home: "Home",
+        about: "About",
+        members: "Members",
+        schedule: "Schedule",
+        kpi: "KPI Hall",
+        media: "Media Hub",
+        contact: "Contact"
+      }
+    }
+  };
+
+  const currentText = text[language];
 
   // Mock data for documents
   const documents = [
@@ -79,23 +111,86 @@ const MediaHub = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-gray-100">
+    <div className="min-h-screen bg-white font-inter">
       {/* Header */}
-      <div className="bni-professional-gradient text-white py-16">
-        <div className="container mx-auto px-4 text-center">
-          <div className="animate-fade-in">
+      <header className="bg-[#D71920] shadow-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center">
+              <div className="text-2xl font-bold text-white">
+                BNI <span className="text-white">FELIX</span>
+              </div>
+            </div>
+            
+            {/* Language Toggle */}
+            <div className="hidden md:flex items-center space-x-4">
+              <button 
+                onClick={toggleLanguage}
+                className="text-white hover:text-gray-200 transition-colors text-sm border border-white px-3 py-1 rounded"
+              >
+                {language === 'vi' ? 'EN' : 'VI'}
+              </button>
+            </div>
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex space-x-8">
+              <a href="/" className="text-white hover:text-gray-200 transition-colors">{currentText.nav.home}</a>
+              <a href="/about" className="text-white hover:text-gray-200 transition-colors">{currentText.nav.about}</a>
+              <a href="/members" className="text-white hover:text-gray-200 transition-colors">{currentText.nav.members}</a>
+              <a href="/schedule" className="text-white hover:text-gray-200 transition-colors">{currentText.nav.schedule}</a>
+              <a href="/kpi-hall-of-impact" className="text-white hover:text-gray-200 transition-colors">{currentText.nav.kpi}</a>
+              <a href="/media" className="text-white border-b-2 border-white transition-colors">{currentText.nav.media}</a>
+              <a href="/contact" className="text-white hover:text-gray-200 transition-colors">{currentText.nav.contact}</a>
+            </nav>
+
+            {/* Mobile menu button */}
+            <div className="md:hidden">
+              <button onClick={toggleMenu} className="text-white">
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-[#D71920] border-t border-[#8B0000]">
+            <div className="px-2 pt-2 pb-3 space-y-1">
+              <a href="/" className="block px-3 py-2 text-white hover:text-gray-200">{currentText.nav.home}</a>
+              <a href="/about" className="block px-3 py-2 text-white hover:text-gray-200">{currentText.nav.about}</a>
+              <a href="/members" className="block px-3 py-2 text-white hover:text-gray-200">{currentText.nav.members}</a>
+              <a href="/schedule" className="block px-3 py-2 text-white hover:text-gray-200">{currentText.nav.schedule}</a>
+              <a href="/kpi-hall-of-impact" className="block px-3 py-2 text-white hover:text-gray-200">{currentText.nav.kpi}</a>
+              <a href="/media" className="block px-3 py-2 text-white border-l-4 border-white">{currentText.nav.media}</a>
+              <a href="/contact" className="block px-3 py-2 text-white hover:text-gray-200">{currentText.nav.contact}</a>
+              <button 
+                onClick={toggleLanguage}
+                className="block px-3 py-2 text-white hover:text-gray-200 text-left w-full"
+              >
+                {language === 'vi' ? 'English' : 'Tiếng Việt'}
+              </button>
+            </div>
+          </div>
+        )}
+      </header>
+
+      {/* Hero Banner */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-[#D71920] via-[#8B0000] to-[#D71920] text-white">
+        <div className="absolute inset-0 bg-black/20"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+          <div className="text-center animate-fade-in">
             <h1 className="text-4xl md:text-6xl font-bold mb-4">
               📺 MEDIA HUB
             </h1>
-            <p className="text-xl md:text-2xl mb-2 text-gray-100">
+            <p className="text-xl md:text-2xl mb-2 text-white/90">
               TRUYỀN THÔNG & TÀI NGUYÊN
             </p>
-            <p className="text-lg text-gray-200">
+            <p className="text-lg text-white/80">
               Media & Resources Center
             </p>
           </div>
         </div>
-      </div>
+      </section>
 
       <div className="container mx-auto px-4 py-12">
         {/* Search and Filter */}
