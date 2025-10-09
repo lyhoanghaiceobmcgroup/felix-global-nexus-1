@@ -14,18 +14,46 @@ export default function WebsiteAdmin() {
   const [activeTab, setActiveTab] = useState("home");
   const [isSaving, setIsSaving] = useState(false);
 
-  // Home Page Content
+  // Home Page Content - đồng bộ với Index.tsx
   const [homeContent, setHomeContent] = useState({
-    heroTitle: "Chào mừng đến với BNI FELIX Chapter",
-    heroSubtitle: "Kết nối - Phát triển - Thành công",
-    heroDescription: "FELIX là cộng đồng doanh nhân năng động, nơi kết nối các chuyên gia và doanh nghiệp...",
-    heroImage: "/placeholder.svg",
+    // Hero Section
+    heroTitle: "FELIX Chapter – Nơi kết nối kinh doanh vững mạnh",
+    heroSubtitle: "Chapter chuyên nghiệp thuộc BNI Vietnam - Xây dựng mạng lưới kinh doanh bền vững thông qua việc trao referral chất lượng",
+    heroImage: "/src/assets/bni-meeting-hero.jpg",
+    
+    // Quick Intro Section
+    introTitle: "Giới thiệu Chapter FELIX",
+    introDescription: "FELIX Chapter là cộng đồng doanh nhân chuyên nghiệp, nơi các thành viên xây dựng mối quan hệ kinh doanh bền vững. Chúng tôi cam kết tạo ra môi trường tin cậy để các doanh nghiệp phát triển thông qua referral chất lượng và hỗ trợ lẫn nhau.",
+    
+    // Stats
     stats: [
-      { label: "Thành viên", value: "53+", icon: "Users" },
-      { label: "Referrals/năm", value: "1,200+", icon: "TrendingUp" },
-      { label: "Doanh thu", value: ">50 tỷ", icon: "DollarSign" },
-      { label: "Cuộc họp 1-1", value: "1,000+", icon: "Calendar" }
-    ]
+      { label: "Thành viên", value: "35+", icon: "Users" },
+      { label: "Referral/tháng", value: "120+", icon: "TrendingUp" },
+      { label: "Doanh thu tạo ra", value: "15B+", icon: "BarChart3" }
+    ],
+    
+    // Schedule Info
+    nextMeetingDate: "Thứ 3, 18/06/2024",
+    nextMeetingTime: "6:45 AM - 8:45 AM",
+    nextSpeaker: "Nguyễn Văn A",
+    nextTopic: "Chiến lược Marketing 2024",
+    
+    // Featured Members
+    featuredMembers: [
+      { name: "Nguyễn Văn A", industry: "Marketing Digital", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" },
+      { name: "Trần Thị B", industry: "Thiết kế nội thất", avatar: "/placeholder.svg" },
+      { name: "Lê Minh C", industry: "Tư vấn tài chính", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" },
+      { name: "Phạm Thu D", industry: "Bất động sản", avatar: "/placeholder.svg" },
+      { name: "Hoàng Văn E", industry: "Công nghệ IT", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" }
+    ],
+    
+    // KPI Section
+    kpiReferralCompletion: 85,
+    kpiOneOnOneCompletion: 92,
+    memberOfWeek: "Nguyễn Văn A",
+    
+    // Open Industries
+    openIndustries: ["Luật sư/Tư vấn pháp lý", "Bảo hiểm", "Dịch vụ kế toán", "In ấn/Quảng cáo", "Vận tải/Logistics", "Y tế/Sức khỏe"]
   });
 
   // About Page Content
@@ -146,15 +174,6 @@ export default function WebsiteAdmin() {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Mô tả</Label>
-                  <Textarea
-                    value={homeContent.heroDescription}
-                    onChange={(e) => setHomeContent({...homeContent, heroDescription: e.target.value})}
-                    placeholder="Nhập mô tả"
-                    rows={4}
-                  />
-                </div>
 
                 <div className="space-y-2">
                   <Label>Hình ảnh Hero</Label>
@@ -171,10 +190,34 @@ export default function WebsiteAdmin() {
                 </div>
               </div>
 
+              {/* Quick Intro Section */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Giới thiệu Chapter</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề giới thiệu</Label>
+                  <Input
+                    value={homeContent.introTitle}
+                    onChange={(e) => setHomeContent({...homeContent, introTitle: e.target.value})}
+                    placeholder="Nhập tiêu đề giới thiệu"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Mô tả giới thiệu</Label>
+                  <Textarea
+                    value={homeContent.introDescription}
+                    onChange={(e) => setHomeContent({...homeContent, introDescription: e.target.value})}
+                    placeholder="Nhập mô tả giới thiệu"
+                    rows={4}
+                  />
+                </div>
+              </div>
+
               {/* Stats Section */}
               <div className="space-y-4">
                 <h3 className="text-xl font-bold border-b pb-2">Thống kê Tổng quan</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {homeContent.stats.map((stat, index) => (
                     <Card key={index} className="border-bni-gold">
                       <CardContent className="pt-4 space-y-2">
@@ -209,6 +252,164 @@ export default function WebsiteAdmin() {
                 <Button variant="outline" className="w-full">
                   <Plus className="h-4 w-4 mr-2" />
                   Thêm chỉ số
+                </Button>
+              </div>
+
+              {/* Schedule Section */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Lịch họp tuần tới</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Ngày họp</Label>
+                    <Input
+                      value={homeContent.nextMeetingDate}
+                      onChange={(e) => setHomeContent({...homeContent, nextMeetingDate: e.target.value})}
+                      placeholder="VD: Thứ 3, 18/06/2024"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Giờ họp</Label>
+                    <Input
+                      value={homeContent.nextMeetingTime}
+                      onChange={(e) => setHomeContent({...homeContent, nextMeetingTime: e.target.value})}
+                      placeholder="VD: 6:45 AM - 8:45 AM"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Diễn giả</Label>
+                    <Input
+                      value={homeContent.nextSpeaker}
+                      onChange={(e) => setHomeContent({...homeContent, nextSpeaker: e.target.value})}
+                      placeholder="Tên diễn giả"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Chủ đề</Label>
+                    <Input
+                      value={homeContent.nextTopic}
+                      onChange={(e) => setHomeContent({...homeContent, nextTopic: e.target.value})}
+                      placeholder="Chủ đề trình bày"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Featured Members Section */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Thành viên nổi bật</h3>
+                <div className="space-y-3">
+                  {homeContent.featuredMembers.map((member, index) => (
+                    <Card key={index} className="border-bni-gold">
+                      <CardContent className="pt-4 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label className="font-semibold">Thành viên {index + 1}</Label>
+                          <Button variant="ghost" size="sm">
+                            <Trash2 className="h-4 w-4 text-red-600" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                          <Input
+                            placeholder="Tên"
+                            value={member.name}
+                            onChange={(e) => {
+                              const newMembers = [...homeContent.featuredMembers];
+                              newMembers[index].name = e.target.value;
+                              setHomeContent({...homeContent, featuredMembers: newMembers});
+                            }}
+                          />
+                          <Input
+                            placeholder="Ngành nghề"
+                            value={member.industry}
+                            onChange={(e) => {
+                              const newMembers = [...homeContent.featuredMembers];
+                              newMembers[index].industry = e.target.value;
+                              setHomeContent({...homeContent, featuredMembers: newMembers});
+                            }}
+                          />
+                          <Input
+                            placeholder="URL Avatar"
+                            value={member.avatar}
+                            onChange={(e) => {
+                              const newMembers = [...homeContent.featuredMembers];
+                              newMembers[index].avatar = e.target.value;
+                              setHomeContent({...homeContent, featuredMembers: newMembers});
+                            }}
+                          />
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+                <Button variant="outline" className="w-full">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Thêm thành viên nổi bật
+                </Button>
+              </div>
+
+              {/* KPI Section */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">KPI & Vinh danh</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Hoàn thành Referral (%)</Label>
+                    <Input
+                      type="number"
+                      value={homeContent.kpiReferralCompletion}
+                      onChange={(e) => setHomeContent({...homeContent, kpiReferralCompletion: parseInt(e.target.value)})}
+                      placeholder="85"
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label>Hoàn thành 1-1 (%)</Label>
+                    <Input
+                      type="number"
+                      value={homeContent.kpiOneOnOneCompletion}
+                      onChange={(e) => setHomeContent({...homeContent, kpiOneOnOneCompletion: parseInt(e.target.value)})}
+                      placeholder="92"
+                    />
+                  </div>
+
+                  <div className="space-y-2 md:col-span-2">
+                    <Label>Thành viên xuất sắc tuần</Label>
+                    <Input
+                      value={homeContent.memberOfWeek}
+                      onChange={(e) => setHomeContent({...homeContent, memberOfWeek: e.target.value})}
+                      placeholder="Tên thành viên xuất sắc"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Open Industries Section */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Ngành nghề trống</h3>
+                <div className="space-y-2">
+                  {homeContent.openIndustries.map((industry, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        value={industry}
+                        onChange={(e) => {
+                          const newIndustries = [...homeContent.openIndustries];
+                          newIndustries[index] = e.target.value;
+                          setHomeContent({...homeContent, openIndustries: newIndustries});
+                        }}
+                        placeholder={`Ngành nghề ${index + 1}`}
+                      />
+                      <Button variant="ghost" size="icon">
+                        <Trash2 className="h-4 w-4 text-red-600" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+                <Button variant="outline" className="w-full">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Thêm ngành nghề
                 </Button>
               </div>
 
