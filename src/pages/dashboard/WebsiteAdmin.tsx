@@ -56,15 +56,37 @@ export default function WebsiteAdmin() {
     openIndustries: ["Luật sư/Tư vấn pháp lý", "Bảo hiểm", "Dịch vụ kế toán", "In ấn/Quảng cáo", "Vận tải/Logistics", "Y tế/Sức khỏe"]
   });
 
-  // About Page Content
+  // About Page Content - đồng bộ với About.tsx
   const [aboutContent, setAboutContent] = useState({
+    heroTitle: "Giới thiệu Chapter FELIX",
+    heroSubtitle: "Kết nối cộng đồng doanh nghiệp thành công - bền vững - nhân văn",
     mission: "Kết nối cộng đồng doanh nghiệp thành công – bền vững – nhân văn.",
     vision: "Trở thành chapter dẫn đầu về chỉ số Referral, văn hóa kết nối và giá trị cộng đồng trong hệ thống BNI toàn quốc.",
+    coreValuesTitle: "Giá trị cốt lõi của BNI (BNI Core Values)",
     values: [
-      "Givers Gain® – Cho là Nhận",
-      "Xây dựng mối quan hệ lâu dài",
-      "Trách nhiệm & Cam kết",
-      "Truyền cảm hứng & hỗ trợ"
+      { name: "Givers Gain® – Cho là Nhận", icon: "Heart" },
+      { name: "Xây dựng mối quan hệ lâu dài", icon: "Heart" },
+      { name: "Trách nhiệm & Cam kết", icon: "Target" },
+      { name: "Truyền cảm hứng & hỗ trợ", icon: "TrendingUp" },
+      { name: "Tư duy tích cực", icon: "Star" },
+      { name: "Gắn bó với trách nhiệm cộng đồng", icon: "Users" },
+      { name: "Công nhận thành tựu", icon: "Award" }
+    ],
+    timelineTitle: "Lịch sử hình thành Chapter FELIX",
+    timeline: [
+      { year: "2020", presidentA: "Nguyễn Văn A", presidentB: "Lê Minh T", achievement: "Thành lập FELIX với 21 thành viên ban đầu", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" },
+      { year: "2021", presidentA: "Trần Thị B", presidentB: "Nguyễn Hữu D", achievement: "Mở rộng lên 35 thành viên, xây dựng văn hóa 1-1", avatar: "/placeholder.svg" },
+      { year: "2022", presidentA: "Lê Quốc C", presidentB: "Trịnh Thu Yến", achievement: "Vượt KPI BNI Vietnam, truyền thông mạnh mẽ", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" },
+      { year: "2023", presidentA: "Phạm Dương D", presidentB: "Đặng Quốc K", achievement: "Tổ chức hội thảo FELIX CONNECT 300+ người", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" },
+      { year: "2024", presidentA: "Vũ Mai E", presidentB: "Nguyễn Đức N", achievement: "Gắn kết hệ sinh thái đối tác, doanh thu Referral cao nhất miền Bắc", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" },
+      { year: "2025", presidentA: "Đinh Trí F", presidentB: "Trần Thái Hưng", achievement: "Chuyển đổi số toàn diện – tối ưu dashboard hoạt động", avatar: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80" }
+    ],
+    highlightsTitle: "Các điểm nổi bật FELIX hiện tại",
+    highlights: [
+      { label: "53+ thành viên, đa ngành nghề", icon: "Users" },
+      { label: "Tổng doanh thu Referral đạt >50 tỷ VNĐ", icon: "TrendingUp" },
+      { label: "Trung bình 1,200+ Referral/năm, hơn 1,000 cuộc 1-1", icon: "Star" },
+      { label: "Top 3 chapter miền Bắc về hiệu quả Referral", icon: "Trophy" }
     ]
   });
 
@@ -436,50 +458,215 @@ export default function WebsiteAdmin() {
                 <Info className="h-6 w-6 text-bni-red" />
                 Quản lý Trang Giới thiệu
               </CardTitle>
-              <CardDescription>Chỉnh sửa Sứ mệnh, Tầm nhìn và Giá trị cốt lõi</CardDescription>
+              <CardDescription>Chỉnh sửa toàn bộ nội dung trang Giới thiệu</CardDescription>
             </CardHeader>
             <CardContent className="pt-6 space-y-6">
-              <div className="space-y-2">
-                <Label>Sứ mệnh *</Label>
-                <Textarea
-                  value={aboutContent.mission}
-                  onChange={(e) => setAboutContent({...aboutContent, mission: e.target.value})}
-                  placeholder="Nhập sứ mệnh"
-                  rows={3}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label>Tầm nhìn *</Label>
-                <Textarea
-                  value={aboutContent.vision}
-                  onChange={(e) => setAboutContent({...aboutContent, vision: e.target.value})}
-                  placeholder="Nhập tầm nhìn"
-                  rows={3}
-                />
-              </div>
-
+              {/* Hero Section */}
               <div className="space-y-4">
-                <Label className="text-lg font-bold">Giá trị cốt lõi</Label>
-                {aboutContent.values.map((value, index) => (
-                  <div key={index} className="flex gap-2">
-                    <Input
-                      value={value}
-                      onChange={(e) => {
-                        const newValues = [...aboutContent.values];
-                        newValues[index] = e.target.value;
-                        setAboutContent({...aboutContent, values: newValues});
-                      }}
-                      placeholder={`Giá trị ${index + 1}`}
-                    />
-                    <Button variant="ghost" size="icon">
-                      <Trash2 className="h-4 w-4 text-red-600" />
-                    </Button>
-                  </div>
-                ))}
+                <h3 className="text-xl font-bold border-b pb-2">Hero Section</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề chính</Label>
+                  <Input
+                    value={aboutContent.heroTitle}
+                    onChange={(e) => setAboutContent({...aboutContent, heroTitle: e.target.value})}
+                    placeholder="Nhập tiêu đề chính"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Phụ đề</Label>
+                  <Input
+                    value={aboutContent.heroSubtitle}
+                    onChange={(e) => setAboutContent({...aboutContent, heroSubtitle: e.target.value})}
+                    placeholder="Nhập phụ đề"
+                  />
+                </div>
+              </div>
+
+              {/* Mission & Vision */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Sứ mệnh & Tầm nhìn</h3>
+                
+                <div className="space-y-2">
+                  <Label>Sứ mệnh *</Label>
+                  <Textarea
+                    value={aboutContent.mission}
+                    onChange={(e) => setAboutContent({...aboutContent, mission: e.target.value})}
+                    placeholder="Nhập sứ mệnh"
+                    rows={3}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Tầm nhìn *</Label>
+                  <Textarea
+                    value={aboutContent.vision}
+                    onChange={(e) => setAboutContent({...aboutContent, vision: e.target.value})}
+                    placeholder="Nhập tầm nhìn"
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              {/* Core Values */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Giá trị cốt lõi BNI</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề phần giá trị cốt lõi</Label>
+                  <Input
+                    value={aboutContent.coreValuesTitle}
+                    onChange={(e) => setAboutContent({...aboutContent, coreValuesTitle: e.target.value})}
+                    placeholder="Tiêu đề"
+                  />
+                </div>
+
+                <Label className="text-lg font-semibold">Danh sách giá trị cốt lõi (7 giá trị)</Label>
+                <div className="space-y-2">
+                  {aboutContent.values.map((value, index) => (
+                    <div key={index} className="flex gap-2">
+                      <Input
+                        value={value.name}
+                        onChange={(e) => {
+                          const newValues = [...aboutContent.values];
+                          newValues[index].name = e.target.value;
+                          setAboutContent({...aboutContent, values: newValues});
+                        }}
+                        placeholder={`Giá trị ${index + 1}`}
+                      />
+                      <Button variant="ghost" size="icon">
+                        <Trash2 className="h-4 w-4 text-red-600" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
                 <Button variant="outline" className="w-full">
                   <Plus className="h-4 w-4 mr-2" />
                   Thêm giá trị
+                </Button>
+              </div>
+
+              {/* Timeline */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Lịch sử hình thành (2020-2025)</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề phần lịch sử</Label>
+                  <Input
+                    value={aboutContent.timelineTitle}
+                    onChange={(e) => setAboutContent({...aboutContent, timelineTitle: e.target.value})}
+                    placeholder="Tiêu đề lịch sử"
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  {aboutContent.timeline.map((item, index) => (
+                    <Card key={index} className="border-bni-gold">
+                      <CardContent className="pt-4 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label className="font-semibold">Năm {item.year}</Label>
+                          <Button variant="ghost" size="sm">
+                            <Trash2 className="h-4 w-4 text-red-600" />
+                          </Button>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                          <Input
+                            placeholder="Năm"
+                            value={item.year}
+                            onChange={(e) => {
+                              const newTimeline = [...aboutContent.timeline];
+                              newTimeline[index].year = e.target.value;
+                              setAboutContent({...aboutContent, timeline: newTimeline});
+                            }}
+                          />
+                          <Input
+                            placeholder="Chủ tịch A"
+                            value={item.presidentA}
+                            onChange={(e) => {
+                              const newTimeline = [...aboutContent.timeline];
+                              newTimeline[index].presidentA = e.target.value;
+                              setAboutContent({...aboutContent, timeline: newTimeline});
+                            }}
+                          />
+                          <Input
+                            placeholder="Chủ tịch B"
+                            value={item.presidentB}
+                            onChange={(e) => {
+                              const newTimeline = [...aboutContent.timeline];
+                              newTimeline[index].presidentB = e.target.value;
+                              setAboutContent({...aboutContent, timeline: newTimeline});
+                            }}
+                          />
+                          <Input
+                            placeholder="URL Avatar"
+                            value={item.avatar}
+                            onChange={(e) => {
+                              const newTimeline = [...aboutContent.timeline];
+                              newTimeline[index].avatar = e.target.value;
+                              setAboutContent({...aboutContent, timeline: newTimeline});
+                            }}
+                          />
+                        </div>
+                        <Textarea
+                          placeholder="Thành tựu"
+                          value={item.achievement}
+                          onChange={(e) => {
+                            const newTimeline = [...aboutContent.timeline];
+                            newTimeline[index].achievement = e.target.value;
+                            setAboutContent({...aboutContent, timeline: newTimeline});
+                          }}
+                          rows={2}
+                        />
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+                <Button variant="outline" className="w-full">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Thêm năm mới
+                </Button>
+              </div>
+
+              {/* Highlights */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Điểm nổi bật FELIX</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề phần điểm nổi bật</Label>
+                  <Input
+                    value={aboutContent.highlightsTitle}
+                    onChange={(e) => setAboutContent({...aboutContent, highlightsTitle: e.target.value})}
+                    placeholder="Tiêu đề điểm nổi bật"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {aboutContent.highlights.map((highlight, index) => (
+                    <Card key={index} className="border-bni-gold">
+                      <CardContent className="pt-4 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <Label className="font-semibold">Điểm nổi bật {index + 1}</Label>
+                          <Button variant="ghost" size="sm">
+                            <Trash2 className="h-4 w-4 text-red-600" />
+                          </Button>
+                        </div>
+                        <Input
+                          placeholder="Nội dung điểm nổi bật"
+                          value={highlight.label}
+                          onChange={(e) => {
+                            const newHighlights = [...aboutContent.highlights];
+                            newHighlights[index].label = e.target.value;
+                            setAboutContent({...aboutContent, highlights: newHighlights});
+                          }}
+                        />
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+                <Button variant="outline" className="w-full">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Thêm điểm nổi bật
                 </Button>
               </div>
 
