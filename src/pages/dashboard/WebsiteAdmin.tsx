@@ -158,6 +158,120 @@ export default function WebsiteAdmin() {
     ]
   });
 
+  // KPI Hall Content - đồng bộ với KpiHallOfImpact.tsx
+  const [kpiContent, setKpiContent] = useState({
+    // Hero Section
+    titleVi: "KPI & Hall of Impact",
+    titleEn: "KPI & Hall of Impact",
+    subtitleVi: "Bảng thành tích và vinh danh thành viên xuất sắc BNI FELIX",
+    subtitleEn: "Performance dashboard and recognition of outstanding BNI FELIX members",
+    
+    // KPI Overview Stats
+    totalReferrals: 127,
+    referralReceived: 89,
+    referralValue: "2.1B",
+    meetings: 142,
+    attendance: 95,
+    
+    // KPI Table Data
+    kpiTableMembers: [
+      {
+        name: "Nguyễn Văn A",
+        company: "ABC Marketing",
+        industry: "Marketing & Digital",
+        referralsGiven: 15,
+        referralsReceived: 12,
+        value: "450,000,000",
+        oneonone: 8,
+        attendance: 95,
+        growth: 22,
+        avatar: "photo-1472099645785-5658abf4ff4e"
+      },
+      {
+        name: "Trần Thị B",
+        company: "XYZ Solutions",
+        industry: "IT & Technology",
+        referralsGiven: 12,
+        referralsReceived: 10,
+        value: "320,000,000",
+        oneonone: 6,
+        attendance: 88,
+        growth: 15,
+        avatar: "photo-1494790108755-2616b612b786"
+      },
+      {
+        name: "Lê Minh C",
+        company: "Legal Partners",
+        industry: "Legal Services",
+        referralsGiven: 10,
+        referralsReceived: 8,
+        value: "280,000,000",
+        oneonone: 7,
+        attendance: 92,
+        growth: 18,
+        avatar: "photo-1507003211169-0a1dd7228f2d"
+      }
+    ],
+    
+    // Hall of Fame Data
+    hallOfFame: {
+      referralLeader: {
+        name: "Nguyễn Văn A",
+        company: "ABC Marketing",
+        achievement: "15 referrals",
+        industry: "Marketing & Digital",
+        avatar: "photo-1472099645785-5658abf4ff4e"
+      },
+      topConnector: {
+        name: "Trần Thị B",
+        company: "XYZ Solutions",
+        achievement: "12 referrals nhận",
+        industry: "IT & Technology",
+        avatar: "photo-1494790108755-2616b612b786"
+      },
+      topOneOne: {
+        name: "Lê Minh C",
+        company: "Legal Partners",
+        achievement: "12 cuộc họp 1-1",
+        industry: "Legal Services",
+        avatar: "photo-1507003211169-0a1dd7228f2d"
+      },
+      mvpMonth: {
+        name: "Phạm Thị D",
+        company: "Creative Studio",
+        achievement: "95% điểm tổng hợp",
+        industry: "Design & Creative",
+        avatar: "photo-1438761681033-6461ffad8d80"
+      }
+    },
+    
+    // Special Achievements
+    specialAchievements: [
+      {
+        name: "Hoàng Văn E",
+        company: "Finance Group",
+        achievement: "Giới thiệu 5 thành viên mới",
+        type: "newMember",
+        avatar: "photo-1560250097-0b93528c311a"
+      },
+      {
+        name: "Ngô Thị F",
+        company: "Event Solutions",
+        achievement: "Đối tác tài trợ chính",
+        type: "sponsor",
+        avatar: "photo-1580489944761-15a19d654956"
+      },
+      {
+        name: "Vũ Minh G",
+        company: "Real Estate Pro",
+        achievement: "Đạt 1 tỷ VNĐ referral",
+        type: "milestone",
+        avatar: "photo-1519085360753-af0119f7cbe7"
+      }
+    ]
+  });
+
+
   // Contact Info
   const [contactInfo, setContactInfo] = useState({
     phone: "084 890 5555",
@@ -1148,20 +1262,406 @@ export default function WebsiteAdmin() {
                 <Trophy className="h-6 w-6 text-bni-red" />
                 Quản lý KPI & Hall of Impact
               </CardTitle>
-              <CardDescription>Cập nhật tiêu đề và mô tả trang</CardDescription>
+              <CardDescription>Cập nhật thông tin KPI và bảng vinh danh</CardDescription>
             </CardHeader>
-            <CardContent className="pt-6 space-y-4">
-              <div className="space-y-2">
-                <Label>Tiêu đề trang</Label>
-                <Input defaultValue="KPI & Hall of Impact" />
+            <CardContent className="pt-6 space-y-6">
+              {/* Hero Section */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Tiêu đề & Phụ đề</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Tiêu đề (Tiếng Việt)</Label>
+                    <Input
+                      value={kpiContent.titleVi}
+                      onChange={(e) => setKpiContent({...kpiContent, titleVi: e.target.value})}
+                      placeholder="KPI & Hall of Impact"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Tiêu đề (English)</Label>
+                    <Input
+                      value={kpiContent.titleEn}
+                      onChange={(e) => setKpiContent({...kpiContent, titleEn: e.target.value})}
+                      placeholder="KPI & Hall of Impact"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Phụ đề (Tiếng Việt)</Label>
+                    <Textarea
+                      value={kpiContent.subtitleVi}
+                      onChange={(e) => setKpiContent({...kpiContent, subtitleVi: e.target.value})}
+                      placeholder="Bảng thành tích và vinh danh thành viên xuất sắc"
+                      rows={2}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Phụ đề (English)</Label>
+                    <Textarea
+                      value={kpiContent.subtitleEn}
+                      onChange={(e) => setKpiContent({...kpiContent, subtitleEn: e.target.value})}
+                      placeholder="Performance dashboard and recognition of outstanding members"
+                      rows={2}
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>Mô tả</Label>
-                <Textarea
-                  defaultValue="Bảng thành tích và vinh danh thành viên xuất sắc BNI FELIX"
-                  rows={3}
-                />
+              {/* KPI Overview Stats */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Tổng quan KPI Chapter</h3>
+                
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                  <div className="space-y-2">
+                    <Label>Tổng Referral</Label>
+                    <Input
+                      type="number"
+                      value={kpiContent.totalReferrals}
+                      onChange={(e) => setKpiContent({...kpiContent, totalReferrals: parseInt(e.target.value) || 0})}
+                      placeholder="127"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Referral nhận</Label>
+                    <Input
+                      type="number"
+                      value={kpiContent.referralReceived}
+                      onChange={(e) => setKpiContent({...kpiContent, referralReceived: parseInt(e.target.value) || 0})}
+                      placeholder="89"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Doanh thu</Label>
+                    <Input
+                      value={kpiContent.referralValue}
+                      onChange={(e) => setKpiContent({...kpiContent, referralValue: e.target.value})}
+                      placeholder="2.1B"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Cuộc họp 1-1</Label>
+                    <Input
+                      type="number"
+                      value={kpiContent.meetings}
+                      onChange={(e) => setKpiContent({...kpiContent, meetings: parseInt(e.target.value) || 0})}
+                      placeholder="142"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label>Tỷ lệ tham dự (%)</Label>
+                    <Input
+                      type="number"
+                      value={kpiContent.attendance}
+                      onChange={(e) => setKpiContent({...kpiContent, attendance: parseInt(e.target.value) || 0})}
+                      placeholder="95"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Hall of Fame */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Hall of Impact - Bảng Vinh Danh</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Referral Leader */}
+                  <Card className="border-bni-gold">
+                    <CardHeader>
+                      <CardTitle className="text-base">🏆 Referral Leader</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <Input
+                        placeholder="Tên"
+                        value={kpiContent.hallOfFame.referralLeader.name}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            referralLeader: {...kpiContent.hallOfFame.referralLeader, name: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Công ty"
+                        value={kpiContent.hallOfFame.referralLeader.company}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            referralLeader: {...kpiContent.hallOfFame.referralLeader, company: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Thành tích"
+                        value={kpiContent.hallOfFame.referralLeader.achievement}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            referralLeader: {...kpiContent.hallOfFame.referralLeader, achievement: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Ngành nghề"
+                        value={kpiContent.hallOfFame.referralLeader.industry}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            referralLeader: {...kpiContent.hallOfFame.referralLeader, industry: e.target.value}
+                          }
+                        })}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  {/* Top Connector */}
+                  <Card className="border-bni-gold">
+                    <CardHeader>
+                      <CardTitle className="text-base">🎯 Top Connector</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <Input
+                        placeholder="Tên"
+                        value={kpiContent.hallOfFame.topConnector.name}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            topConnector: {...kpiContent.hallOfFame.topConnector, name: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Công ty"
+                        value={kpiContent.hallOfFame.topConnector.company}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            topConnector: {...kpiContent.hallOfFame.topConnector, company: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Thành tích"
+                        value={kpiContent.hallOfFame.topConnector.achievement}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            topConnector: {...kpiContent.hallOfFame.topConnector, achievement: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Ngành nghề"
+                        value={kpiContent.hallOfFame.topConnector.industry}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            topConnector: {...kpiContent.hallOfFame.topConnector, industry: e.target.value}
+                          }
+                        })}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  {/* Top 1-1 */}
+                  <Card className="border-bni-gold">
+                    <CardHeader>
+                      <CardTitle className="text-base">👥 Top 1-1 Connect</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <Input
+                        placeholder="Tên"
+                        value={kpiContent.hallOfFame.topOneOne.name}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            topOneOne: {...kpiContent.hallOfFame.topOneOne, name: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Công ty"
+                        value={kpiContent.hallOfFame.topOneOne.company}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            topOneOne: {...kpiContent.hallOfFame.topOneOne, company: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Thành tích"
+                        value={kpiContent.hallOfFame.topOneOne.achievement}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            topOneOne: {...kpiContent.hallOfFame.topOneOne, achievement: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Ngành nghề"
+                        value={kpiContent.hallOfFame.topOneOne.industry}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            topOneOne: {...kpiContent.hallOfFame.topOneOne, industry: e.target.value}
+                          }
+                        })}
+                      />
+                    </CardContent>
+                  </Card>
+
+                  {/* MVP Month */}
+                  <Card className="border-bni-gold bg-yellow-50">
+                    <CardHeader>
+                      <CardTitle className="text-base">👑 MVP Tháng</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <Input
+                        placeholder="Tên"
+                        value={kpiContent.hallOfFame.mvpMonth.name}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            mvpMonth: {...kpiContent.hallOfFame.mvpMonth, name: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Công ty"
+                        value={kpiContent.hallOfFame.mvpMonth.company}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            mvpMonth: {...kpiContent.hallOfFame.mvpMonth, company: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Thành tích"
+                        value={kpiContent.hallOfFame.mvpMonth.achievement}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            mvpMonth: {...kpiContent.hallOfFame.mvpMonth, achievement: e.target.value}
+                          }
+                        })}
+                      />
+                      <Input
+                        placeholder="Ngành nghề"
+                        value={kpiContent.hallOfFame.mvpMonth.industry}
+                        onChange={(e) => setKpiContent({
+                          ...kpiContent,
+                          hallOfFame: {
+                            ...kpiContent.hallOfFame,
+                            mvpMonth: {...kpiContent.hallOfFame.mvpMonth, industry: e.target.value}
+                          }
+                        })}
+                      />
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
+
+              {/* Special Achievements */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Đóng góp đặc biệt</h3>
+                
+                <div className="space-y-3">
+                  {kpiContent.specialAchievements.map((achievement, index) => (
+                    <Collapsible key={index}>
+                      <Card className="border-bni-gold">
+                        <CardHeader>
+                          <CollapsibleTrigger className="w-full">
+                            <div className="flex items-center justify-between">
+                              <div className="text-left">
+                                <CardTitle className="text-base">{achievement.name}</CardTitle>
+                                <CardDescription>{achievement.achievement}</CardDescription>
+                              </div>
+                              <div className="flex gap-2">
+                                <Button variant="ghost" size="sm">
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm">
+                                  <Trash2 className="h-4 w-4 text-red-600" />
+                                </Button>
+                              </div>
+                            </div>
+                          </CollapsibleTrigger>
+                        </CardHeader>
+                        <CollapsibleContent>
+                          <CardContent className="space-y-2">
+                            <Input
+                              placeholder="Tên"
+                              value={achievement.name}
+                              onChange={(e) => {
+                                const newAchievements = [...kpiContent.specialAchievements];
+                                newAchievements[index].name = e.target.value;
+                                setKpiContent({...kpiContent, specialAchievements: newAchievements});
+                              }}
+                            />
+                            <Input
+                              placeholder="Công ty"
+                              value={achievement.company}
+                              onChange={(e) => {
+                                const newAchievements = [...kpiContent.specialAchievements];
+                                newAchievements[index].company = e.target.value;
+                                setKpiContent({...kpiContent, specialAchievements: newAchievements});
+                              }}
+                            />
+                            <Input
+                              placeholder="Thành tích"
+                              value={achievement.achievement}
+                              onChange={(e) => {
+                                const newAchievements = [...kpiContent.specialAchievements];
+                                newAchievements[index].achievement = e.target.value;
+                                setKpiContent({...kpiContent, specialAchievements: newAchievements});
+                              }}
+                            />
+                            <div className="space-y-2">
+                              <Label>Loại</Label>
+                              <select
+                                className="w-full border rounded-md p-2"
+                                value={achievement.type}
+                                onChange={(e) => {
+                                  const newAchievements = [...kpiContent.specialAchievements];
+                                  newAchievements[index].type = e.target.value;
+                                  setKpiContent({...kpiContent, specialAchievements: newAchievements});
+                                }}
+                              >
+                                <option value="newMember">Giới thiệu thành viên mới</option>
+                                <option value="sponsor">Đối tác tài trợ</option>
+                                <option value="milestone">Cột mốc doanh số</option>
+                              </select>
+                            </div>
+                          </CardContent>
+                        </CollapsibleContent>
+                      </Card>
+                    </Collapsible>
+                  ))}
+                </div>
+                <Button variant="outline" className="w-full">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Thêm thành tựu đặc biệt
+                </Button>
               </div>
 
               <div className="flex justify-end gap-2 pt-4 border-t">
