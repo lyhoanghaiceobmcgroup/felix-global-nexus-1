@@ -90,6 +90,74 @@ export default function WebsiteAdmin() {
     ]
   });
 
+  // Schedule Page Content - đồng bộ với Schedule.tsx
+  const [scheduleContent, setScheduleContent] = useState({
+    titleVi: "Lịch Họp & Diễn Giả Tuần",
+    titleEn: "Meeting Schedule & Weekly Speakers",
+    subtitleVi: "Thông tin chi tiết về lịch trình họp tuần và diễn giả",
+    subtitleEn: "Detailed information about weekly meeting schedule and speakers",
+    scheduleVi: "Thứ Ba hàng tuần, 6:45 AM – 8:45 AM",
+    scheduleEn: "Tuesday Weekly, 6:45 AM – 8:45 AM",
+    locationVi: "Cung Văn Hóa Hữu Nghị Việt Xô, số 91 Trần Hưng Đạo, Hà Nội",
+    locationEn: "Vietnam-Soviet Friendship Cultural Palace, 91 Tran Hung Dao, Hanoi",
+    mapsLink: "https://maps.google.com/",
+    guestNoteVi: "Mỗi thành viên có thể mời 1 đối tác/đồng nghiệp tham dự họp thử",
+    guestNoteEn: "Each member can invite 1 partner/colleague to trial meeting",
+    weeklySchedule: [
+      {
+        week: "Tuần 24",
+        date: "14/01/2025",
+        speaker: {
+          name: "Nguyễn Văn A",
+          nameEn: "Nguyen Van A",
+          avatar: "/placeholder.svg",
+          industry: "Thiết kế nội thất",
+          industryEn: "Interior Design",
+          company: "ABC Design Studio"
+        },
+        topic: "Xu hướng thiết kế nội thất 2025",
+        topicEn: "Interior Design Trends 2025",
+        coordinator: "Trần Thị B",
+        hasVideo: true,
+        hasMaterials: true
+      },
+      {
+        week: "Tuần 25",
+        date: "21/01/2025",
+        speaker: {
+          name: "Lê Minh C",
+          nameEn: "Le Minh C",
+          avatar: "/placeholder.svg",
+          industry: "Marketing Digital",
+          industryEn: "Digital Marketing",
+          company: "XYZ Marketing Agency"
+        },
+        topic: "Chiến lược marketing trong kỷ nguyên AI",
+        topicEn: "Marketing Strategy in AI Era",
+        coordinator: "Phạm Thị D",
+        hasVideo: false,
+        hasMaterials: true
+      },
+      {
+        week: "Tuần 26",
+        date: "28/01/2025",
+        speaker: {
+          name: "Hoàng Thị E",
+          nameEn: "Hoang Thi E",
+          avatar: "/placeholder.svg",
+          industry: "Luật doanh nghiệp",
+          industryEn: "Corporate Law",
+          company: "Legal Partners"
+        },
+        topic: "Quy định pháp lý mới cho doanh nghiệp",
+        topicEn: "New Legal Regulations for Businesses",
+        coordinator: "Vũ Văn F",
+        hasVideo: true,
+        hasMaterials: false
+      }
+    ]
+  });
+
   // Contact Info
   const [contactInfo, setContactInfo] = useState({
     phone: "084 890 5555",
@@ -716,25 +784,345 @@ export default function WebsiteAdmin() {
                 <Calendar className="h-6 w-6 text-bni-red" />
                 Quản lý Lịch họp
               </CardTitle>
-              <CardDescription>Cập nhật thông tin lịch họp và diễn giả</CardDescription>
+              <CardDescription>Cập nhật thông tin lịch họp và diễn giả tuần</CardDescription>
             </CardHeader>
-            <CardContent className="pt-6 space-y-4">
-              <div className="space-y-2">
-                <Label>Thời gian họp cố định</Label>
-                <Input defaultValue="Thứ Ba hàng tuần, 6:45 AM – 8:45 AM" />
+            <CardContent className="pt-6 space-y-6">
+              {/* Hero Section */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Tiêu đề & Phụ đề</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề chính (Tiếng Việt)</Label>
+                  <Input
+                    value={scheduleContent.titleVi}
+                    onChange={(e) => setScheduleContent({...scheduleContent, titleVi: e.target.value})}
+                    placeholder="Lịch Họp & Diễn Giả Tuần"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Tiêu đề chính (English)</Label>
+                  <Input
+                    value={scheduleContent.titleEn}
+                    onChange={(e) => setScheduleContent({...scheduleContent, titleEn: e.target.value})}
+                    placeholder="Meeting Schedule & Weekly Speakers"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Phụ đề (Tiếng Việt)</Label>
+                  <Input
+                    value={scheduleContent.subtitleVi}
+                    onChange={(e) => setScheduleContent({...scheduleContent, subtitleVi: e.target.value})}
+                    placeholder="Thông tin chi tiết về lịch trình họp tuần và diễn giả"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Phụ đề (English)</Label>
+                  <Input
+                    value={scheduleContent.subtitleEn}
+                    onChange={(e) => setScheduleContent({...scheduleContent, subtitleEn: e.target.value})}
+                    placeholder="Detailed information about weekly meeting schedule and speakers"
+                  />
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>Địa điểm họp</Label>
-                <Textarea
-                  defaultValue="Cung Văn Hóa Hữu Nghị Việt Xô, số 91 Trần Hưng Đạo, Hà Nội"
-                  rows={2}
-                />
+              {/* Meeting Info */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Thông tin lịch họp cố định</h3>
+                
+                <div className="space-y-2">
+                  <Label>Lịch họp cố định (Tiếng Việt)</Label>
+                  <Input
+                    value={scheduleContent.scheduleVi}
+                    onChange={(e) => setScheduleContent({...scheduleContent, scheduleVi: e.target.value})}
+                    placeholder="Thứ Ba hàng tuần, 6:45 AM – 8:45 AM"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Lịch họp cố định (English)</Label>
+                  <Input
+                    value={scheduleContent.scheduleEn}
+                    onChange={(e) => setScheduleContent({...scheduleContent, scheduleEn: e.target.value})}
+                    placeholder="Tuesday Weekly, 6:45 AM – 8:45 AM"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Địa điểm (Tiếng Việt)</Label>
+                  <Textarea
+                    value={scheduleContent.locationVi}
+                    onChange={(e) => setScheduleContent({...scheduleContent, locationVi: e.target.value})}
+                    placeholder="Cung Văn Hóa Hữu Nghị Việt Xô, số 91 Trần Hưng Đạo, Hà Nội"
+                    rows={2}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Địa điểm (English)</Label>
+                  <Textarea
+                    value={scheduleContent.locationEn}
+                    onChange={(e) => setScheduleContent({...scheduleContent, locationEn: e.target.value})}
+                    placeholder="Vietnam-Soviet Friendship Cultural Palace, 91 Tran Hung Dao, Hanoi"
+                    rows={2}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Link Google Maps</Label>
+                  <Input
+                    value={scheduleContent.mapsLink}
+                    onChange={(e) => setScheduleContent({...scheduleContent, mapsLink: e.target.value})}
+                    placeholder="https://maps.google.com/..."
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Ghi chú khách mời (Tiếng Việt)</Label>
+                  <Textarea
+                    value={scheduleContent.guestNoteVi}
+                    onChange={(e) => setScheduleContent({...scheduleContent, guestNoteVi: e.target.value})}
+                    placeholder="Mỗi thành viên có thể mời 1 đối tác/đồng nghiệp tham dự họp thử"
+                    rows={2}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Ghi chú khách mời (English)</Label>
+                  <Textarea
+                    value={scheduleContent.guestNoteEn}
+                    onChange={(e) => setScheduleContent({...scheduleContent, guestNoteEn: e.target.value})}
+                    placeholder="Each member can invite 1 partner/colleague to trial meeting"
+                    rows={2}
+                  />
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>Link Google Maps</Label>
-                <Input placeholder="https://maps.google.com/..." />
+              {/* Weekly Schedule */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">Lịch diễn giả từng tuần</h3>
+                
+                <div className="space-y-3">
+                  {scheduleContent.weeklySchedule.map((item, index) => (
+                    <Collapsible key={index}>
+                      <Card className="border-bni-gold">
+                        <CardHeader>
+                          <CollapsibleTrigger className="w-full">
+                            <div className="flex items-center justify-between">
+                              <div className="text-left">
+                                <CardTitle className="text-lg">{item.week} - {item.date}</CardTitle>
+                                <CardDescription>{item.speaker.name}</CardDescription>
+                              </div>
+                              <div className="flex gap-2">
+                                <Button variant="ghost" size="sm">
+                                  <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm">
+                                  <Trash2 className="h-4 w-4 text-red-600" />
+                                </Button>
+                              </div>
+                            </div>
+                          </CollapsibleTrigger>
+                        </CardHeader>
+                        <CollapsibleContent>
+                          <CardContent className="space-y-4">
+                            {/* Week Info */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label>Tuần</Label>
+                                <Input
+                                  value={item.week}
+                                  onChange={(e) => {
+                                    const newSchedule = [...scheduleContent.weeklySchedule];
+                                    newSchedule[index].week = e.target.value;
+                                    setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                  }}
+                                  placeholder="Tuần 24"
+                                />
+                              </div>
+                              <div className="space-y-2">
+                                <Label>Ngày</Label>
+                                <Input
+                                  value={item.date}
+                                  onChange={(e) => {
+                                    const newSchedule = [...scheduleContent.weeklySchedule];
+                                    newSchedule[index].date = e.target.value;
+                                    setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                  }}
+                                  placeholder="14/01/2025"
+                                />
+                              </div>
+                            </div>
+
+                            {/* Speaker Info */}
+                            <div className="space-y-4 border-t pt-4">
+                              <h4 className="font-semibold">Thông tin diễn giả</h4>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                  <Label>Tên (Tiếng Việt)</Label>
+                                  <Input
+                                    value={item.speaker.name}
+                                    onChange={(e) => {
+                                      const newSchedule = [...scheduleContent.weeklySchedule];
+                                      newSchedule[index].speaker.name = e.target.value;
+                                      setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                    }}
+                                    placeholder="Nguyễn Văn A"
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label>Tên (English)</Label>
+                                  <Input
+                                    value={item.speaker.nameEn}
+                                    onChange={(e) => {
+                                      const newSchedule = [...scheduleContent.weeklySchedule];
+                                      newSchedule[index].speaker.nameEn = e.target.value;
+                                      setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                    }}
+                                    placeholder="Nguyen Van A"
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label>Ngành nghề (Tiếng Việt)</Label>
+                                  <Input
+                                    value={item.speaker.industry}
+                                    onChange={(e) => {
+                                      const newSchedule = [...scheduleContent.weeklySchedule];
+                                      newSchedule[index].speaker.industry = e.target.value;
+                                      setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                    }}
+                                    placeholder="Thiết kế nội thất"
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label>Ngành nghề (English)</Label>
+                                  <Input
+                                    value={item.speaker.industryEn}
+                                    onChange={(e) => {
+                                      const newSchedule = [...scheduleContent.weeklySchedule];
+                                      newSchedule[index].speaker.industryEn = e.target.value;
+                                      setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                    }}
+                                    placeholder="Interior Design"
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label>Công ty</Label>
+                                  <Input
+                                    value={item.speaker.company}
+                                    onChange={(e) => {
+                                      const newSchedule = [...scheduleContent.weeklySchedule];
+                                      newSchedule[index].speaker.company = e.target.value;
+                                      setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                    }}
+                                    placeholder="ABC Design Studio"
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label>Avatar URL</Label>
+                                  <div className="flex gap-2">
+                                    <Input
+                                      value={item.speaker.avatar}
+                                      onChange={(e) => {
+                                        const newSchedule = [...scheduleContent.weeklySchedule];
+                                        newSchedule[index].speaker.avatar = e.target.value;
+                                        setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                      }}
+                                      placeholder="/placeholder.svg"
+                                    />
+                                    <Button variant="outline" size="sm">
+                                      <Upload className="h-4 w-4" />
+                                    </Button>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Topic Info */}
+                            <div className="space-y-4 border-t pt-4">
+                              <h4 className="font-semibold">Chủ đề trình bày</h4>
+                              <div className="grid grid-cols-1 gap-4">
+                                <div className="space-y-2">
+                                  <Label>Chủ đề (Tiếng Việt)</Label>
+                                  <Input
+                                    value={item.topic}
+                                    onChange={(e) => {
+                                      const newSchedule = [...scheduleContent.weeklySchedule];
+                                      newSchedule[index].topic = e.target.value;
+                                      setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                    }}
+                                    placeholder="Xu hướng thiết kế nội thất 2025"
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label>Chủ đề (English)</Label>
+                                  <Input
+                                    value={item.topicEn}
+                                    onChange={(e) => {
+                                      const newSchedule = [...scheduleContent.weeklySchedule];
+                                      newSchedule[index].topicEn = e.target.value;
+                                      setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                    }}
+                                    placeholder="Interior Design Trends 2025"
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label>Thành viên trực</Label>
+                                  <Input
+                                    value={item.coordinator}
+                                    onChange={(e) => {
+                                      const newSchedule = [...scheduleContent.weeklySchedule];
+                                      newSchedule[index].coordinator = e.target.value;
+                                      setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                    }}
+                                    placeholder="Trần Thị B"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Media Flags */}
+                            <div className="space-y-4 border-t pt-4">
+                              <h4 className="font-semibold">Tài liệu & Video</h4>
+                              <div className="flex gap-4">
+                                <label className="flex items-center gap-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={item.hasVideo}
+                                    onChange={(e) => {
+                                      const newSchedule = [...scheduleContent.weeklySchedule];
+                                      newSchedule[index].hasVideo = e.target.checked;
+                                      setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                    }}
+                                  />
+                                  <span>Có video</span>
+                                </label>
+                                <label className="flex items-center gap-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={item.hasMaterials}
+                                    onChange={(e) => {
+                                      const newSchedule = [...scheduleContent.weeklySchedule];
+                                      newSchedule[index].hasMaterials = e.target.checked;
+                                      setScheduleContent({...scheduleContent, weeklySchedule: newSchedule});
+                                    }}
+                                  />
+                                  <span>Có tài liệu</span>
+                                </label>
+                              </div>
+                            </div>
+                          </CardContent>
+                        </CollapsibleContent>
+                      </Card>
+                    </Collapsible>
+                  ))}
+                </div>
+                <Button variant="outline" className="w-full">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Thêm tuần mới
+                </Button>
               </div>
 
               <div className="flex justify-end gap-2 pt-4 border-t">
