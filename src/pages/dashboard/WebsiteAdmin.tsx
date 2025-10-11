@@ -14,6 +14,97 @@ export default function WebsiteAdmin() {
   const [activeTab, setActiveTab] = useState("home");
   const [isSaving, setIsSaving] = useState(false);
 
+  // Media Hub Content - đồng bộ với MediaHub.tsx
+  const [mediaContent, setMediaContent] = useState({
+    // Hero Section
+    heroTitleVi: "📺 MEDIA HUB",
+    heroSubtitleVi: "TRUYỀN THÔNG & TÀI NGUYÊN",
+    heroSubtitleEn: "Media & Resources Center",
+    
+    // Filter Options
+    filterOptions: [
+      { value: 'all', label: 'Tất cả', labelEn: 'All' },
+      { value: 'introduction', label: 'Giới thiệu', labelEn: 'Introduction' },
+      { value: 'onboarding', label: 'Tài liệu mới', labelEn: 'Onboarding' },
+      { value: 'training', label: 'Đào tạo', labelEn: 'Training' }
+    ],
+    
+    // Documents
+    documents: [
+      {
+        id: 1,
+        title: "BNI FELIX Chapter Introduction",
+        titleEn: "BNI FELIX Chapter Introduction", 
+        type: "PDF",
+        category: "introduction",
+        isPublic: true,
+        downloadUrl: "#",
+        thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400"
+      },
+      {
+        id: 2,
+        title: "Hướng dẫn thành viên mới",
+        titleEn: "New Member Onboarding Guide",
+        type: "Video",
+        category: "onboarding", 
+        isPublic: false,
+        downloadUrl: "#",
+        thumbnail: "https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?w=400"
+      }
+    ],
+    
+    // Photo Albums
+    photoAlbums: [
+      {
+        id: 1,
+        title: "Họp tuần 15/06/2024",
+        titleEn: "Weekly Meeting 15/06/2024",
+        year: "2024",
+        event: "weekly",
+        photos: 25,
+        coverImage: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400"
+      },
+      {
+        id: 2, 
+        title: "FELIX Gala Night 2024",
+        titleEn: "FELIX Gala Night 2024",
+        year: "2024",
+        event: "gala",
+        photos: 150,
+        coverImage: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400"
+      }
+    ],
+    
+    // Videos
+    videos: [
+      {
+        id: 1,
+        title: "Diễn giả: Nguyễn Văn A - Digital Marketing",
+        titleEn: "Speaker: Nguyen Van A - Digital Marketing",
+        speaker: "Nguyễn Văn A",
+        date: "15/06/2024",
+        duration: "45:30",
+        videoUrl: "#",
+        slideUrl: "#",
+        thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400"
+      }
+    ],
+    
+    // CTA Section
+    ctaTitleVi: "📲 Truy cập nhanh tài nguyên FELIX",
+    ctaTitleEn: "Quick Access to FELIX Resources",
+    ctaButtons: [
+      "📎 Tải tài liệu FELIX",
+      "🎬 Xem video diễn giả",
+      "🖼️ Xem thư viện ảnh",
+      "📤 Gửi tài liệu mới"
+    ],
+    
+    // Access Notice
+    accessNoticeVi: "🔐 Lưu ý quyền truy cập: Thành viên đăng nhập mới xem được tài liệu nội bộ. Khách chỉ xem được tài liệu công khai.",
+    accessNoticeEn: "🔐 Access Notice: Only logged-in members can view internal documents. Guests can only view public documents."
+  });
+
   // Home Page Content - đồng bộ với Index.tsx
   const [homeContent, setHomeContent] = useState({
     // Hero Section
@@ -1689,25 +1780,562 @@ export default function WebsiteAdmin() {
               </CardTitle>
               <CardDescription>Quản lý tài liệu, hình ảnh và video</CardDescription>
             </CardHeader>
-            <CardContent className="pt-6">
-              <div className="text-center py-8 text-muted-foreground">
-                <Image className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                <p className="text-lg font-semibold mb-2">Quản lý Media</p>
-                <p className="mb-4">Tải lên và quản lý tài liệu, hình ảnh, video</p>
-                <div className="flex gap-2 justify-center">
-                  <Button variant="outline">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Tải tài liệu
-                  </Button>
-                  <Button variant="outline">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Tải hình ảnh
-                  </Button>
-                  <Button variant="outline">
-                    <Upload className="h-4 w-4 mr-2" />
-                    Tải video
+            <CardContent className="pt-6 space-y-6">
+              
+              {/* Hero Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold border-b pb-2">Hero Section</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề chính (VI)</Label>
+                  <Input
+                    value={mediaContent.heroTitleVi}
+                    onChange={(e) => setMediaContent({...mediaContent, heroTitleVi: e.target.value})}
+                    placeholder="Tiêu đề hero section"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Phụ đề (VI)</Label>
+                    <Input
+                      value={mediaContent.heroSubtitleVi}
+                      onChange={(e) => setMediaContent({...mediaContent, heroSubtitleVi: e.target.value})}
+                      placeholder="Phụ đề tiếng Việt"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label>Phụ đề (EN)</Label>
+                    <Input
+                      value={mediaContent.heroSubtitleEn}
+                      onChange={(e) => setMediaContent({...mediaContent, heroSubtitleEn: e.target.value})}
+                      placeholder="Phụ đề tiếng Anh"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Documents Section */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold border-b pb-2">Quản lý Tài liệu</h3>
+                  <Button 
+                    size="sm"
+                    onClick={() => {
+                      const newDoc = {
+                        id: Date.now(),
+                        title: "Tài liệu mới",
+                        titleEn: "New Document",
+                        type: "PDF",
+                        category: "introduction",
+                        isPublic: true,
+                        downloadUrl: "#",
+                        thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400"
+                      };
+                      setMediaContent({
+                        ...mediaContent,
+                        documents: [...mediaContent.documents, newDoc]
+                      });
+                    }}
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Thêm tài liệu
                   </Button>
                 </div>
+                
+                <div className="space-y-3">
+                  {mediaContent.documents.map((doc, index) => (
+                    <Collapsible key={doc.id}>
+                      <div className="border rounded-lg p-4 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <CollapsibleTrigger asChild>
+                            <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                              <Edit className="h-4 w-4" />
+                              <span className="font-semibold">{doc.title}</span>
+                            </Button>
+                          </CollapsibleTrigger>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => {
+                              setMediaContent({
+                                ...mediaContent,
+                                documents: mediaContent.documents.filter(d => d.id !== doc.id)
+                              });
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        
+                        <CollapsibleContent className="space-y-3">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div className="space-y-2">
+                              <Label>Tiêu đề (VI)</Label>
+                              <Input
+                                value={doc.title}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.documents];
+                                  updated[index].title = e.target.value;
+                                  setMediaContent({...mediaContent, documents: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Tiêu đề (EN)</Label>
+                              <Input
+                                value={doc.titleEn}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.documents];
+                                  updated[index].titleEn = e.target.value;
+                                  setMediaContent({...mediaContent, documents: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Loại</Label>
+                              <Input
+                                value={doc.type}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.documents];
+                                  updated[index].type = e.target.value;
+                                  setMediaContent({...mediaContent, documents: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Danh mục</Label>
+                              <Input
+                                value={doc.category}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.documents];
+                                  updated[index].category = e.target.value;
+                                  setMediaContent({...mediaContent, documents: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>URL tải về</Label>
+                              <Input
+                                value={doc.downloadUrl}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.documents];
+                                  updated[index].downloadUrl = e.target.value;
+                                  setMediaContent({...mediaContent, documents: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Hình thumbnail</Label>
+                              <Input
+                                value={doc.thumbnail}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.documents];
+                                  updated[index].thumbnail = e.target.value;
+                                  setMediaContent({...mediaContent, documents: updated});
+                                }}
+                              />
+                            </div>
+                          </div>
+                          
+                          <div className="flex items-center space-x-2">
+                            <input
+                              type="checkbox"
+                              checked={doc.isPublic}
+                              onChange={(e) => {
+                                const updated = [...mediaContent.documents];
+                                updated[index].isPublic = e.target.checked;
+                                setMediaContent({...mediaContent, documents: updated});
+                              }}
+                              className="rounded"
+                            />
+                            <Label>Công khai (khách có thể xem)</Label>
+                          </div>
+                        </CollapsibleContent>
+                      </div>
+                    </Collapsible>
+                  ))}
+                </div>
+              </div>
+
+              {/* Photo Albums Section */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold border-b pb-2">Quản lý Album Ảnh</h3>
+                  <Button 
+                    size="sm"
+                    onClick={() => {
+                      const newAlbum = {
+                        id: Date.now(),
+                        title: "Album mới",
+                        titleEn: "New Album",
+                        year: "2024",
+                        event: "weekly",
+                        photos: 0,
+                        coverImage: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81?w=400"
+                      };
+                      setMediaContent({
+                        ...mediaContent,
+                        photoAlbums: [...mediaContent.photoAlbums, newAlbum]
+                      });
+                    }}
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Thêm album
+                  </Button>
+                </div>
+                
+                <div className="space-y-3">
+                  {mediaContent.photoAlbums.map((album, index) => (
+                    <Collapsible key={album.id}>
+                      <div className="border rounded-lg p-4 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <CollapsibleTrigger asChild>
+                            <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                              <Edit className="h-4 w-4" />
+                              <span className="font-semibold">{album.title}</span>
+                            </Button>
+                          </CollapsibleTrigger>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => {
+                              setMediaContent({
+                                ...mediaContent,
+                                photoAlbums: mediaContent.photoAlbums.filter(a => a.id !== album.id)
+                              });
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        
+                        <CollapsibleContent className="space-y-3">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div className="space-y-2">
+                              <Label>Tiêu đề (VI)</Label>
+                              <Input
+                                value={album.title}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.photoAlbums];
+                                  updated[index].title = e.target.value;
+                                  setMediaContent({...mediaContent, photoAlbums: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Tiêu đề (EN)</Label>
+                              <Input
+                                value={album.titleEn}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.photoAlbums];
+                                  updated[index].titleEn = e.target.value;
+                                  setMediaContent({...mediaContent, photoAlbums: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Năm</Label>
+                              <Input
+                                value={album.year}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.photoAlbums];
+                                  updated[index].year = e.target.value;
+                                  setMediaContent({...mediaContent, photoAlbums: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Sự kiện</Label>
+                              <Input
+                                value={album.event}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.photoAlbums];
+                                  updated[index].event = e.target.value;
+                                  setMediaContent({...mediaContent, photoAlbums: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Số lượng ảnh</Label>
+                              <Input
+                                type="number"
+                                value={album.photos}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.photoAlbums];
+                                  updated[index].photos = parseInt(e.target.value) || 0;
+                                  setMediaContent({...mediaContent, photoAlbums: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Ảnh bìa</Label>
+                              <Input
+                                value={album.coverImage}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.photoAlbums];
+                                  updated[index].coverImage = e.target.value;
+                                  setMediaContent({...mediaContent, photoAlbums: updated});
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </CollapsibleContent>
+                      </div>
+                    </Collapsible>
+                  ))}
+                </div>
+              </div>
+
+              {/* Videos Section */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-bold border-b pb-2">Quản lý Video</h3>
+                  <Button 
+                    size="sm"
+                    onClick={() => {
+                      const newVideo = {
+                        id: Date.now(),
+                        title: "Video mới",
+                        titleEn: "New Video",
+                        speaker: "Diễn giả",
+                        date: new Date().toLocaleDateString('vi-VN'),
+                        duration: "00:00",
+                        videoUrl: "#",
+                        slideUrl: "#",
+                        thumbnail: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400"
+                      };
+                      setMediaContent({
+                        ...mediaContent,
+                        videos: [...mediaContent.videos, newVideo]
+                      });
+                    }}
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Thêm video
+                  </Button>
+                </div>
+                
+                <div className="space-y-3">
+                  {mediaContent.videos.map((video, index) => (
+                    <Collapsible key={video.id}>
+                      <div className="border rounded-lg p-4 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <CollapsibleTrigger asChild>
+                            <Button variant="ghost" size="sm" className="flex items-center gap-2">
+                              <Edit className="h-4 w-4" />
+                              <span className="font-semibold">{video.title}</span>
+                            </Button>
+                          </CollapsibleTrigger>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => {
+                              setMediaContent({
+                                ...mediaContent,
+                                videos: mediaContent.videos.filter(v => v.id !== video.id)
+                              });
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        
+                        <CollapsibleContent className="space-y-3">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div className="space-y-2">
+                              <Label>Tiêu đề (VI)</Label>
+                              <Input
+                                value={video.title}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.videos];
+                                  updated[index].title = e.target.value;
+                                  setMediaContent({...mediaContent, videos: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Tiêu đề (EN)</Label>
+                              <Input
+                                value={video.titleEn}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.videos];
+                                  updated[index].titleEn = e.target.value;
+                                  setMediaContent({...mediaContent, videos: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Diễn giả</Label>
+                              <Input
+                                value={video.speaker}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.videos];
+                                  updated[index].speaker = e.target.value;
+                                  setMediaContent({...mediaContent, videos: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Ngày</Label>
+                              <Input
+                                value={video.date}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.videos];
+                                  updated[index].date = e.target.value;
+                                  setMediaContent({...mediaContent, videos: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Thời lượng</Label>
+                              <Input
+                                value={video.duration}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.videos];
+                                  updated[index].duration = e.target.value;
+                                  setMediaContent({...mediaContent, videos: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>Hình thumbnail</Label>
+                              <Input
+                                value={video.thumbnail}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.videos];
+                                  updated[index].thumbnail = e.target.value;
+                                  setMediaContent({...mediaContent, videos: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>URL Video</Label>
+                              <Input
+                                value={video.videoUrl}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.videos];
+                                  updated[index].videoUrl = e.target.value;
+                                  setMediaContent({...mediaContent, videos: updated});
+                                }}
+                              />
+                            </div>
+                            
+                            <div className="space-y-2">
+                              <Label>URL Slide</Label>
+                              <Input
+                                value={video.slideUrl}
+                                onChange={(e) => {
+                                  const updated = [...mediaContent.videos];
+                                  updated[index].slideUrl = e.target.value;
+                                  setMediaContent({...mediaContent, videos: updated});
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </CollapsibleContent>
+                      </div>
+                    </Collapsible>
+                  ))}
+                </div>
+              </div>
+
+              {/* CTA Section */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold border-b pb-2">Call-to-Action Section</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Tiêu đề CTA (VI)</Label>
+                    <Input
+                      value={mediaContent.ctaTitleVi}
+                      onChange={(e) => setMediaContent({...mediaContent, ctaTitleVi: e.target.value})}
+                      placeholder="Tiêu đề CTA tiếng Việt"
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label>Tiêu đề CTA (EN)</Label>
+                    <Input
+                      value={mediaContent.ctaTitleEn}
+                      onChange={(e) => setMediaContent({...mediaContent, ctaTitleEn: e.target.value})}
+                      placeholder="Tiêu đề CTA tiếng Anh"
+                    />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label>Văn bản các nút CTA (mỗi dòng một nút)</Label>
+                  <Textarea
+                    value={mediaContent.ctaButtons.join('\n')}
+                    onChange={(e) => setMediaContent({
+                      ...mediaContent, 
+                      ctaButtons: e.target.value.split('\n').filter(line => line.trim())
+                    })}
+                    rows={4}
+                    placeholder="Mỗi dòng là một nút"
+                  />
+                </div>
+              </div>
+
+              {/* Access Notice */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-bold border-b pb-2">Thông báo Quyền truy cập</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label>Thông báo (VI)</Label>
+                    <Textarea
+                      value={mediaContent.accessNoticeVi}
+                      onChange={(e) => setMediaContent({...mediaContent, accessNoticeVi: e.target.value})}
+                      rows={3}
+                    />
+                  </div>
+                  
+                  <div className="space-y-2">
+                    <Label>Thông báo (EN)</Label>
+                    <Textarea
+                      value={mediaContent.accessNoticeEn}
+                      onChange={(e) => setMediaContent({...mediaContent, accessNoticeEn: e.target.value})}
+                      rows={3}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-4 border-t">
+                <Button variant="outline">Xem trước</Button>
+                <Button 
+                  onClick={() => {
+                    setIsSaving(true);
+                    setTimeout(() => {
+                      setIsSaving(false);
+                      toast.success("Đã lưu thông tin Media Hub");
+                    }, 1000);
+                  }}
+                  disabled={isSaving}
+                  className="bg-bni-red hover:bg-bni-red/90"
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  {isSaving ? "Đang lưu..." : "Lưu thay đổi"}
+                </Button>
               </div>
             </CardContent>
           </Card>
