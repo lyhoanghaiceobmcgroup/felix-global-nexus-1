@@ -173,291 +173,283 @@ const Dashboard = () => {
         return null;
     }
   };
-  return <SidebarProvider>
+  return <SidebarProvider defaultOpen={false}>
       <div className="min-h-screen flex w-full bg-gradient-to-br from-background via-bni-gold/5 to-background">
         <DashboardSidebar />
         
-        <div className="flex-1 flex flex-col">
-          {/* Header */}
-          
-
-          <main className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 max-w-[1600px] mx-auto">
-        {/* Show subroute content if navigated to a report page */}
-        {isSubRoute ? <Outlet /> :
-          // Enhanced Dashboard Overview with Executive Information
-          <div className="space-y-8">
-            {/* Executive Header */}
-            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
-              <div className="flex-1">
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold flex items-center gap-2 sm:gap-3">
-                  <Crown className="h-6 w-6 sm:h-8 sm:w-8 text-bni-gold flex-shrink-0" />
-                  <span>Tổng quan Điều hành BNI Felix Chapter</span>
-                </h2>
-                <p className="text-sm sm:text-base text-muted-foreground mt-2">
-                  {chapterData.termName} ({chapterData.termStart} – {chapterData.termEnd}) | Cập nhật: {chapterData.lastUpdated}
+        <main className="flex-1 w-full px-3 sm:px-4 lg:px-6 py-3 sm:py-4 lg:py-6">
+          {isSubRoute ? <Outlet /> :
+          <div className="space-y-4 sm:space-y-5 lg:space-y-6 max-w-[1600px] mx-auto">
+            {/* Compact Executive Header */}
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+              <div>
+                <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold flex items-center gap-2">
+                  <Crown className="h-5 w-5 sm:h-6 sm:w-6 text-bni-gold flex-shrink-0" />
+                  <span className="line-clamp-1">Tổng quan Felix Chapter</span>
+                </h1>
+                <p className="text-xs sm:text-sm text-muted-foreground mt-1">
+                  {chapterData.termName} | {chapterData.lastUpdated}
                 </p>
               </div>
-              <Button variant="outline" className="gap-2 w-full sm:w-auto">
-                <Download className="h-4 w-4" />
-                <span className="hidden sm:inline">Xuất báo cáo</span>
-                <span className="sm:hidden">Xuất</span>
+              <Button variant="outline" size="sm" className="gap-1.5 w-full sm:w-auto">
+                <Download className="h-3.5 w-3.5" />
+                <span>Xuất báo cáo</span>
               </Button>
             </div>
 
-            {/* Strategic Objectives Overview */}
-            <Card className="border-2 border-bni-gold/20 bg-gradient-to-br from-bni-gold/5 to-background">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-2xl">
-                  <Target className="h-6 w-6 text-bni-gold" />
-                  Mục tiêu Chiến lược {chapterData.termName}
+            {/* Compact Strategic Objectives */}
+            <Card className="border border-bni-gold/30 bg-gradient-to-br from-bni-gold/5 to-background">
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <Target className="h-4 w-4 sm:h-5 sm:w-5 text-bni-gold" />
+                  Mục tiêu {chapterData.termName}
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                  <div className="space-y-2">
-                    <div className="text-sm text-muted-foreground">Doanh thu Nhiệm kỳ</div>
-                    <div className="text-2xl font-bold text-bni-gold">{chapterData.strategicObjectives.revenue.target}</div>
-                    <div className="text-sm font-semibold">Hiện tại: {chapterData.strategicObjectives.revenue.current}</div>
-                    <Progress value={chapterData.strategicObjectives.revenue.progress} className="h-2" />
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                  <div className="space-y-1.5">
+                    <div className="text-xs text-muted-foreground">Doanh thu</div>
+                    <div className="text-lg sm:text-xl font-bold text-bni-gold">{chapterData.strategicObjectives.revenue.target}</div>
+                    <div className="text-xs">Hiện: {chapterData.strategicObjectives.revenue.current}</div>
+                    <Progress value={chapterData.strategicObjectives.revenue.progress} className="h-1.5" />
                     {getStatusBadge(chapterData.strategicObjectives.revenue.status)}
                   </div>
-                  <div className="space-y-2">
-                    <div className="text-sm text-muted-foreground">Sĩ số Thành viên</div>
-                    <div className="text-2xl font-bold text-bni-red">{chapterData.strategicObjectives.memberCount.target}</div>
-                    <div className="text-sm font-semibold">Hiện tại: {chapterData.strategicObjectives.memberCount.current}</div>
-                    <Progress value={chapterData.strategicObjectives.memberCount.progress} className="h-2" />
+                  <div className="space-y-1.5">
+                    <div className="text-xs text-muted-foreground">Thành viên</div>
+                    <div className="text-lg sm:text-xl font-bold text-bni-red">{chapterData.strategicObjectives.memberCount.target}</div>
+                    <div className="text-xs">Hiện: {chapterData.strategicObjectives.memberCount.current}</div>
+                    <Progress value={chapterData.strategicObjectives.memberCount.progress} className="h-1.5" />
                     {getStatusBadge(chapterData.strategicObjectives.memberCount.status)}
                   </div>
-                  <div className="space-y-2">
-                    <div className="text-sm text-muted-foreground">Tỷ lệ Hiện diện</div>
-                    <div className="text-2xl font-bold text-green-600">{chapterData.strategicObjectives.attendance.current}</div>
-                    <div className="text-sm font-semibold">Mục tiêu: {chapterData.strategicObjectives.attendance.target}</div>
-                    <Progress value={chapterData.strategicObjectives.attendance.progress} className="h-2" />
+                  <div className="space-y-1.5">
+                    <div className="text-xs text-muted-foreground">Hiện diện</div>
+                    <div className="text-lg sm:text-xl font-bold text-green-600">{chapterData.strategicObjectives.attendance.current}</div>
+                    <div className="text-xs">MT: {chapterData.strategicObjectives.attendance.target}</div>
+                    <Progress value={chapterData.strategicObjectives.attendance.progress} className="h-1.5" />
                     {getStatusBadge(chapterData.strategicObjectives.attendance.status)}
                   </div>
-                  <div className="space-y-2">
-                    <div className="text-sm text-muted-foreground">TV KPI Xanh</div>
-                    <div className="text-2xl font-bold text-green-600">{chapterData.strategicObjectives.kpiGreenMembers.current}</div>
-                    <div className="text-sm font-semibold">Mục tiêu: {chapterData.strategicObjectives.kpiGreenMembers.target}</div>
-                    <Progress value={chapterData.strategicObjectives.kpiGreenMembers.progress} className="h-2" />
+                  <div className="space-y-1.5">
+                    <div className="text-xs text-muted-foreground">KPI Xanh</div>
+                    <div className="text-lg sm:text-xl font-bold text-green-600">{chapterData.strategicObjectives.kpiGreenMembers.current}</div>
+                    <div className="text-xs">MT: {chapterData.strategicObjectives.kpiGreenMembers.target}</div>
+                    <Progress value={chapterData.strategicObjectives.kpiGreenMembers.progress} className="h-1.5" />
                     {getStatusBadge(chapterData.strategicObjectives.kpiGreenMembers.status)}
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Leadership Structure */}
+            {/* Compact Leadership */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-bni-gold" />
-                  Ban Lãnh đạo {chapterData.termName}
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <Users className="h-4 w-4 sm:h-5 sm:w-5 text-bni-gold" />
+                  Ban Lãnh đạo
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {chapterData.leadership.map((leader, index) => leader.isPrimary ? <div key={index} className="col-span-full p-4 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3">
+                  {chapterData.leadership.map((leader, index) => leader.isPrimary ? <div key={index} className="col-span-full p-2.5 sm:p-3 border-2 border-bni-gold rounded-lg bg-bni-gold/5">
                         <div className="flex items-center gap-2">
-                          <Crown className="h-5 w-5 text-bni-gold" />
-                          <span className="font-semibold">{leader.role}:</span>
-                          <span className="font-bold text-bni-red">{leader.name}</span>
+                          <Crown className="h-4 w-4 text-bni-gold flex-shrink-0" />
+                          <span className="font-semibold text-sm">{leader.role}:</span>
+                          <span className="font-bold text-bni-red text-sm truncate">{leader.name}</span>
                         </div>
-                      </div> : <div key={index} className="p-3 border rounded-lg bg-card">
-                        <div className="font-semibold text-sm">{leader.role}</div>
-                        <div className="text-sm">{leader.name}</div>
+                      </div> : <div key={index} className="p-2 sm:p-2.5 border rounded-lg bg-card">
+                        <div className="font-semibold text-xs">{leader.role}</div>
+                        <div className="text-xs truncate">{leader.name}</div>
                       </div>)}
                 </div>
               </CardContent>
             </Card>
 
-            {/* Performance Metrics */}
+            {/* Compact Performance Metrics */}
             <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-bni-red" />
-                  Hiệu suất Kinh doanh & Kết nối (Tháng 8)
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
+                  <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5 text-bni-red" />
+                  Hiệu suất (Tháng 8)
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-3 sm:space-y-4">
                 <div>
-                  <h4 className="font-semibold mb-2">Giá trị Giao dịch (Thank You Note)</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Mục tiêu: ~5.5 Tỷ</span>
-                      <span className="font-bold">Thực tế: 1.23 Tỷ</span>
+                  <h4 className="font-semibold text-sm mb-1.5">Giao dịch (TYFCB)</h4>
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs">
+                      <span>MT: ~5.5 Tỷ</span>
+                      <span className="font-bold">1.23 Tỷ</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Progress value={22.4} className="h-3 flex-1" />
-                      <Badge variant="outline" className="bg-yellow-500/10 text-yellow-700">22%</Badge>
+                    <div className="flex items-center gap-2">
+                      <Progress value={22.4} className="h-2 flex-1" />
+                      <Badge variant="outline" className="bg-yellow-500/10 text-yellow-700 text-xs">22%</Badge>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-2">Cơ hội Kinh doanh (Referrals)</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Mục tiêu: 258 - 408</span>
-                      <span className="font-bold">Thực tế: 103</span>
+                  <h4 className="font-semibold text-sm mb-1.5">Referrals</h4>
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs">
+                      <span>MT: 258-408</span>
+                      <span className="font-bold">103</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Progress value={25.2} className="h-3 flex-1" />
-                      <Badge variant="outline" className="bg-red-500/10 text-red-700">25%</Badge>
+                    <div className="flex items-center gap-2">
+                      <Progress value={25.2} className="h-2 flex-1" />
+                      <Badge variant="outline" className="bg-red-500/10 text-red-700 text-xs">25%</Badge>
                     </div>
                   </div>
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-2">Số lượt 1-2-1</h4>
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Mục tiêu: 344 - 544</span>
-                      <span className="font-bold">Thực tế: 344</span>
+                  <h4 className="font-semibold text-sm mb-1.5">1-2-1</h4>
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between text-xs">
+                      <span>MT: 344-544</span>
+                      <span className="font-bold">344</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Progress value={63.2} className="h-3 flex-1" />
-                      <Badge variant="outline" className="bg-green-500/10 text-green-700">Đạt mức tối thiểu</Badge>
+                    <div className="flex items-center gap-2">
+                      <Progress value={63.2} className="h-2 flex-1" />
+                      <Badge variant="outline" className="bg-green-500/10 text-green-700 text-xs">Đạt tối thiểu</Badge>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Compact Stats Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
               {stats.map((stat, index) => {
                 const Icon = stat.icon;
-                return <Card key={index} className="hover:shadow-lg transition-shadow">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                      <CardTitle className="text-sm font-medium">
+                return <Card key={index} className="hover:shadow-md transition-shadow">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-1.5 p-3 sm:p-4">
+                      <CardTitle className="text-xs sm:text-sm font-medium line-clamp-2">
                         {stat.title}
                       </CardTitle>
-                      <Icon className="h-5 w-5 text-muted-foreground" />
+                      <Icon className="h-4 w-4 text-muted-foreground flex-shrink-0" />
                     </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-bold">{stat.value}</div>
-                      <div className="flex items-center text-xs mt-2">
-                        {stat.trend === "up" && <ArrowUpRight className="h-4 w-4 text-green-500 mr-1" />}
-                        {stat.trend === "down" && <ArrowDownRight className="h-4 w-4 text-red-500 mr-1" />}
+                    <CardContent className="p-3 sm:p-4 pt-0">
+                      <div className="text-xl sm:text-2xl lg:text-3xl font-bold">{stat.value}</div>
+                      <div className="flex items-center text-xs mt-1">
+                        {stat.trend === "up" && <ArrowUpRight className="h-3 w-3 text-green-500 mr-0.5" />}
+                        {stat.trend === "down" && <ArrowDownRight className="h-3 w-3 text-red-500 mr-0.5" />}
                         <span className={stat.trend === "up" ? "text-green-500" : stat.trend === "down" ? "text-red-500" : "text-muted-foreground"}>
                           {stat.change}
                         </span>
-                        <span className="text-muted-foreground ml-2">{stat.description}</span>
                       </div>
                     </CardContent>
                   </Card>;
               })}
             </div>
 
-            {/* Main Content Tabs */}
-            <Tabs defaultValue="members" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
-                <TabsTrigger value="members" className="text-xs sm:text-sm">Thành viên</TabsTrigger>
-                <TabsTrigger value="referrals" className="text-xs sm:text-sm">Referrals</TabsTrigger>
-                <TabsTrigger value="meetings" className="text-xs sm:text-sm">Lịch họp</TabsTrigger>
-                <TabsTrigger value="top-performers" className="text-xs sm:text-sm">Top xuất sắc</TabsTrigger>
+            {/* Compact Tabs */}
+            <Tabs defaultValue="members" className="space-y-4">
+              <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto p-1">
+                <TabsTrigger value="members" className="text-xs sm:text-sm py-1.5 sm:py-2">Thành viên</TabsTrigger>
+                <TabsTrigger value="referrals" className="text-xs sm:text-sm py-1.5 sm:py-2">Referrals</TabsTrigger>
+                <TabsTrigger value="meetings" className="text-xs sm:text-sm py-1.5 sm:py-2">Lịch họp</TabsTrigger>
+                <TabsTrigger value="top-performers" className="text-xs sm:text-sm py-1.5 sm:py-2">Top</TabsTrigger>
               </TabsList>
 
-              {/* Members Tab - Member Tracking */}
-              <TabsContent value="members" className="space-y-4">
+              {/* Compact Members Tab */}
+              <TabsContent value="members" className="space-y-3">
                 <Card>
-                  <CardHeader>
-                    <CardTitle>Theo dõi & Chăm sóc Thành viên</CardTitle>
-                    <CardDescription>
-                      Cập nhật trạng thái KPI và hoạt động của từng thành viên
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base sm:text-lg">Theo dõi Thành viên</CardTitle>
+                    <CardDescription className="text-xs sm:text-sm">
+                      Trạng thái KPI và hoạt động
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <div className="overflow-x-auto -mx-6 sm:mx-0">
-                      <div className="min-w-[640px] px-6 sm:px-0">
+                    <div className="overflow-x-auto -mx-3 sm:mx-0">
+                      <div className="min-w-[600px] px-3 sm:px-0">
                         <Table>
                         <TableHeader>
-                          <TableRow>
-                            <TableHead>Tên</TableHead>
-                            <TableHead>Vai trò / Ngành</TableHead>
-                            <TableHead>KPI</TableHead>
-                            <TableHead>Hoạt động Nổi bật</TableHead>
-                            <TableHead>Ghi chú</TableHead>
+                          <TableRow className="text-xs">
+                            <TableHead className="py-2">Tên</TableHead>
+                            <TableHead className="py-2">Vai trò</TableHead>
+                            <TableHead className="py-2">KPI</TableHead>
+                            <TableHead className="py-2">Hoạt động</TableHead>
+                            <TableHead className="py-2">Ghi chú</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          <TableRow>
-                            <TableCell className="font-semibold">Mrs. Đoàn Thị Ánh Khuyên</TableCell>
-                            <TableCell>
-                              <div>Chủ tịch</div>
-                              <div className="text-sm text-muted-foreground">Sức khỏe</div>
+                          <TableRow className="text-xs sm:text-sm">
+                            <TableCell className="font-semibold py-2">Mrs. Đ.T.Á. Khuyên</TableCell>
+                            <TableCell className="py-2">
+                              <div className="font-medium">Chủ tịch</div>
+                              <div className="text-xs text-muted-foreground">Sức khỏe</div>
                             </TableCell>
-                            <TableCell>
-                              <Badge className="bg-green-500/10 text-green-700 border-green-200">🟢 Xanh</Badge>
+                            <TableCell className="py-2">
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200 text-xs">🟢</Badge>
                             </TableCell>
-                            <TableCell className="text-sm">
-                              19 lượt 1-2-1, 486 điểm CEU
+                            <TableCell className="py-2">
+                              19 x 1-2-1, 486 CEU
                             </TableCell>
-                            <TableCell className="text-sm">Lãnh đạo xuất sắc</TableCell>
+                            <TableCell className="py-2 text-xs">Xuất sắc</TableCell>
                           </TableRow>
-                          <TableRow>
-                            <TableCell className="font-semibold">Mr. Lý Hoàng Hải</TableCell>
-                            <TableCell>
-                              <div>Phó Chủ tịch</div>
-                              <div className="text-sm text-muted-foreground">Dịch vụ DN</div>
+                          <TableRow className="text-xs sm:text-sm">
+                            <TableCell className="font-semibold py-2">Mr. Lý H. Hải</TableCell>
+                            <TableCell className="py-2">
+                              <div className="font-medium">Phó CT</div>
+                              <div className="text-xs text-muted-foreground">DV DN</div>
                             </TableCell>
-                            <TableCell>
-                              <Badge className="bg-green-500/10 text-green-700 border-green-200">🟢 Xanh</Badge>
+                            <TableCell className="py-2">
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200 text-xs">🟢</Badge>
                             </TableCell>
-                            <TableCell className="text-sm">Diễn giả chính tuần này</TableCell>
-                            <TableCell className="text-sm">Hỗ trợ truyền thông</TableCell>
+                            <TableCell className="py-2">Diễn giả tuần này</TableCell>
+                            <TableCell className="py-2 text-xs">HT truyền thông</TableCell>
                           </TableRow>
-                          <TableRow>
-                            <TableCell className="font-semibold">Mrs. Lưu Thị Châu</TableCell>
-                            <TableCell>
-                              <div>Tổng Thư ký</div>
-                              <div className="text-sm text-muted-foreground">F&B</div>
+                          <TableRow className="text-xs sm:text-sm">
+                            <TableCell className="font-semibold py-2">Mrs. Lưu T. Châu</TableCell>
+                            <TableCell className="py-2">
+                              <div className="font-medium">Tổng TK</div>
+                              <div className="text-xs text-muted-foreground">F&B</div>
                             </TableCell>
-                            <TableCell>
-                              <Badge className="bg-green-500/10 text-green-700 border-green-200">🟢 Xanh</Badge>
+                            <TableCell className="py-2">
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200 text-xs">🟢</Badge>
                             </TableCell>
-                            <TableCell className="text-sm">Trao 12 cơ hội kinh doanh</TableCell>
-                            <TableCell className="text-sm">Vinh danh</TableCell>
+                            <TableCell className="py-2">12 cơ hội KD</TableCell>
+                            <TableCell className="py-2 text-xs">Vinh danh</TableCell>
                           </TableRow>
-                          <TableRow>
-                            <TableCell className="font-semibold">Mrs. Hà Thị Hạnh</TableCell>
-                            <TableCell>
-                              <div>Ban Khách mời</div>
-                              <div className="text-sm text-muted-foreground">Bảo hiểm</div>
+                          <TableRow className="text-xs sm:text-sm">
+                            <TableCell className="font-semibold py-2">Mrs. Hà T. Hạnh</TableCell>
+                            <TableCell className="py-2">
+                              <div className="font-medium">Khách mời</div>
+                              <div className="text-xs text-muted-foreground">Bảo hiểm</div>
                             </TableCell>
-                            <TableCell>
-                              <Badge className="bg-green-500/10 text-green-700 border-green-200">🟢 Xanh</Badge>
+                            <TableCell className="py-2">
+                              <Badge className="bg-green-500/10 text-green-700 border-green-200 text-xs">🟢</Badge>
                             </TableCell>
-                            <TableCell className="text-sm">
-                              <Trophy className="h-4 w-4 inline mr-1 text-bni-gold" />
-                              Thank You Note {'>'}312 Triệu
+                            <TableCell className="py-2">
+                              <Trophy className="h-3 w-3 inline mr-1 text-bni-gold" />
+                              TYN 312M
                             </TableCell>
-                            <TableCell className="text-sm">Case study thành công</TableCell>
+                            <TableCell className="py-2 text-xs">Case study</TableCell>
                           </TableRow>
-                          <TableRow>
-                            <TableCell className="font-semibold">Mr. Nguyễn Sơn Tùng</TableCell>
-                            <TableCell>
-                              <div>PT Chất lượng TV</div>
-                              <div className="text-sm text-muted-foreground">Nội thất</div>
+                          <TableRow className="text-xs sm:text-sm">
+                            <TableCell className="font-semibold py-2">Mr. N. Sơn Tùng</TableCell>
+                            <TableCell className="py-2">
+                              <div className="font-medium">PT Chất lượng</div>
+                              <div className="text-xs text-muted-foreground">Nội thất</div>
                             </TableCell>
-                            <TableCell>
-                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200">🟡 Vàng</Badge>
+                            <TableCell className="py-2">
+                              <Badge className="bg-yellow-500/10 text-yellow-700 border-yellow-200 text-xs">🟡</Badge>
                             </TableCell>
-                            <TableCell className="text-sm">Diễn giả đào tạo networking</TableCell>
-                            <TableCell className="text-sm">
-                              <AlertCircle className="h-4 w-4 inline mr-1 text-yellow-600" />
-                              Cần cải thiện Referrals
+                            <TableCell className="py-2">DG đào tạo</TableCell>
+                            <TableCell className="py-2 text-xs">
+                              <AlertCircle className="h-3 w-3 inline mr-1 text-yellow-600" />
+                              Cải thiện Ref
                             </TableCell>
                           </TableRow>
-                          <TableRow>
-                            <TableCell className="font-semibold">Ms. Phùng Trang Linh</TableCell>
-                            <TableCell>
-                              <div>Ban Truyền thông</div>
-                              <div className="text-sm text-muted-foreground">F&B</div>
+                          <TableRow className="text-xs sm:text-sm">
+                            <TableCell className="font-semibold py-2">Ms. P. Trang Linh</TableCell>
+                            <TableCell className="py-2">
+                              <div className="font-medium">Truyền thông</div>
+                              <div className="text-xs text-muted-foreground">F&B</div>
                             </TableCell>
-                            <TableCell>
-                              <Badge variant="outline">N/A</Badge>
+                            <TableCell className="py-2">
+                              <Badge variant="outline" className="text-xs">N/A</Badge>
                             </TableCell>
-                            <TableCell className="text-sm">Thành viên mới</TableCell>
-                            <TableCell className="text-sm">Cần Mentor</TableCell>
+                            <TableCell className="py-2">TV mới</TableCell>
+                            <TableCell className="py-2 text-xs">Cần Mentor</TableCell>
                           </TableRow>
                         </TableBody>
                       </Table>
@@ -1003,8 +995,7 @@ const Dashboard = () => {
               </TabsContent>
             </Tabs>
           </div>}
-          </main>
-        </div>
+        </main>
       </div>
     </SidebarProvider>;
 };
