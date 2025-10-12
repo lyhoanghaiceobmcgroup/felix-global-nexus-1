@@ -105,6 +105,215 @@ export default function WebsiteAdmin() {
     accessNoticeEn: "🔐 Access Notice: Only logged-in members can view internal documents. Guests can only view public documents."
   });
 
+  // Members Page Content - đồng bộ với Members.tsx
+  const [membersContent, setMembersContent] = useState({
+    // Hero Section
+    heroTitleVi: "Thành Viên & Giới Thiệu Ngành Nghề 30s",
+    heroTitleEn: "Members & 30s Industry Introduction",
+    heroSubtitleVi: "Kết nối chuyên nghiệp - Chia sẻ cơ hội - Phát triển cùng nhau",
+    heroSubtitleEn: "Professional Networking - Share Opportunities - Grow Together",
+    
+    // Hero Buttons
+    heroButtons: [
+      { textVi: "👁️ Xem tất cả thành viên", textEn: "👁️ View All Members", variant: "default" },
+      { textVi: "📅 Đặt lịch 1-1", textEn: "📅 Schedule 1-1", variant: "outline" },
+      { textVi: "🎤 Bắt đầu giới thiệu 30s", textEn: "🎤 Start 30s Introduction", variant: "default" },
+      { textVi: "📤 Đăng ký Slide 30s", textEn: "📤 Register 30s Slide", variant: "outline" },
+      { textVi: "👥 Giới thiệu bạn bè tham gia", textEn: "👥 Refer Friends to Join", variant: "default" }
+    ],
+    
+    // Member Directory Section
+    directoryTitleVi: "📘 Danh sách thành viên FELIX Chapter",
+    directoryTitleEn: "📘 FELIX Chapter Member Directory",
+    directoryDescVi: "53+ thành viên đa ngành nghề, kết nối và hỗ trợ phát triển kinh doanh bền vững",
+    directoryDescEn: "53+ members across diverse industries, connecting and supporting sustainable business growth",
+    
+    // Tabs
+    tabs: [
+      { value: "members", labelVi: "Danh sách thành viên", labelEn: "Member List" },
+      { value: "presentation", labelVi: "Giới thiệu 30s", labelEn: "30s Introduction" },
+      { value: "connect", labelVi: "1-1 CONNECT", labelEn: "1-1 CONNECT" },
+      { value: "outstanding", labelVi: "Thành viên nổi bật", labelEn: "Outstanding Members" }
+    ],
+    
+    // Members Data
+    members: [
+      {
+        id: 1,
+        name: "Nguyễn Thị Huệ",
+        nameEn: "Hue Nguyen Thi",
+        position: "Giám đốc Marketing",
+        positionEn: "Marketing Director",
+        company: "Digital Marketing Pro",
+        companyEn: "Digital Marketing Pro",
+        industry: "Marketing",
+        industryEn: "Marketing",
+        region: "Hà Nội",
+        regionEn: "Hanoi",
+        avatar: "/placeholder.svg",
+        badges: ["TOP Referral", "CONNECT Leader"],
+        tagline: "Tăng doanh thu 300% với Google & Facebook Ads",
+        taglineEn: "Increase revenue 300% with Google & Facebook Ads",
+        introduction: "Xin chào, tôi là Huệ, chuyên gia Marketing trực tuyến. Chúng tôi giúp doanh nghiệp tăng doanh thu từ Google Ads và Facebook Ads với ROI tối thiểu 300%.",
+        introductionEn: "Hello, I'm Hue, digital marketing specialist. We help businesses increase revenue from Google Ads and Facebook Ads with minimum 300% ROI.",
+        website: "https://digitalmarketingpro.vn",
+        email: "hue@digitalmarketingpro.vn",
+        phone: "0912345678",
+        zalo: "0912345678"
+      },
+      {
+        id: 2,
+        name: "Phạm Anh Tuấn",
+        nameEn: "Tuan Pham Anh",
+        position: "Kiến trúc sư trưởng",
+        positionEn: "Chief Architect",
+        company: "Interior Design Studio",
+        companyEn: "Interior Design Studio",
+        industry: "Thiết kế",
+        industryEn: "Design",
+        region: "Hà Nội",
+        regionEn: "Hanoi",
+        avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+        badges: ["Star Member"],
+        tagline: "15 năm kinh nghiệm thiết kế không gian hoàn hảo",
+        taglineEn: "15 years experience designing perfect spaces",
+        introduction: "Tôi là Tuấn, chuyên thiết kế nội thất cao cấp. Chúng tôi tạo ra không gian sống và làm việc hoàn hảo với 15 năm kinh nghiệm.",
+        introductionEn: "I'm Tuan, specialized in luxury interior design. We create perfect living and working spaces with 15 years of experience.",
+        website: "https://interiordesign.vn",
+        email: "tuan@interiordesign.vn",
+        phone: "0987654321",
+        zalo: "0987654321"
+      },
+      {
+        id: 3,
+        name: "Lê Thị Phượng",
+        nameEn: "Phuong Le Thi",
+        position: "Chuyên gia tài chính",
+        positionEn: "Financial Expert",
+        company: "Financial Consulting",
+        companyEn: "Financial Consulting",
+        industry: "Tài chính",
+        industryEn: "Finance",
+        region: "Hà Nội",
+        regionEn: "Hanoi",
+        avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=150&q=80",
+        badges: ["TOP Connector", "Tăng trưởng nhanh"],
+        tagline: "Tối ưu dòng tiền và đầu tư hiệu quả",
+        taglineEn: "Optimize cash flow and efficient investment",
+        introduction: "Tôi là Phượng, chuyên gia tư vấn tài chính. Chúng tôi giúp doanh nghiệp tối ưu hóa dòng tiền và đầu tư hiệu quả.",
+        introductionEn: "I'm Phuong, financial consulting expert. We help businesses optimize cash flow and invest effectively.",
+        website: "https://financialconsulting.vn",
+        email: "phuong@financialconsulting.vn",
+        phone: "0901234567",
+        zalo: "0901234567"
+      }
+    ],
+    
+    // Presentation Tab - Check-in & 30s Slides System
+    presentation: {
+      titleVi: "⏱️ Hệ thống Check-in & Trình chiếu 30s",
+      titleEn: "⏱️ Check-in & 30s Presentation System",
+      
+      checkInSection: {
+        titleVi: "Check-in qua Dashboard",
+        titleEn: "Check-in via Dashboard",
+        descVi: "Thành viên check-in trước buổi họp để được đưa vào danh sách trình bày",
+        descEn: "Members check-in before meeting to be included in presentation list"
+      },
+      
+      slideSection: {
+        titleVi: "Slide tự động hiển thị",
+        titleEn: "Auto-display Slides",
+        descVi: "Thông tin 30s hiển thị: Tên + Ngành nghề + Hình ảnh + Slogan",
+        descEn: "30s info displays: Name + Industry + Image + Slogan"
+      },
+      
+      timerSection: {
+        titleVi: "Đồng bộ trình chiếu",
+        titleEn: "Synchronized Presentation",
+        descVi: "Nút Play đếm ngược 30s đồng bộ với slide của cá nhân",
+        descEn: "Play button counts down 30s synchronized with individual slide"
+      },
+      
+      slideTemplates: [
+        {
+          id: 1,
+          name: "SLIDE 1",
+          color: "#DC143C",
+          layout: "standard",
+          elements: [
+            { type: "logo", position: "top-center" },
+            { type: "name", position: "center", text: "Tên thành viên + Vai trò" },
+            { type: "tagline", position: "bottom", text: "Tối ưu thuế – Tăng trưởng doanh nghiệp" },
+            { type: "services", position: "bottom-center", text: "Kế toán – Tư vấn Thuế – Kiểm toán" }
+          ]
+        },
+        {
+          id: 2,
+          name: "SLIDE 2",
+          color: "#8B0000",
+          layout: "product-showcase",
+          elements: [
+            { type: "product-image", position: "center", text: "Hình ảnh sản phẩm/dịch vụ" },
+            { type: "product-highlight", position: "center-bottom", text: "Sản phẩm nổi bật\nTên – Ứng dụng – Ưu điểm" },
+            { type: "contact-buttons", position: "bottom", buttons: ["🌐 Website", "📱 QR", "📞 Hotline"] }
+          ]
+        }
+      ]
+    },
+    
+    // 1-1 CONNECT Tab
+    connectTab: {
+      titleVi: "Hệ thống 1-1 CONNECT",
+      titleEn: "1-1 CONNECT System",
+      descVi: "Hệ thống đặt lịch 1-1 thông minh với gợi ý kết nối theo ngành bổ trợ",
+      descEn: "Smart 1-1 scheduling system with connection suggestions by complementary industry",
+      
+      sections: [
+        {
+          icon: "📅",
+          titleVi: "Đặt lịch 1-1 thông minh",
+          titleEn: "Smart 1-1 Scheduling",
+          descVi: "Hiển thị lịch rảnh của các thành viên và đặt lịch tự động",
+          descEn: "Display member availability and automatic scheduling",
+          buttonVi: "📅 Mở Lịch Đặt Hẹn",
+          buttonEn: "📅 Open Schedule"
+        },
+        {
+          icon: "👥",
+          titleVi: "Gợi ý kết nối",
+          titleEn: "Connection Suggestions",
+          descVi: "Gợi ý kết nối 1-1 theo ngành bổ trợ và ưu tiên KPI",
+          descEn: "1-1 connection suggestions by complementary industry and KPI priority",
+          buttonVi: "🔍 Xem Gợi Ý Kết Nối",
+          buttonEn: "🔍 View Suggestions"
+        },
+        {
+          icon: "⏰",
+          titleVi: "Lịch sử cuộc hẹn",
+          titleEn: "Meeting History",
+          descVi: "Lưu lịch sử cuộc hẹn và kết quả kết nối",
+          descEn: "Save meeting history and connection results",
+          buttonVi: "📊 Xem Lịch Sử",
+          buttonEn: "📊 View History"
+        }
+      ]
+    },
+    
+    // Outstanding Members Tab
+    outstandingTab: {
+      titleVi: "Thành Viên Nổi Bật",
+      titleEn: "Outstanding Members",
+      badgeTypes: [
+        { id: "top-referral", nameVi: "TOP Referral", nameEn: "TOP Referral", color: "#DC143C" },
+        { id: "connect-leader", nameVi: "CONNECT Leader", nameEn: "CONNECT Leader", color: "#8B0000" },
+        { id: "fast-growth", nameVi: "Tăng trưởng nhanh", nameEn: "Fast Growth", color: "#B22222" }
+      ],
+      buttonTextVi: "🏆 Xem Chi Tiết Thành Tích",
+      buttonTextEn: "🏆 View Achievement Details"
+    }
+  });
+
   // Home Page Content - đồng bộ với Index.tsx
   const [homeContent, setHomeContent] = useState({
     // Hero Section
@@ -1057,15 +1266,469 @@ export default function WebsiteAdmin() {
                 <Users className="h-6 w-6 text-bni-red" />
                 Quản lý Trang Thành viên
               </CardTitle>
-              <CardDescription>Quản lý danh sách và thông tin thành viên</CardDescription>
+              <CardDescription>Quản lý nội dung, bố cục, giao diện và tính năng của trang Thành viên</CardDescription>
             </CardHeader>
-            <CardContent className="pt-6">
-              <div className="text-center py-8 text-muted-foreground">
-                <Users className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                <p className="text-lg font-semibold mb-2">Quản lý thành viên</p>
-                <p className="mb-4">Sử dụng trang "Danh sách thành viên" trong Dashboard để quản lý chi tiết</p>
-                <Button variant="outline">
-                  Đi đến Danh sách thành viên
+            <CardContent className="pt-6 space-y-6">
+              {/* Hero Section */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">🎯 Hero Section</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề chính (Tiếng Việt)</Label>
+                  <Input
+                    value={membersContent.heroTitleVi}
+                    onChange={(e) => setMembersContent({...membersContent, heroTitleVi: e.target.value})}
+                    placeholder="Thành Viên & Giới Thiệu Ngành Nghề 30s"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Tiêu đề chính (English)</Label>
+                  <Input
+                    value={membersContent.heroTitleEn}
+                    onChange={(e) => setMembersContent({...membersContent, heroTitleEn: e.target.value})}
+                    placeholder="Members & 30s Industry Introduction"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Phụ đề (Tiếng Việt)</Label>
+                  <Input
+                    value={membersContent.heroSubtitleVi}
+                    onChange={(e) => setMembersContent({...membersContent, heroSubtitleVi: e.target.value})}
+                    placeholder="Kết nối chuyên nghiệp - Chia sẻ cơ hội - Phát triển cùng nhau"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Phụ đề (English)</Label>
+                  <Input
+                    value={membersContent.heroSubtitleEn}
+                    onChange={(e) => setMembersContent({...membersContent, heroSubtitleEn: e.target.value})}
+                    placeholder="Professional Networking - Share Opportunities - Grow Together"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Hero Background Color</Label>
+                  <Input
+                    type="color"
+                    value="#DC143C"
+                    className="h-10"
+                  />
+                  <p className="text-xs text-muted-foreground">Màu nền gradient hero section</p>
+                </div>
+              </div>
+
+              {/* Hero Buttons */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">🔘 Nút chức năng Hero</h3>
+                
+                {membersContent.heroButtons.map((button, index) => (
+                  <Collapsible key={index}>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted rounded-lg hover:bg-muted/80">
+                      <span className="font-semibold">Nút {index + 1}: {button.textVi}</span>
+                      <Edit className="h-4 w-4" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="p-4 space-y-3 border rounded-b-lg">
+                      <div className="space-y-2">
+                        <Label>Text (Tiếng Việt)</Label>
+                        <Input
+                          value={button.textVi}
+                          onChange={(e) => {
+                            const newButtons = [...membersContent.heroButtons];
+                            newButtons[index] = {...button, textVi: e.target.value};
+                            setMembersContent({...membersContent, heroButtons: newButtons});
+                          }}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Text (English)</Label>
+                        <Input
+                          value={button.textEn}
+                          onChange={(e) => {
+                            const newButtons = [...membersContent.heroButtons];
+                            newButtons[index] = {...button, textEn: e.target.value};
+                            setMembersContent({...membersContent, heroButtons: newButtons});
+                          }}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Variant</Label>
+                        <Input
+                          value={button.variant}
+                          onChange={(e) => {
+                            const newButtons = [...membersContent.heroButtons];
+                            newButtons[index] = {...button, variant: e.target.value};
+                            setMembersContent({...membersContent, heroButtons: newButtons});
+                          }}
+                          placeholder="default / outline"
+                        />
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ))}
+              </div>
+
+              {/* Member Directory Section */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">📘 Member Directory Section</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề danh sách (Tiếng Việt)</Label>
+                  <Input
+                    value={membersContent.directoryTitleVi}
+                    onChange={(e) => setMembersContent({...membersContent, directoryTitleVi: e.target.value})}
+                    placeholder="📘 Danh sách thành viên FELIX Chapter"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Tiêu đề danh sách (English)</Label>
+                  <Input
+                    value={membersContent.directoryTitleEn}
+                    onChange={(e) => setMembersContent({...membersContent, directoryTitleEn: e.target.value})}
+                    placeholder="📘 FELIX Chapter Member Directory"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Mô tả (Tiếng Việt)</Label>
+                  <Textarea
+                    value={membersContent.directoryDescVi}
+                    onChange={(e) => setMembersContent({...membersContent, directoryDescVi: e.target.value})}
+                    placeholder="53+ thành viên đa ngành nghề..."
+                    rows={3}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Mô tả (English)</Label>
+                  <Textarea
+                    value={membersContent.directoryDescEn}
+                    onChange={(e) => setMembersContent({...membersContent, directoryDescEn: e.target.value})}
+                    placeholder="53+ members across diverse industries..."
+                    rows={3}
+                  />
+                </div>
+              </div>
+
+              {/* Tabs Configuration */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">📑 Tab Configuration</h3>
+                
+                {membersContent.tabs.map((tab, index) => (
+                  <Collapsible key={index}>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted rounded-lg hover:bg-muted/80">
+                      <span className="font-semibold">Tab: {tab.labelVi}</span>
+                      <Edit className="h-4 w-4" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="p-4 space-y-3 border rounded-b-lg">
+                      <div className="space-y-2">
+                        <Label>Label (Tiếng Việt)</Label>
+                        <Input
+                          value={tab.labelVi}
+                          onChange={(e) => {
+                            const newTabs = [...membersContent.tabs];
+                            newTabs[index] = {...tab, labelVi: e.target.value};
+                            setMembersContent({...membersContent, tabs: newTabs});
+                          }}
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Label (English)</Label>
+                        <Input
+                          value={tab.labelEn}
+                          onChange={(e) => {
+                            const newTabs = [...membersContent.tabs];
+                            newTabs[index] = {...tab, labelEn: e.target.value};
+                            setMembersContent({...membersContent, tabs: newTabs});
+                          }}
+                        />
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ))}
+              </div>
+
+              {/* Members Data */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">👥 Quản lý Danh sách Thành viên</h3>
+                <p className="text-sm text-muted-foreground">Tổng số: {membersContent.members.length} thành viên</p>
+                
+                {membersContent.members.slice(0, 3).map((member, index) => (
+                  <Collapsible key={member.id}>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted rounded-lg hover:bg-muted/80">
+                      <div className="flex items-center gap-3">
+                        <img src={member.avatar} alt={member.name} className="w-10 h-10 rounded-full" />
+                        <div className="text-left">
+                          <span className="font-semibold block">{member.name}</span>
+                          <span className="text-xs text-muted-foreground">{member.company}</span>
+                        </div>
+                      </div>
+                      <Edit className="h-4 w-4" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="p-4 space-y-3 border rounded-b-lg">
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="space-y-2">
+                          <Label>Tên (VI)</Label>
+                          <Input value={member.name} />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Tên (EN)</Label>
+                          <Input value={member.nameEn} />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Chức vụ (VI)</Label>
+                          <Input value={member.position} />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Chức vụ (EN)</Label>
+                          <Input value={member.positionEn} />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Công ty</Label>
+                          <Input value={member.company} />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Ngành nghề (VI)</Label>
+                          <Input value={member.industry} />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Khu vực</Label>
+                          <Input value={member.region} />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Avatar URL</Label>
+                          <Input value={member.avatar} />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Tagline (VI)</Label>
+                        <Input value={member.tagline} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Giới thiệu (VI)</Label>
+                        <Textarea value={member.introduction} rows={3} />
+                      </div>
+                      <div className="grid grid-cols-3 gap-3">
+                        <div className="space-y-2">
+                          <Label>Email</Label>
+                          <Input value={member.email} />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Phone</Label>
+                          <Input value={member.phone} />
+                        </div>
+                        <div className="space-y-2">
+                          <Label>Website</Label>
+                          <Input value={member.website} />
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Badges</Label>
+                        <div className="flex gap-2">
+                          {member.badges.map((badge, i) => (
+                            <Badge key={i} variant="secondary">{badge}</Badge>
+                          ))}
+                        </div>
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ))}
+                
+                <Button variant="outline" className="w-full">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Thêm thành viên mới
+                </Button>
+              </div>
+
+              {/* Presentation Tab Settings */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">⏱️ Cài đặt Tab "Giới thiệu 30s"</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề (Tiếng Việt)</Label>
+                  <Input
+                    value={membersContent.presentation.titleVi}
+                    onChange={(e) => setMembersContent({
+                      ...membersContent, 
+                      presentation: {...membersContent.presentation, titleVi: e.target.value}
+                    })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Tiêu đề (English)</Label>
+                  <Input
+                    value={membersContent.presentation.titleEn}
+                    onChange={(e) => setMembersContent({
+                      ...membersContent, 
+                      presentation: {...membersContent.presentation, titleEn: e.target.value}
+                    })}
+                  />
+                </div>
+
+                <h4 className="font-semibold mt-4">Check-in Section</h4>
+                <div className="space-y-2">
+                  <Label>Tiêu đề Check-in (VI)</Label>
+                  <Input value={membersContent.presentation.checkInSection.titleVi} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Mô tả Check-in (VI)</Label>
+                  <Textarea value={membersContent.presentation.checkInSection.descVi} rows={2} />
+                </div>
+
+                <h4 className="font-semibold mt-4">Slide Templates</h4>
+                {membersContent.presentation.slideTemplates.map((template, index) => (
+                  <Collapsible key={template.id}>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted rounded-lg hover:bg-muted/80">
+                      <span className="font-semibold">{template.name} - {template.layout}</span>
+                      <Edit className="h-4 w-4" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="p-4 space-y-3 border rounded-b-lg">
+                      <div className="space-y-2">
+                        <Label>Tên Slide</Label>
+                        <Input value={template.name} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Màu nền</Label>
+                        <Input type="color" value={template.color} className="h-10" />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Layout Type</Label>
+                        <Input value={template.layout} placeholder="standard / product-showcase" />
+                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        Elements: {template.elements.length} thành phần
+                      </p>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ))}
+              </div>
+
+              {/* 1-1 CONNECT Tab Settings */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">🤝 Cài đặt Tab "1-1 CONNECT"</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề (Tiếng Việt)</Label>
+                  <Input
+                    value={membersContent.connectTab.titleVi}
+                    onChange={(e) => setMembersContent({
+                      ...membersContent, 
+                      connectTab: {...membersContent.connectTab, titleVi: e.target.value}
+                    })}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Mô tả (Tiếng Việt)</Label>
+                  <Textarea
+                    value={membersContent.connectTab.descVi}
+                    onChange={(e) => setMembersContent({
+                      ...membersContent, 
+                      connectTab: {...membersContent.connectTab, descVi: e.target.value}
+                    })}
+                    rows={3}
+                  />
+                </div>
+
+                <h4 className="font-semibold mt-4">Connect Sections</h4>
+                {membersContent.connectTab.sections.map((section, index) => (
+                  <Collapsible key={index}>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted rounded-lg hover:bg-muted/80">
+                      <span className="font-semibold">{section.icon} {section.titleVi}</span>
+                      <Edit className="h-4 w-4" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="p-4 space-y-3 border rounded-b-lg">
+                      <div className="space-y-2">
+                        <Label>Icon</Label>
+                        <Input value={section.icon} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Tiêu đề (VI)</Label>
+                        <Input value={section.titleVi} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Mô tả (VI)</Label>
+                        <Textarea value={section.descVi} rows={2} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Button Text (VI)</Label>
+                        <Input value={section.buttonVi} />
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ))}
+              </div>
+
+              {/* Outstanding Members Tab Settings */}
+              <div className="space-y-4">
+                <h3 className="text-xl font-bold border-b pb-2">🏆 Cài đặt Tab "Thành viên nổi bật"</h3>
+                
+                <div className="space-y-2">
+                  <Label>Tiêu đề (Tiếng Việt)</Label>
+                  <Input
+                    value={membersContent.outstandingTab.titleVi}
+                    onChange={(e) => setMembersContent({
+                      ...membersContent, 
+                      outstandingTab: {...membersContent.outstandingTab, titleVi: e.target.value}
+                    })}
+                  />
+                </div>
+
+                <h4 className="font-semibold mt-4">Badge Types</h4>
+                {membersContent.outstandingTab.badgeTypes.map((badge, index) => (
+                  <Collapsible key={badge.id}>
+                    <CollapsibleTrigger className="flex items-center justify-between w-full p-4 bg-muted rounded-lg hover:bg-muted/80">
+                      <div className="flex items-center gap-2">
+                        <div 
+                          className="w-4 h-4 rounded-full" 
+                          style={{backgroundColor: badge.color}}
+                        ></div>
+                        <span className="font-semibold">{badge.nameVi}</span>
+                      </div>
+                      <Edit className="h-4 w-4" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="p-4 space-y-3 border rounded-b-lg">
+                      <div className="space-y-2">
+                        <Label>Tên Badge (VI)</Label>
+                        <Input value={badge.nameVi} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Tên Badge (EN)</Label>
+                        <Input value={badge.nameEn} />
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Màu</Label>
+                        <Input type="color" value={badge.color} className="h-10" />
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
+                ))}
+
+                <div className="space-y-2">
+                  <Label>Button Text (VI)</Label>
+                  <Input
+                    value={membersContent.outstandingTab.buttonTextVi}
+                    onChange={(e) => setMembersContent({
+                      ...membersContent, 
+                      outstandingTab: {...membersContent.outstandingTab, buttonTextVi: e.target.value}
+                    })}
+                  />
+                </div>
+              </div>
+
+              {/* Save Button */}
+              <div className="flex justify-end pt-6 border-t">
+                <Button 
+                  onClick={() => handleSave("Trang Thành viên")}
+                  className="bg-bni-red hover:bg-bni-dark-red"
+                  disabled={isSaving}
+                >
+                  <Save className="h-4 w-4 mr-2" />
+                  {isSaving ? "Đang lưu..." : "Lưu thay đổi"}
                 </Button>
               </div>
             </CardContent>
