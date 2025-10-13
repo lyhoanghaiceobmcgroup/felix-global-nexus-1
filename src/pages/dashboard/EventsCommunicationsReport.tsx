@@ -104,13 +104,6 @@ export default function EventsCommunicationsReport() {
         </CardHeader>
         <CardContent className="pt-6">
           <EventCalendar
-            events={events.map(e => ({
-              id: e.id,
-              date: new Date(e.date),
-              title: e.title,
-              prepStatus: e.prepStatus,
-              commsStatus: e.commsStatus,
-            }))}
             onDateSelect={(date) => setSelectedDate(date)}
             onCreateEvent={() => setIsCreateDialogOpen(true)}
           />

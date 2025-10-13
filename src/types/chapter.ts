@@ -32,6 +32,20 @@ export interface PerformanceMetrics {
   upcomingEvent: string;
 }
 
+export interface ChapterEvent {
+  id: string;
+  date: Date;
+  title: string;
+  description?: string;
+  type: 'meeting' | 'event' | 'training' | 'social';
+  prepStatus: 'completed' | 'in-progress' | 'not-started';
+  commsStatus: 'completed' | 'in-progress' | 'not-started';
+  location?: string;
+  attendees?: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface ReportStatus {
   isCompleted: boolean;
   completedAt?: string;
@@ -46,6 +60,7 @@ export interface ChapterData {
   strategicObjectives: StrategicObjectives;
   leadership: LeadershipMember[];
   performanceMetrics: PerformanceMetrics;
+  events: ChapterEvent[];
   reports: {
     president: ReportStatus;
     vicePresident: ReportStatus;
@@ -117,6 +132,46 @@ export const initialChapterData: ChapterData = {
     trainingPointsLastMonth: 486,
     upcomingEvent: "Lễ Chuyển giao BĐH (07/10/2025)"
   },
+  events: [
+    {
+      id: "1",
+      date: new Date(2025, 9, 7), // Oct 7, 2025
+      title: "Lễ Chuyển giao BĐH",
+      description: "Lễ chuyển giao Ban Điều hành nhiệm kỳ XI",
+      type: 'event',
+      prepStatus: 'in-progress',
+      commsStatus: 'in-progress',
+      location: "Khách sạn Nikko",
+      attendees: 45,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: "2",
+      date: new Date(2025, 9, 13), // Oct 13, 2025
+      title: "Workshop Kỹ năng Kinh doanh",
+      description: "Workshop nâng cao kỹ năng kinh doanh",
+      type: 'training',
+      prepStatus: 'not-started',
+      commsStatus: 'not-started',
+      location: "Văn phòng Chapter",
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      id: "3",
+      date: new Date(2025, 9, 14), // Oct 14, 2025 (Tuesday)
+      title: "Họp Chapter hàng tuần",
+      description: "Họp chapter định kỳ thứ Ba",
+      type: 'meeting',
+      prepStatus: 'completed',
+      commsStatus: 'completed',
+      location: "Cung Văn Hóa Hữu Nghị Việt Xô",
+      attendees: 42,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+  ],
   reports: {
     president: { isCompleted: false },
     vicePresident: { isCompleted: false },

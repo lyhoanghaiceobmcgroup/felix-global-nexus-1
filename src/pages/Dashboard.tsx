@@ -9,6 +9,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { useChapterData } from "@/contexts/ChapterDataContext";
+import UpcomingEventsDisplay from "@/components/dashboard/UpcomingEventsDisplay";
 
 // Mockup data
 const stats = [{
@@ -150,9 +151,8 @@ const topMembers = [{
 const Dashboard = () => {
   const location = useLocation();
   const isSubRoute = location.pathname !== "/dashboard";
-  const {
-    chapterData
-  } = useChapterData();
+  const { chapterData, getUpcomingEvents } = useChapterData();
+  const upcomingEvents = getUpcomingEvents(30); // Get events for next 30 days
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'achieved':
@@ -912,38 +912,9 @@ const Dashboard = () => {
                 </Card>
               </TabsContent>
 
-              {/* Meetings Tab */}
+              {/* Meetings Tab - Now synced with Chapter Events */}
               <TabsContent value="meetings" className="space-y-4">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Lịch họp sắp tới</CardTitle>
-                    <CardDescription>
-                      Các cuộc họp và sự kiện trong tuần tới
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {upcomingMeetings.map(meeting => <div key={meeting.id} className="flex items-start space-x-4 p-4 rounded-lg border bg-card hover:bg-accent/50 transition-colors">
-                          <div className="flex-shrink-0">
-                            <Calendar className="h-10 w-10 text-bni-red" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-base font-semibold">{meeting.title}</p>
-                            <p className="text-sm text-muted-foreground mt-1">
-                              {new Date(meeting.date).toLocaleDateString('vi-VN')} • {meeting.time}
-                            </p>
-                            <p className="text-sm text-muted-foreground">
-                              📍 {meeting.location}
-                            </p>
-                            <div className="flex items-center mt-2 space-x-2">
-                              <Badge variant="outline">{meeting.attendees} người tham dự</Badge>
-                              <Badge>{meeting.type === "weekly" ? "Họp tuần" : meeting.type === "one-to-one" ? "1-to-1" : "Đào tạo"}</Badge>
-                            </div>
-                          </div>
-                        </div>)}
-                    </div>
-                  </CardContent>
-                </Card>
+                <UpcomingEventsDisplay />
               </TabsContent>
 
               {/* Top Performers Tab */}

@@ -5,24 +5,18 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar as CalendarIcon, Plus } from "lucide-react";
 import { format, addDays, isBefore, startOfDay } from "date-fns";
-
-interface Event {
-  id: string;
-  date: Date;
-  title: string;
-  prepStatus: 'completed' | 'in-progress' | 'not-started';
-  commsStatus: 'completed' | 'in-progress' | 'not-started';
-}
+import { useChapterData } from "@/contexts/ChapterDataContext";
 
 interface EventCalendarProps {
-  events: Event[];
-  onDateSelect: (date: Date) => void;
+  onDateSelect?: (date: Date) => void;
   onCreateEvent: () => void;
 }
 
-export default function EventCalendar({ events, onDateSelect, onCreateEvent }: EventCalendarProps) {
+export default function EventCalendar({ onDateSelect, onCreateEvent }: EventCalendarProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
+  const { getEvents } = useChapterData();
+  const events = getEvents();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -91,7 +85,7 @@ export default function EventCalendar({ events, onDateSelect, onCreateEvent }: E
               selected={selectedDate}
               onSelect={(date) => {
                 setSelectedDate(date);
-                if (date) onDateSelect(date);
+                if (date && onDateSelect) onDateSelect(date);
               }}
               month={currentMonth}
               onMonthChange={setCurrentMonth}

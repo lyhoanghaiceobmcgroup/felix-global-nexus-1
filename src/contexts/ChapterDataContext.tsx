@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { ChapterData, initialChapterData } from '@/types/chapter';
+import { ChapterData, initialChapterData, ChapterEvent } from '@/types/chapter';
 
 interface ChapterDataContextType {
   chapterData: ChapterData;
@@ -8,6 +8,11 @@ interface ChapterDataContextType {
   updateLeadership: (leadership: ChapterData['leadership']) => void;
   updatePerformanceMetrics: (metrics: Partial<ChapterData['performanceMetrics']>) => void;
   submitReport: (reportType: keyof ChapterData['reports'], completedBy: string) => void;
+  addEvent: (event: Omit<ChapterEvent, 'id' | 'createdAt' | 'updatedAt'>) => void;
+  updateEvent: (id: string, event: Partial<ChapterEvent>) => void;
+  deleteEvent: (id: string) => void;
+  getEvents: () => ChapterEvent[];
+  getUpcomingEvents: (days?: number) => ChapterEvent[];
 }
 
 const ChapterDataContext = createContext<ChapterDataContextType | undefined>(undefined);
@@ -93,6 +98,56 @@ export function ChapterDataProvider({ children }: { children: React.ReactNode })
     }));
   };
 
+  const addEvent = (event: Omit<ChapterEvent, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const newEvent: ChapterEvent = {
+      ...event,
+      id: Date.now().toString(),
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    
+    setChapterData(prev => ({
+      ...prev,
+      events: [...prev.events, newEvent],
+      lastUpdated: new Date().toISOString().split('T')[0]
+    }));
+  };
+
+  const updateEvent = (id: string, eventUpdate: Partial<ChapterEvent>) => {
+    setChapterData(prev => ({
+      ...prev,
+      events: prev.events.map(event =>
+        event.id === id
+          ? { ...event, ...eventUpdate, updatedAt: new Date() }
+          : event
+      ),
+      lastUpdated: new Date().toISOString().split('T')[0]
+    }));
+  };
+
+  const deleteEvent = (id: string) => {
+    setChapterData(prev => ({
+      ...prev,
+      events: prev.events.filter(event => event.id !== id),
+      lastUpdated: new Date().toISOString().split('T')[0]
+    }));
+  };
+
+  const getEvents = () => {
+    return chapterData.events;
+  };
+
+  const getUpcomingEvents = (days: number = 7) => {
+    const now = new Date();
+    const futureDate = new Date();
+    futureDate.setDate(now.getDate() + days);
+    
+    return chapterData.events.filter(event => {
+      const eventDate = new Date(event.date);
+      return eventDate >= now && eventDate <= futureDate;
+    }).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+  };
+
   return (
     <ChapterDataContext.Provider
       value={{
@@ -101,7 +156,12 @@ export function ChapterDataProvider({ children }: { children: React.ReactNode })
         updateStrategicObjectives,
         updateLeadership,
         updatePerformanceMetrics,
-        submitReport
+        submitReport,
+        addEvent,
+        updateEvent,
+        deleteEvent,
+        getEvents,
+        getUpcomingEvents
       }}
     >
       {children}
