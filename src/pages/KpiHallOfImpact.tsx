@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Menu, X, Trophy, Star, Users, TrendingUp, Download, Target, Award, Crown, Zap, Calendar, FileText, BarChart3, PieChart, ArrowUp, ArrowDown, Medal, Filter, UserPlus, Gift } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { MemberFooter } from "@/components/members/MemberFooter";
 const KpiHallOfImpact = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [language, setLanguage] = useState('vi');
@@ -871,6 +872,8 @@ const KpiHallOfImpact = () => {
           </div>
         </div>
       </footer>
+
+      <MemberFooter />
     </div>;
 };
 export default KpiHallOfImpact;

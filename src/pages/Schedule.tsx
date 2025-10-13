@@ -5,6 +5,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Menu, X, Calendar as CalendarIcon, Clock, MapPin, Download, User, Phone, Mail, Users, Search, AlertTriangle, FileText, ChevronLeft, ChevronRight, Video, Share2, Bell, ExternalLink } from "lucide-react";
+import { MemberFooter } from "@/components/members/MemberFooter";
 const Schedule = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [language, setLanguage] = useState('vi');
@@ -558,6 +559,8 @@ const Schedule = () => {
           </div>
         </div>
       </footer>
+
+      <MemberFooter />
     </div>;
 };
 export default Schedule;

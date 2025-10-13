@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { FileText, Image, Youtube, Download, Share2, Play, Search, Filter, Upload, Lock, Eye, Menu, X } from "lucide-react";
+import { MemberFooter } from "@/components/members/MemberFooter";
 
 const MediaHub = () => {
   const [selectedFilter, setSelectedFilter] = useState('all');
@@ -424,6 +425,8 @@ const MediaHub = () => {
           </div>
         </div>
       </div>
+
+      <MemberFooter />
     </div>
   );
 };

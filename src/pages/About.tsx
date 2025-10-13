@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Menu, X, Users, TrendingUp, Globe, Award, Phone, Mail, MapPin, ChevronRight, Calendar, Clock, Star, Trophy, Target, Eye, Heart, Download, Share2, Map } from "lucide-react";
+import { MemberFooter } from "@/components/members/MemberFooter";
 
 const About = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -495,6 +496,8 @@ const About = () => {
           </div>
         </div>
       </footer>
+
+      <MemberFooter />
     </div>
   );
 };

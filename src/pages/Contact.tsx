@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { MapPin, Phone, Mail, Users, Clock, Facebook, Youtube, Linkedin, Download, Send, HandHeart, FileText, Globe, Bot, QrCode, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { MemberFooter } from "@/components/members/MemberFooter";
 
 const Contact = () => {
   const [language, setLanguage] = useState<'vi' | 'en'>('vi');
@@ -703,6 +704,8 @@ const Contact = () => {
           </div>
         </DialogContent>
       </Dialog>
+
+      <MemberFooter />
     </div>
   );
 };
