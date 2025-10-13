@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { MapPin, Phone, Mail, Users, Clock, Facebook, Youtube, Linkedin, Download, Send, HandHeart, FileText, Globe, Bot, QrCode, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { MemberFooter } from "@/components/members/MemberFooter";
+import { MemberHeader } from "@/components/members/MemberHeader";
 
 const Contact = () => {
   const [language, setLanguage] = useState<'vi' | 'en'>('vi');
@@ -58,6 +59,15 @@ const Contact = () => {
 
   const content = {
     vi: {
+      nav: {
+        home: "Trang chủ",
+        about: "Giới thiệu",
+        members: "Thành viên",
+        schedule: "Lịch họp",
+        kpi: "KPI Hall",
+        media: "Media Hub",
+        contact: "Liên hệ"
+      },
       pageTitle: "Liên Hệ & Kết Nối Đối Tác",
       pageSubtitle: "💼 Hãy kết nối để tạo ra giá trị bền vững cùng FELIX Chapter",
       pageDescription: "Chúng tôi luôn chào đón những mối quan hệ mới – dù bạn là doanh nhân, khách mời tiềm năng, nhà tài trợ hay đối tác chiến lược. FELIX mong muốn hợp tác cùng những cá nhân và tổ chức có cùng tầm nhìn về phát triển kinh doanh vững mạnh và kết nối giá trị thực tế.",
@@ -135,6 +145,15 @@ const Contact = () => {
       }
     },
     en: {
+      nav: {
+        home: "Home",
+        about: "About",
+        members: "Members",
+        schedule: "Schedule",
+        kpi: "KPI Hall",
+        media: "Media Hub",
+        contact: "Contact"
+      },
       pageTitle: "Contact & Partner Connection",
       pageSubtitle: "💼 Connect to create lasting value with FELIX Chapter",
       pageDescription: "We always welcome new relationships - whether you are an entrepreneur, potential guest, sponsor or strategic partner. FELIX desires to cooperate with individuals and organizations with the same vision of strong business development and practical value connections.",
@@ -256,8 +275,14 @@ const Contact = () => {
 
   const t = content[language];
 
+  const toggleLanguage = () => {
+    setLanguage(language === 'vi' ? 'en' : 'vi');
+  };
+
   return (
     <div className="min-h-screen bg-background">
+      <MemberHeader language={language} toggleLanguage={toggleLanguage} currentText={t} />
+      
       {/* Header with BNI Colors */}
       <div className="bg-gradient-to-r from-[#D71920] via-[#8B0000] to-[#2E2E2E] text-white py-20">
         <div className="container mx-auto px-4 text-center">
