@@ -575,103 +575,70 @@ export default function WebsiteAdmin() {
   // Contact Info - đồng bộ với Contact.tsx
   const [contactInfo, setContactInfo] = useState({
     // Hero Section
-    pageTitleVi: "Liên Hệ & Kết Nối Đối Tác",
-    pageTitleEn: "Contact & Partner Connection",
-    pageSubtitleVi: "💼 Hãy kết nối để tạo ra giá trị bền vững cùng FELIX Chapter",
-    pageSubtitleEn: "💼 Connect to create lasting value with FELIX Chapter",
-    pageDescriptionVi: "Chúng tôi luôn chào đón những mối quan hệ mới – dù bạn là doanh nhân, khách mời tiềm năng, nhà tài trợ hay đối tác chiến lược. FELIX mong muốn hợp tác cùng những cá nhân và tổ chức có cùng tầm nhìn về phát triển kinh doanh vững mạnh và kết nối giá trị thực tế.",
-    pageDescriptionEn: "We always welcome new relationships - whether you are an entrepreneur, potential guest, sponsor or strategic partner. FELIX desires to cooperate with individuals and organizations with the same vision of strong business development and practical value connections.",
+    pageTitle: "Liên Hệ & Kết Nối Đối Tác",
+    pageSubtitle: "💼 Hãy kết nối để tạo ra giá trị bền vững cùng FELIX Chapter",
+    pageDescription: "Chúng tôi luôn chào đón những mối quan hệ mới – dù bạn là doanh nhân, khách mời tiềm năng, nhà tài trợ hay đối tác chiến lược. FELIX mong muốn hợp tác cùng những cá nhân và tổ chức có cùng tầm nhìn về phát triển kinh doanh vững mạnh và kết nối giá trị thực tế.",
     
     // Contact Details
     phone: "084 890 5555",
     email: "info@bnifelix.vn",
     address: "Cung văn hóa Hữu Nghị Việt Xô, 91 Trần Hưng Đạo, Hà Nội",
-    addressEn: "Vietnam-Soviet Friendship Cultural Palace, 91 Tran Hung Dao, Hanoi",
     hours: "06:45 – 8:45 (Thứ 3 hàng tuần)",
-    hoursEn: "06:45 – 8:45 (Tuesday Weekly)",
     googleMapsLink: "https://maps.google.com/?q=91+Tran+Hung+Dao+Hanoi",
     
     // Quick Contact Form
-    quickContactTitleVi: "📝 Form liên hệ nhanh",
-    quickContactTitleEn: "📝 Quick Contact Form",
-    quickContactDescVi: "Điền thông tin dưới đây, đội ngũ FELIX sẽ phản hồi bạn trong vòng 24h làm việc.",
-    quickContactDescEn: "Fill in the information below, FELIX team will respond to you within 24 working hours.",
+    quickContactTitle: "📝 Form liên hệ nhanh",
+    quickContactDesc: "Điền thông tin dưới đây, đội ngũ FELIX sẽ phản hồi bạn trong vòng 24h làm việc.",
     
     // Contact Reasons
     reasons: [
-      { value: "meeting", labelVi: "Tham dự họp", labelEn: "Attend meeting" },
-      { value: "partner", labelVi: "Đăng ký đối tác", labelEn: "Register partnership" },
-      { value: "media", labelVi: "Hợp tác truyền thông", labelEn: "Media collaboration" },
-      { value: "sponsor", labelVi: "Nhà tài trợ", labelEn: "Sponsorship" },
-      { value: "other", labelVi: "Khác", labelEn: "Other" }
+      { value: "meeting", label: "Tham dự họp" },
+      { value: "partner", label: "Đăng ký đối tác" },
+      { value: "media", label: "Hợp tác truyền thông" },
+      { value: "sponsor", label: "Nhà tài trợ" },
+      { value: "other", label: "Khác" }
     ],
     
     // QR & Direct Connection
-    qrTitleVi: "Kết nối trực tiếp",
-    qrTitleEn: "Direct Connection",
-    qrDescVi: "Quét QR Code để kết nối Zalo hoặc chat với AI",
-    qrDescEn: "Scan QR Code to connect Zalo or chat with AI",
-    scanQRVi: "📲 Quét QR để kết nối Zalo",
-    scanQREn: "📲 Scan QR to connect Zalo",
-    chatAIVi: "🧠 Nhận phản hồi nhanh từ Trợ lý FELIX AI",
-    chatAIEn: "🧠 Get quick response from FELIX AI Assistant",
+    qrTitle: "Kết nối trực tiếp",
+    qrDesc: "Quét QR Code để kết nối Zalo hoặc chat với AI",
+    scanQR: "📲 Quét QR để kết nối Zalo",
+    chatAI: "🧠 Nhận phản hồi nhanh từ Trợ lý FELIX AI",
     
     // Strategic Partnership
-    partnershipTitleVi: "🤝 Trở thành đối tác chiến lược",
-    partnershipTitleEn: "🤝 Become Strategic Partner",
-    partnershipDescVi: "FELIX đồng hành cùng các tổ chức uy tín trong:",
-    partnershipDescEn: "FELIX cooperates with prestigious organizations in:",
-    partnerCategory1Vi: "Đào tạo – Coaching – Truyền thông thương hiệu",
-    partnerCategory1En: "Training – Coaching – Brand Communication",
-    partnerCategory2Vi: "Công nghệ – Phần mềm – Tài chính – Pháp lý",
-    partnerCategory2En: "Technology – Software – Finance – Legal",
-    partnerCategory3Vi: "Tổ chức sự kiện – Hội thảo – Hợp tác cộng đồng",
-    partnerCategory3En: "Event Organization – Seminars – Community Cooperation",
-    partnerQuestionVi: "Bạn muốn đồng hành cùng FELIX?",
-    partnerQuestionEn: "Do you want to partner with FELIX?",
-    sendProposalVi: "💼 Gửi đề xuất hợp tác",
-    sendProposalEn: "💼 Send Partnership Proposal",
-    registerSponsorVi: "🏷️ Đăng ký làm Nhà tài trợ",
-    registerSponsorEn: "🏷️ Register as Sponsor",
+    partnershipTitle: "🤝 Trở thành đối tác chiến lược",
+    partnershipDesc: "FELIX đồng hành cùng các tổ chức uy tín trong:",
+    partnerCategory1: "Đào tạo – Coaching – Truyền thông thương hiệu",
+    partnerCategory2: "Công nghệ – Phần mềm – Tài chính – Pháp lý",
+    partnerCategory3: "Tổ chức sự kiện – Hội thảo – Hợp tác cộng đồng",
+    partnerQuestion: "Bạn muốn đồng hành cùng FELIX?",
+    sendProposal: "💼 Gửi đề xuất hợp tác",
+    registerSponsor: "🏷️ Đăng ký làm Nhà tài trợ",
     
     // Newsletter
-    newsletterTitleVi: "📬 Nhận bản tin FELIX",
-    newsletterTitleEn: "📬 Receive FELIX Newsletter",
-    newsletterDescVi: "Đăng ký để cập nhật lịch họp, sự kiện, tài liệu hữu ích mỗi tuần.",
-    newsletterDescEn: "Subscribe to get updates on meeting schedules, events, and useful materials every week.",
-    subscribeNewsletterVi: "📬 Đăng ký nhận bản tin định kỳ",
-    subscribeNewsletterEn: "📬 Subscribe to Newsletter",
+    newsletterTitle: "📬 Nhận bản tin FELIX",
+    newsletterDesc: "Đăng ký để cập nhật lịch họp, sự kiện, tài liệu hữu ích mỗi tuần.",
+    subscribeNewsletter: "📬 Đăng ký nhận bản tin định kỳ",
     
     // Social Media
-    socialMediaTitleVi: "🌐 Kết nối mạng xã hội",
-    socialMediaTitleEn: "🌐 Social Media Connection",
-    followFanpageVi: "📺 Fanpage Facebook FELIX Chapter",
-    followFanpageEn: "📺 Facebook Fanpage FELIX Chapter",
-    watchVideoVi: "🎥 YouTube Video giới thiệu hoạt động",
-    watchVideoEn: "🎥 YouTube Introduction Video",
-    connectLinkedInVi: "🔗 LinkedIn: Cộng đồng Doanh nhân FELIX",
-    connectLinkedInEn: "🔗 LinkedIn: FELIX Entrepreneur Community",
+    socialMediaTitle: "🌐 Kết nối mạng xã hội",
+    followFanpage: "📺 Fanpage Facebook FELIX Chapter",
+    watchVideo: "🎥 YouTube Video giới thiệu hoạt động",
+    connectLinkedIn: "🔗 LinkedIn: Cộng đồng Doanh nhân FELIX",
     facebook: "https://facebook.com/bnielixhanoi",
     youtube: "https://youtube.com/@bnielixhanoi",
     linkedin: "https://linkedin.com/company/bni-felix-hanoi",
     
     // AI Assistant
-    aiAssistantTitleVi: "🤖 Trợ lý FELIX AI – Hỏi đáp nhanh",
-    aiAssistantTitleEn: "🤖 FELIX AI Assistant – Quick Q&A",
-    aiDescVi: "Trả lời nhanh các câu hỏi về FELIX",
-    aiDescEn: "Quick answers to questions about FELIX",
-    openAIVi: "🧠 Mở Trợ lý FELIX AI",
-    openAIEn: "🧠 Open FELIX AI Assistant",
+    aiAssistantTitle: "🤖 Trợ lý FELIX AI – Hỏi đáp nhanh",
+    aiDesc: "Trả lời nhanh các câu hỏi về FELIX",
+    openAI: "🧠 Mở Trợ lý FELIX AI",
     
     // Exit Popup
-    exitTitleVi: "Đừng vội rời đi!",
-    exitTitleEn: "Don't leave yet!",
-    exitDescVi: "Bạn đã nhận brochure FELIX chưa?",
-    exitDescEn: "Have you received the FELIX brochure?",
-    receiveDocsVi: "📩 Nhận tài liệu",
-    receiveDocsEn: "📩 Receive Documents",
-    connectRepVi: "📞 Kết nối với đại diện Chapter",
-    connectRepEn: "📞 Connect with Chapter Representative"
+    exitTitle: "Đừng vội rời đi!",
+    exitDesc: "Bạn đã nhận brochure FELIX chưa?",
+    receiveDocs: "📩 Nhận tài liệu",
+    connectRep: "📞 Kết nối với đại diện Chapter"
   });
 
   const handleSave = (section: string) => {
@@ -3111,66 +3078,32 @@ export default function WebsiteAdmin() {
               <div className="space-y-4">
                 <h3 className="text-lg font-bold border-b pb-2">Hero Section</h3>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Tiêu đề trang (VI)</Label>
-                    <Input
-                      value={contactInfo.pageTitleVi}
-                      onChange={(e) => setContactInfo({...contactInfo, pageTitleVi: e.target.value})}
-                      placeholder="Tiêu đề tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Tiêu đề trang (EN)</Label>
-                    <Input
-                      value={contactInfo.pageTitleEn}
-                      onChange={(e) => setContactInfo({...contactInfo, pageTitleEn: e.target.value})}
-                      placeholder="Tiêu đề tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Tiêu đề trang</Label>
+                  <Input
+                    value={contactInfo.pageTitle}
+                    onChange={(e) => setContactInfo({...contactInfo, pageTitle: e.target.value})}
+                    placeholder="Tiêu đề trang"
+                  />
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Phụ đề (VI)</Label>
-                    <Input
-                      value={contactInfo.pageSubtitleVi}
-                      onChange={(e) => setContactInfo({...contactInfo, pageSubtitleVi: e.target.value})}
-                      placeholder="Phụ đề tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Phụ đề (EN)</Label>
-                    <Input
-                      value={contactInfo.pageSubtitleEn}
-                      onChange={(e) => setContactInfo({...contactInfo, pageSubtitleEn: e.target.value})}
-                      placeholder="Phụ đề tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Phụ đề</Label>
+                  <Input
+                    value={contactInfo.pageSubtitle}
+                    onChange={(e) => setContactInfo({...contactInfo, pageSubtitle: e.target.value})}
+                    placeholder="Phụ đề"
+                  />
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Mô tả trang (VI)</Label>
-                    <Textarea
-                      value={contactInfo.pageDescriptionVi}
-                      onChange={(e) => setContactInfo({...contactInfo, pageDescriptionVi: e.target.value})}
-                      placeholder="Mô tả tiếng Việt"
-                      rows={3}
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Mô tả trang (EN)</Label>
-                    <Textarea
-                      value={contactInfo.pageDescriptionEn}
-                      onChange={(e) => setContactInfo({...contactInfo, pageDescriptionEn: e.target.value})}
-                      placeholder="Mô tả tiếng Anh"
-                      rows={3}
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Mô tả trang</Label>
+                  <Textarea
+                    value={contactInfo.pageDescription}
+                    onChange={(e) => setContactInfo({...contactInfo, pageDescription: e.target.value})}
+                    placeholder="Mô tả trang"
+                    rows={3}
+                  />
                 </div>
               </div>
 
@@ -3199,46 +3132,23 @@ export default function WebsiteAdmin() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Địa chỉ (VI) *</Label>
-                    <Textarea
-                      value={contactInfo.address}
-                      onChange={(e) => setContactInfo({...contactInfo, address: e.target.value})}
-                      placeholder="Địa chỉ tiếng Việt"
-                      rows={2}
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Địa chỉ (EN) *</Label>
-                    <Textarea
-                      value={contactInfo.addressEn}
-                      onChange={(e) => setContactInfo({...contactInfo, addressEn: e.target.value})}
-                      placeholder="Địa chỉ tiếng Anh"
-                      rows={2}
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Địa chỉ *</Label>
+                  <Textarea
+                    value={contactInfo.address}
+                    onChange={(e) => setContactInfo({...contactInfo, address: e.target.value})}
+                    placeholder="Địa chỉ"
+                    rows={2}
+                  />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Thời gian họp (VI)</Label>
-                    <Input
-                      value={contactInfo.hours}
-                      onChange={(e) => setContactInfo({...contactInfo, hours: e.target.value})}
-                      placeholder="Thời gian họp tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Thời gian họp (EN)</Label>
-                    <Input
-                      value={contactInfo.hoursEn}
-                      onChange={(e) => setContactInfo({...contactInfo, hoursEn: e.target.value})}
-                      placeholder="Thời gian họp tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Thời gian họp</Label>
+                  <Input
+                    value={contactInfo.hours}
+                    onChange={(e) => setContactInfo({...contactInfo, hours: e.target.value})}
+                    placeholder="Thời gian họp"
+                  />
                 </div>
                 
                 <div className="space-y-2">
@@ -3255,46 +3165,23 @@ export default function WebsiteAdmin() {
               <div className="space-y-4">
                 <h3 className="text-lg font-bold border-b pb-2">Form Liên Hệ Nhanh</h3>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Tiêu đề form (VI)</Label>
-                    <Input
-                      value={contactInfo.quickContactTitleVi}
-                      onChange={(e) => setContactInfo({...contactInfo, quickContactTitleVi: e.target.value})}
-                      placeholder="Tiêu đề form tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Tiêu đề form (EN)</Label>
-                    <Input
-                      value={contactInfo.quickContactTitleEn}
-                      onChange={(e) => setContactInfo({...contactInfo, quickContactTitleEn: e.target.value})}
-                      placeholder="Tiêu đề form tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Tiêu đề form</Label>
+                  <Input
+                    value={contactInfo.quickContactTitle}
+                    onChange={(e) => setContactInfo({...contactInfo, quickContactTitle: e.target.value})}
+                    placeholder="Tiêu đề form"
+                  />
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Mô tả form (VI)</Label>
-                    <Textarea
-                      value={contactInfo.quickContactDescVi}
-                      onChange={(e) => setContactInfo({...contactInfo, quickContactDescVi: e.target.value})}
-                      placeholder="Mô tả form tiếng Việt"
-                      rows={2}
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Mô tả form (EN)</Label>
-                    <Textarea
-                      value={contactInfo.quickContactDescEn}
-                      onChange={(e) => setContactInfo({...contactInfo, quickContactDescEn: e.target.value})}
-                      placeholder="Mô tả form tiếng Anh"
-                      rows={2}
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Mô tả form</Label>
+                  <Textarea
+                    value={contactInfo.quickContactDesc}
+                    onChange={(e) => setContactInfo({...contactInfo, quickContactDesc: e.target.value})}
+                    placeholder="Mô tả form"
+                    rows={2}
+                  />
                 </div>
               </div>
 
@@ -3302,24 +3189,13 @@ export default function WebsiteAdmin() {
               <div className="space-y-4">
                 <h3 className="text-lg font-bold border-b pb-2">Kết nối trực tiếp (QR & AI)</h3>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Tiêu đề QR (VI)</Label>
-                    <Input
-                      value={contactInfo.qrTitleVi}
-                      onChange={(e) => setContactInfo({...contactInfo, qrTitleVi: e.target.value})}
-                      placeholder="Tiêu đề QR tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Tiêu đề QR (EN)</Label>
-                    <Input
-                      value={contactInfo.qrTitleEn}
-                      onChange={(e) => setContactInfo({...contactInfo, qrTitleEn: e.target.value})}
-                      placeholder="Tiêu đề QR tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Tiêu đề QR</Label>
+                  <Input
+                    value={contactInfo.qrTitle}
+                    onChange={(e) => setContactInfo({...contactInfo, qrTitle: e.target.value})}
+                    placeholder="Tiêu đề QR"
+                  />
                 </div>
               </div>
 
@@ -3327,84 +3203,40 @@ export default function WebsiteAdmin() {
               <div className="space-y-4">
                 <h3 className="text-lg font-bold border-b pb-2">Đối tác chiến lược</h3>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Tiêu đề đối tác (VI)</Label>
-                    <Input
-                      value={contactInfo.partnershipTitleVi}
-                      onChange={(e) => setContactInfo({...contactInfo, partnershipTitleVi: e.target.value})}
-                      placeholder="Tiêu đề đối tác tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Tiêu đề đối tác (EN)</Label>
-                    <Input
-                      value={contactInfo.partnershipTitleEn}
-                      onChange={(e) => setContactInfo({...contactInfo, partnershipTitleEn: e.target.value})}
-                      placeholder="Tiêu đề đối tác tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Tiêu đề đối tác</Label>
+                  <Input
+                    value={contactInfo.partnershipTitle}
+                    onChange={(e) => setContactInfo({...contactInfo, partnershipTitle: e.target.value})}
+                    placeholder="Tiêu đề đối tác"
+                  />
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Loại đối tác 1 (VI)</Label>
-                    <Input
-                      value={contactInfo.partnerCategory1Vi}
-                      onChange={(e) => setContactInfo({...contactInfo, partnerCategory1Vi: e.target.value})}
-                      placeholder="Loại đối tác 1 tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Loại đối tác 1 (EN)</Label>
-                    <Input
-                      value={contactInfo.partnerCategory1En}
-                      onChange={(e) => setContactInfo({...contactInfo, partnerCategory1En: e.target.value})}
-                      placeholder="Loại đối tác 1 tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Loại đối tác 1</Label>
+                  <Input
+                    value={contactInfo.partnerCategory1}
+                    onChange={(e) => setContactInfo({...contactInfo, partnerCategory1: e.target.value})}
+                    placeholder="Loại đối tác 1"
+                  />
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Loại đối tác 2 (VI)</Label>
-                    <Input
-                      value={contactInfo.partnerCategory2Vi}
-                      onChange={(e) => setContactInfo({...contactInfo, partnerCategory2Vi: e.target.value})}
-                      placeholder="Loại đối tác 2 tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Loại đối tác 2 (EN)</Label>
-                    <Input
-                      value={contactInfo.partnerCategory2En}
-                      onChange={(e) => setContactInfo({...contactInfo, partnerCategory2En: e.target.value})}
-                      placeholder="Loại đối tác 2 tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Loại đối tác 2</Label>
+                  <Input
+                    value={contactInfo.partnerCategory2}
+                    onChange={(e) => setContactInfo({...contactInfo, partnerCategory2: e.target.value})}
+                    placeholder="Loại đối tác 2"
+                  />
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Loại đối tác 3 (VI)</Label>
-                    <Input
-                      value={contactInfo.partnerCategory3Vi}
-                      onChange={(e) => setContactInfo({...contactInfo, partnerCategory3Vi: e.target.value})}
-                      placeholder="Loại đối tác 3 tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Loại đối tác 3 (EN)</Label>
-                    <Input
-                      value={contactInfo.partnerCategory3En}
-                      onChange={(e) => setContactInfo({...contactInfo, partnerCategory3En: e.target.value})}
-                      placeholder="Loại đối tác 3 tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Loại đối tác 3</Label>
+                  <Input
+                    value={contactInfo.partnerCategory3}
+                    onChange={(e) => setContactInfo({...contactInfo, partnerCategory3: e.target.value})}
+                    placeholder="Loại đối tác 3"
+                  />
                 </div>
               </div>
 
@@ -3412,24 +3244,13 @@ export default function WebsiteAdmin() {
               <div className="space-y-4">
                 <h3 className="text-lg font-bold border-b pb-2">Bản tin Newsletter</h3>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Tiêu đề newsletter (VI)</Label>
-                    <Input
-                      value={contactInfo.newsletterTitleVi}
-                      onChange={(e) => setContactInfo({...contactInfo, newsletterTitleVi: e.target.value})}
-                      placeholder="Tiêu đề newsletter tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Tiêu đề newsletter (EN)</Label>
-                    <Input
-                      value={contactInfo.newsletterTitleEn}
-                      onChange={(e) => setContactInfo({...contactInfo, newsletterTitleEn: e.target.value})}
-                      placeholder="Tiêu đề newsletter tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Tiêu đề newsletter</Label>
+                  <Input
+                    value={contactInfo.newsletterTitle}
+                    onChange={(e) => setContactInfo({...contactInfo, newsletterTitle: e.target.value})}
+                    placeholder="Tiêu đề newsletter"
+                  />
                 </div>
               </div>
 
@@ -3469,24 +3290,13 @@ export default function WebsiteAdmin() {
               <div className="space-y-4">
                 <h3 className="text-lg font-bold border-b pb-2">Trợ lý AI</h3>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Tiêu đề AI (VI)</Label>
-                    <Input
-                      value={contactInfo.aiAssistantTitleVi}
-                      onChange={(e) => setContactInfo({...contactInfo, aiAssistantTitleVi: e.target.value})}
-                      placeholder="Tiêu đề AI tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Tiêu đề AI (EN)</Label>
-                    <Input
-                      value={contactInfo.aiAssistantTitleEn}
-                      onChange={(e) => setContactInfo({...contactInfo, aiAssistantTitleEn: e.target.value})}
-                      placeholder="Tiêu đề AI tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Tiêu đề AI</Label>
+                  <Input
+                    value={contactInfo.aiAssistantTitle}
+                    onChange={(e) => setContactInfo({...contactInfo, aiAssistantTitle: e.target.value})}
+                    placeholder="Tiêu đề AI"
+                  />
                 </div>
               </div>
 
@@ -3494,24 +3304,13 @@ export default function WebsiteAdmin() {
               <div className="space-y-4">
                 <h3 className="text-lg font-bold border-b pb-2">Exit Popup</h3>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label>Tiêu đề popup (VI)</Label>
-                    <Input
-                      value={contactInfo.exitTitleVi}
-                      onChange={(e) => setContactInfo({...contactInfo, exitTitleVi: e.target.value})}
-                      placeholder="Tiêu đề popup tiếng Việt"
-                    />
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label>Tiêu đề popup (EN)</Label>
-                    <Input
-                      value={contactInfo.exitTitleEn}
-                      onChange={(e) => setContactInfo({...contactInfo, exitTitleEn: e.target.value})}
-                      placeholder="Tiêu đề popup tiếng Anh"
-                    />
-                  </div>
+                <div className="space-y-2">
+                  <Label>Tiêu đề popup</Label>
+                  <Input
+                    value={contactInfo.exitTitle}
+                    onChange={(e) => setContactInfo({...contactInfo, exitTitle: e.target.value})}
+                    placeholder="Tiêu đề popup"
+                  />
                 </div>
               </div>
 
