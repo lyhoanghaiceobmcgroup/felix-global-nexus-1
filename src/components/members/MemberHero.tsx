@@ -1,10 +1,13 @@
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+
 interface MemberHeroProps {
   currentText: any;
 }
 export const MemberHero = ({
   currentText
 }: MemberHeroProps) => {
+  const navigate = useNavigate();
   return <section className="relative overflow-hidden bg-gradient-to-br from-bni-red via-bni-dark-red to-bni-red text-white">
       <div className="absolute inset-0 bg-black/20"></div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
@@ -22,7 +25,11 @@ export const MemberHero = ({
             <Button size="lg" variant="outline" className="border-white bg-white/10 hover:bg-white text-white hover:text-bni-red text-lg px-8 py-6">
               📅 {currentText.hero.schedule11}
             </Button>
-            <Button size="lg" className="bg-bni-black hover:bg-bni-black/90 text-white text-lg px-8 py-6">
+            <Button 
+              onClick={() => navigate('/presentation-30s')}
+              size="lg" 
+              className="bg-bni-black hover:bg-bni-black/90 text-white text-lg px-8 py-6"
+            >
               🎤 {currentText.hero.start30s}
             </Button>
           </div>

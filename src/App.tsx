@@ -7,6 +7,7 @@ import { ChapterDataProvider } from "@/contexts/ChapterDataContext";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import Members from "./pages/Members";
+import Presentation30s from "./pages/Presentation30s";
 import Schedule from "./pages/Schedule";
 import KpiHallOfImpact from "./pages/KpiHallOfImpact";
 import Contact from "./pages/Contact";
@@ -37,6 +38,7 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<About />} />
             <Route path="/members" element={<Members />} />
+            <Route path="/presentation-30s" element={<Presentation30s />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/kpi-hall-of-impact" element={<KpiHallOfImpact />} />
             <Route path="/contact" element={<Contact />} />
