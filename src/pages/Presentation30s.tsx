@@ -253,152 +253,159 @@ const Presentation30s = () => {
           </CardContent>
         </Card>
 
-        {/* Current Presenter */}
-        {checkedInMembers.length > 0 && currentPresenter < checkedInMembers.length && (
-          <Card className="border-primary shadow-xl mb-8 bg-card">
-            <CardContent className="p-8">
-              <div className="text-center mb-6">
-                <h2 className="text-3xl font-bold text-foreground">
-                  {currentText.currentPresenter}
-                </h2>
-              </div>
-
-              <div className="flex flex-col lg:flex-row items-center gap-8">
-                {/* Avatar & Info */}
-                <div className="text-center lg:text-left">
-                  <Avatar className="w-32 h-32 mx-auto lg:mx-0 mb-4 border-4 border-primary">
-                    <AvatarImage src={checkedInMembers[currentPresenter]?.avatar} />
-                    <AvatarFallback>
-                      {(language === 'vi' ? checkedInMembers[currentPresenter]?.name : checkedInMembers[currentPresenter]?.nameEn)?.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <h3 className="text-2xl font-bold text-foreground mb-2">
-                    {language === 'vi' ? checkedInMembers[currentPresenter]?.name : checkedInMembers[currentPresenter]?.nameEn}
-                  </h3>
-                  <p className="text-primary text-lg mb-2 font-semibold">
-                    {language === 'vi' ? checkedInMembers[currentPresenter]?.position : checkedInMembers[currentPresenter]?.positionEn}
-                  </p>
-                  <p className="text-foreground text-lg mb-4">
-                    {language === 'vi' ? checkedInMembers[currentPresenter]?.company : checkedInMembers[currentPresenter]?.companyEn}
-                  </p>
-                  <Badge className="bg-primary text-primary-foreground mb-2">
-                    {language === 'vi' ? checkedInMembers[currentPresenter]?.industry : checkedInMembers[currentPresenter]?.industryEn}
-                  </Badge>
-                  <div className="mt-4 space-y-1">
-                    <p className="text-sm text-muted-foreground">
-                      {currentText.checkInOrder}: #{checkedInMembers[currentPresenter]?.checkInOrder}
-                    </p>
-                    <p className="text-sm text-muted-foreground">
-                      {currentText.checkInTime}: {checkedInMembers[currentPresenter]?.checkInTime}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Presentation Area */}
-                <div className="flex-1 text-center">
-                  <div className="bg-primary/10 backdrop-blur p-6 rounded-lg mb-6 border border-primary/20">
-                    <p className="text-lg leading-relaxed text-foreground">
-                      {language === 'vi' ? checkedInMembers[currentPresenter]?.introduction : checkedInMembers[currentPresenter]?.introductionEn}
-                    </p>
-                  </div>
-
-                  {/* Timer */}
-                  <div className="flex items-center justify-center gap-4 mb-6">
-                    <div className="text-center">
-                      <div className={`text-5xl font-bold ${timeLeft <= 10 ? 'text-destructive' : 'text-primary'}`}>
-                        {timeLeft}s
+        {/* Main Layout: Queue List Left, Current Presenter Right */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Queue List - Left Side */}
+          <div className="lg:col-span-1">
+            <Card className="border-primary/20 bg-card sticky top-24">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-bold text-foreground mb-6">
+                  📋 {currentText.upNext}
+                </h3>
+                <div className="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto">
+                  {checkedInMembers.map((member, index) => (
+                    <div
+                      key={member.id}
+                      className={`flex items-center gap-4 p-4 rounded-lg border transition-all ${
+                        index === currentPresenter
+                          ? 'border-primary bg-primary/10'
+                          : index < currentPresenter
+                          ? 'border-muted bg-muted opacity-50'
+                          : 'border-border bg-background hover:border-primary/50'
+                      }`}
+                    >
+                      <div className="flex-shrink-0">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
+                          index === currentPresenter
+                            ? 'bg-primary text-primary-foreground'
+                            : index < currentPresenter
+                            ? 'bg-muted text-muted-foreground'
+                            : 'bg-primary/10 text-primary'
+                        }`}>
+                          {member.checkInOrder}
+                        </div>
                       </div>
-                      <p className="text-sm text-muted-foreground">{currentText.timeRemaining}</p>
+                      <Avatar className="w-12 h-12">
+                        <AvatarImage src={member.avatar} />
+                        <AvatarFallback>
+                          {(language === 'vi' ? member.name : member.nameEn)?.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-foreground truncate">
+                          {language === 'vi' ? member.name : member.nameEn}
+                        </h4>
+                        <p className="text-sm text-muted-foreground truncate">
+                          {language === 'vi' ? member.company : member.companyEn} • {member.checkInTime}
+                        </p>
+                      </div>
+                      <Badge variant={index === currentPresenter ? "default" : index < currentPresenter ? "secondary" : "outline"} className="shrink-0">
+                        {language === 'vi' ? member.industry : member.industryEn}
+                      </Badge>
                     </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Current Presenter - Right Side */}
+          <div className="lg:col-span-2">
+            {checkedInMembers.length > 0 && currentPresenter < checkedInMembers.length && (
+              <Card className="border-primary shadow-xl bg-card">
+                <CardContent className="p-8">
+                  <div className="text-center mb-6">
+                    <h2 className="text-3xl font-bold text-foreground">
+                      {currentText.currentPresenter}
+                    </h2>
                   </div>
 
-                  {/* Controls */}
-                  <div className="flex justify-center gap-4">
-                    {!isPresenting ? (
-                      <Button onClick={startPresentation} className="bg-primary hover:bg-primary/90">
-                        <Play className="mr-2" size={16} />
-                        {currentText.start}
-                      </Button>
-                    ) : (
-                      <Button onClick={pausePresentation} variant="outline" className="border-primary text-primary">
-                        <Pause className="mr-2" size={16} />
-                        {currentText.pause}
-                      </Button>
-                    )}
-                    <Button 
-                      onClick={nextPresenter} 
-                      variant="outline"
-                      disabled={currentPresenter >= checkedInMembers.length - 1}
-                    >
-                      {currentText.next}
-                      <ChevronRight className="ml-2" size={16} />
-                    </Button>
-                    <Button 
-                      onClick={skipPresenter} 
-                      variant="outline"
-                      disabled={currentPresenter >= checkedInMembers.length - 1}
-                    >
-                      <SkipForward className="mr-2" size={16} />
-                      {currentText.skip}
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
+                  <div className="flex flex-col lg:flex-row items-center gap-8">
+                    {/* Avatar & Info */}
+                    <div className="text-center lg:text-left">
+                      <Avatar className="w-32 h-32 mx-auto lg:mx-0 mb-4 border-4 border-primary">
+                        <AvatarImage src={checkedInMembers[currentPresenter]?.avatar} />
+                        <AvatarFallback>
+                          {(language === 'vi' ? checkedInMembers[currentPresenter]?.name : checkedInMembers[currentPresenter]?.nameEn)?.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <h3 className="text-2xl font-bold text-foreground mb-2">
+                        {language === 'vi' ? checkedInMembers[currentPresenter]?.name : checkedInMembers[currentPresenter]?.nameEn}
+                      </h3>
+                      <p className="text-primary text-lg mb-2 font-semibold">
+                        {language === 'vi' ? checkedInMembers[currentPresenter]?.position : checkedInMembers[currentPresenter]?.positionEn}
+                      </p>
+                      <p className="text-foreground text-lg mb-4">
+                        {language === 'vi' ? checkedInMembers[currentPresenter]?.company : checkedInMembers[currentPresenter]?.companyEn}
+                      </p>
+                      <Badge className="bg-primary text-primary-foreground mb-2">
+                        {language === 'vi' ? checkedInMembers[currentPresenter]?.industry : checkedInMembers[currentPresenter]?.industryEn}
+                      </Badge>
+                      <div className="mt-4 space-y-1">
+                        <p className="text-sm text-muted-foreground">
+                          {currentText.checkInOrder}: #{checkedInMembers[currentPresenter]?.checkInOrder}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {currentText.checkInTime}: {checkedInMembers[currentPresenter]?.checkInTime}
+                        </p>
+                      </div>
+                    </div>
 
-        {/* Queue List */}
-        <Card className="border-primary/20 bg-card">
-          <CardContent className="p-6">
-            <h3 className="text-xl font-bold text-foreground mb-6">
-              📋 {currentText.upNext}
-            </h3>
-            <div className="space-y-4">
-              {checkedInMembers.map((member, index) => (
-                <div
-                  key={member.id}
-                  className={`flex items-center gap-4 p-4 rounded-lg border transition-all ${
-                    index === currentPresenter
-                      ? 'border-primary bg-primary/10'
-                      : index < currentPresenter
-                      ? 'border-muted bg-muted opacity-50'
-                      : 'border-border bg-background hover:border-primary/50'
-                  }`}
-                >
-                  <div className="flex-shrink-0">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                      index === currentPresenter
-                        ? 'bg-primary text-primary-foreground'
-                        : index < currentPresenter
-                        ? 'bg-muted text-muted-foreground'
-                        : 'bg-primary/10 text-primary'
-                    }`}>
-                      {member.checkInOrder}
+                    {/* Presentation Area */}
+                    <div className="flex-1 text-center">
+                      <div className="bg-primary/10 backdrop-blur p-6 rounded-lg mb-6 border border-primary/20">
+                        <p className="text-lg leading-relaxed text-foreground">
+                          {language === 'vi' ? checkedInMembers[currentPresenter]?.introduction : checkedInMembers[currentPresenter]?.introductionEn}
+                        </p>
+                      </div>
+
+                      {/* Timer */}
+                      <div className="flex items-center justify-center gap-4 mb-6">
+                        <div className="text-center">
+                          <div className={`text-5xl font-bold ${timeLeft <= 10 ? 'text-destructive' : 'text-primary'}`}>
+                            {timeLeft}s
+                          </div>
+                          <p className="text-sm text-muted-foreground">{currentText.timeRemaining}</p>
+                        </div>
+                      </div>
+
+                      {/* Controls */}
+                      <div className="flex justify-center gap-4">
+                        {!isPresenting ? (
+                          <Button onClick={startPresentation} className="bg-primary hover:bg-primary/90">
+                            <Play className="mr-2" size={16} />
+                            {currentText.start}
+                          </Button>
+                        ) : (
+                          <Button onClick={pausePresentation} variant="outline" className="border-primary text-primary">
+                            <Pause className="mr-2" size={16} />
+                            {currentText.pause}
+                          </Button>
+                        )}
+                        <Button 
+                          onClick={nextPresenter} 
+                          variant="outline"
+                          disabled={currentPresenter >= checkedInMembers.length - 1}
+                        >
+                          {currentText.next}
+                          <ChevronRight className="ml-2" size={16} />
+                        </Button>
+                        <Button 
+                          onClick={skipPresenter} 
+                          variant="outline"
+                          disabled={currentPresenter >= checkedInMembers.length - 1}
+                        >
+                          <SkipForward className="mr-2" size={16} />
+                          {currentText.skip}
+                        </Button>
+                      </div>
                     </div>
                   </div>
-                  <Avatar className="w-12 h-12">
-                    <AvatarImage src={member.avatar} />
-                    <AvatarFallback>
-                      {(language === 'vi' ? member.name : member.nameEn)?.charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <h4 className="font-semibold text-foreground">
-                      {language === 'vi' ? member.name : member.nameEn}
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      {language === 'vi' ? member.company : member.companyEn} • {member.checkInTime}
-                    </p>
-                  </div>
-                  <Badge variant={index === currentPresenter ? "default" : index < currentPresenter ? "secondary" : "outline"}>
-                    {language === 'vi' ? member.industry : member.industryEn}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                </CardContent>
+              </Card>
+            )}
+          </div>
+        </div>
       </main>
     </div>
   );
